@@ -1,0 +1,44 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Auto Post Ảnh GirlXinh</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 800px; margin: auto; padding: 20px; }
+    textarea, input, button { width: 100%; margin-top: 10px; padding: 10px; font-size: 16px; }
+    .output { margin-top: 20px; background: #f9f9f9; padding: 10px; border: 1px solid #ccc; }
+  </style>
+</head>
+<body>
+  <h1>Tool Tạo Bài Viết Tự Động (Google Drive → HTML)</h1>
+  <p>Nhập link ảnh Google Drive (1 ảnh mỗi dòng):</p>
+
+  <textarea id="imageLinks" rows="10" placeholder="https://drive.google.com/uc?id=..."></textarea>
+
+  <p>Tiêu đề bài viết:</p>
+  <input type="text" id="postTitle" placeholder="Nhập tiêu đề bài viết...">
+
+  <button onclick="generatePost()">Tạo Bài Viết</button>
+
+  <div class="output" id="outputHTML">
+    <!-- Kết quả HTML sẽ hiện ở đây -->
+  </div>
+
+  <script>
+    function generatePost() {
+      const links = document.getElementById('imageLinks').value.trim().split('\n').filter(Boolean);
+      const title = document.getElementById('postTitle').value.trim();
+      let html = `<h2>${title}</h2>\n<div class="gallery">\n`;
+
+      links.forEach(link => {
+        const directLink = link.replace(/.*\/d\/(.*?)\/.*/, 'https://drive.google.com/uc?id=$1');
+        html += `<img src="${directLink}" alt="${title}" style="max-width:100%; margin-bottom:10px;">\n`;
+      });
+
+      html += `</div>`;
+      document.getElementById('outputHTML').innerText = html;
+    }
+  </script>
+</body>
+</html>
