@@ -2,45 +2,29 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Tạo bài viết ảnh Girl Xinh</title>
+  <title>Auto Post GirlXinh</title>
   <style>
-    body { font-family: Arial; margin: 30px; }
-    input, textarea { width: 100%; margin: 10px 0; }
-    #output { background: #f9f9f9; padding: 10px; border: 1px solid #ccc; }
+    body { font-family: Arial; padding: 10px; }
+    textarea { width: 100%; height: 300px; }
   </style>
 </head>
 <body>
-  <h2>🔺 Công cụ tạo bài viết GirlXinh</h2>
-
-  <label>📌 Tiêu đề bài viết (hoặc để trống để tự tạo):</label>
-  <input id="title" placeholder="VD: Gái xinh tóc ngắn dễ thương">
-
-  <label>📷 Link ảnh Google Drive (mỗi dòng 1 ảnh, có thể dán nhiều):</label>
-  <textarea id="imageLinks" rows="6" placeholder="https://drive.google.com/uc?id=..."></textarea>
-
-  <button onclick="generatePost()">Tạo bài viết HTML</button>
-
-  <h3>🔻 Kết quả:</h3>
-  <textarea id="output" rows="20" readonly></textarea>
+  <h2>Tạo bài viết tự động từ Google Drive</h2>
+  <button onclick="generatePost()">Tạo Bài</button>
+  <textarea id="output" placeholder="Bài viết sẽ xuất hiện ở đây..."></textarea>
 
   <script>
-    function generatePost() {
-      const titleInput = document.getElementById("title").value.trim();
-      const imageLines = document.getElementById("imageLinks").value.trim().split('\n').filter(l => l);
-      const title = titleInput || "Bộ ảnh gái xinh " + new Date().toLocaleDateString('vi-VN');
-
-      const imagesHTML = imageLines.map(link => `<img src="${link}" alt="${title}" loading="lazy" style="max-width:100%;margin-bottom:10px;">`).join('\n');
-
-      const seoContent = `
-<h2>${title}</h2>
-<p>Dưới đây là bộ ảnh ${title.toLowerCase()} được chọn lọc đẹp nhất:</p>
-${imagesHTML}
-<p>Truy cập <a href="https://girlxinh.net" target="_blank">girlxinh.net</a> để xem thêm nhiều ảnh hot girl, gái xinh khác được cập nhật liên tục mỗi ngày.</p>`.trim();
-
-      document.getElementById("output").value = seoContent;
+    async function generatePost() {
+      const res = await fetch("https://script.google.com/macros/s/AKfycbznTC3ahKsShrNUhEeHs8QPCcF006MgtdNs-1DIhM39fY8e2LSFT60b_yRYKzfZrU3v/exec");
+      const data = await res.json();
+      let title = "Bộ ảnh gái xinh " + new Date().toLocaleDateString("vi-VN");
+      let content = `<h1>${title}</h1><p>Ngắm nhìn bộ ảnh gái xinh tuyển chọn hôm nay. Chất lượng cao, sắc nét và đầy cuốn hút.</p>`;
+      data.forEach(img => {
+        content += `<img src="${img.url}" alt="gái xinh" loading="lazy" width="100%"><br>`;
+      });
+      content += `<p>Ảnh được sưu tầm và chia sẻ bởi <strong>GirlXinh.net</strong>.</p>`;
+      document.getElementById("output").value = content;
     }
   </script>
 </body>
 </html>
-
-    
