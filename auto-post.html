@@ -1,44 +1,46 @@
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Auto Post Ảnh GirlXinh</title>
+  <title>Tạo bài viết ảnh Girl Xinh</title>
   <style>
-    body { font-family: Arial, sans-serif; max-width: 800px; margin: auto; padding: 20px; }
-    textarea, input, button { width: 100%; margin-top: 10px; padding: 10px; font-size: 16px; }
-    .output { margin-top: 20px; background: #f9f9f9; padding: 10px; border: 1px solid #ccc; }
+    body { font-family: Arial; margin: 30px; }
+    input, textarea { width: 100%; margin: 10px 0; }
+    #output { background: #f9f9f9; padding: 10px; border: 1px solid #ccc; }
   </style>
 </head>
 <body>
-  <h1>Tool Tạo Bài Viết Tự Động (Google Drive → HTML)</h1>
-  <p>Nhập link ảnh Google Drive (1 ảnh mỗi dòng):</p>
+  <h2>🔺 Công cụ tạo bài viết GirlXinh</h2>
 
-  <textarea id="imageLinks" rows="10" placeholder="https://drive.google.com/uc?id=..."></textarea>
+  <label>📌 Tiêu đề bài viết (hoặc để trống để tự tạo):</label>
+  <input id="title" placeholder="VD: Gái xinh tóc ngắn dễ thương">
 
-  <p>Tiêu đề bài viết:</p>
-  <input type="text" id="postTitle" placeholder="Nhập tiêu đề bài viết...">
+  <label>📷 Link ảnh Google Drive (mỗi dòng 1 ảnh, có thể dán nhiều):</label>
+  <textarea id="imageLinks" rows="6" placeholder="https://drive.google.com/uc?id=..."></textarea>
 
-  <button onclick="generatePost()">Tạo Bài Viết</button>
+  <button onclick="generatePost()">Tạo bài viết HTML</button>
 
-  <div class="output" id="outputHTML">
-    <!-- Kết quả HTML sẽ hiện ở đây -->
-  </div>
+  <h3>🔻 Kết quả:</h3>
+  <textarea id="output" rows="20" readonly></textarea>
 
   <script>
     function generatePost() {
-      const links = document.getElementById('imageLinks').value.trim().split('\n').filter(Boolean);
-      const title = document.getElementById('postTitle').value.trim();
-      let html = `<h2>${title}</h2>\n<div class="gallery">\n`;
+      const titleInput = document.getElementById("title").value.trim();
+      const imageLines = document.getElementById("imageLinks").value.trim().split('\n').filter(l => l);
+      const title = titleInput || "Bộ ảnh gái xinh " + new Date().toLocaleDateString('vi-VN');
 
-      links.forEach(link => {
-        const directLink = link.replace(/.*\/d\/(.*?)\/.*/, 'https://drive.google.com/uc?id=$1');
-        html += `<img src="${directLink}" alt="${title}" style="max-width:100%; margin-bottom:10px;">\n`;
-      });
+      const imagesHTML = imageLines.map(link => `<img src="${link}" alt="${title}" loading="lazy" style="max-width:100%;margin-bottom:10px;">`).join('\n');
 
-      html += `</div>`;
-      document.getElementById('outputHTML').innerText = html;
+      const seoContent = `
+<h2>${title}</h2>
+<p>Dưới đây là bộ ảnh ${title.toLowerCase()} được chọn lọc đẹp nhất:</p>
+${imagesHTML}
+<p>Truy cập <a href="https://girlxinh.net" target="_blank">girlxinh.net</a> để xem thêm nhiều ảnh hot girl, gái xinh khác được cập nhật liên tục mỗi ngày.</p>`.trim();
+
+      document.getElementById("output").value = seoContent;
     }
   </script>
 </body>
 </html>
+
+    
