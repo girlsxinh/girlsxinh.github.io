@@ -4,63 +4,62 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tool Auto Post - GirlXinh.net</title>
+  <title>Auto Post Tool</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; background: #fffbe7; }
-    h1 { color: #d63384; }
-    textarea, input, button { width: 100%; margin-top: 10px; padding: 10px; font-size: 1em; }
-    .preview { margin-top: 20px; padding: 10px; border: 1px solid #ccc; background: #fff; }
-    img { max-width: 100%; margin-top: 10px; }
-    .btn-copy { background: #4CAF50; color: white; border: none; cursor: pointer; }
-    .btn-copy:hover { background: #45a049; }
+    body { font-family: Arial; padding: 20px; background: #fdf6f6; }
+    h2 { color: #e91e63; }
+    textarea { width: 100%; height: 180px; }
+    input, button { padding: 10px; font-size: 16px; width: 100%; margin-top: 10px; }
+    .preview { margin-top: 20px; background: white; padding: 15px; border-radius: 10px; }
+    .copy-btn { background: #4caf50; color: white; border: none; cursor: pointer; margin-top: 10px; }
+    .copy-btn:hover { background: #45a049; }
   </style>
 </head>
 <body>
+  <h1>🧠 Tạo bài viết auto từ ảnh Google Drive</h1>
+  <input type="text" id="keyword" placeholder="Nhập từ khóa, ví dụ: ngọc trinh">
+  <textarea id="imageLink" placeholder="Dán link ảnh Google Drive ở đây..."></textarea>
+  <button onclick="generatePost()">Tạo bài viết</button>
 
-<h1>🌸 Tool Auto Post Ảnh Gái Xinh - girlxinh.net</h1>
+  <h3>📌 HTML để đăng Blogger:</h3>
+  <textarea id="resultHTML" readonly></textarea>
+  <button class="copy-btn" onclick="copyHTML()">📋 Copy HTML</button>
 
-<label>Dán link ảnh Google Drive (nhiều dòng):</label>
-<textarea id="imageLinks" rows="6" placeholder="https://drive.google.com/uc?id=..."></textarea>
+  <div class="preview" id="previewPost"></div>
 
-<label>Chủ đề (ví dụ: Gái xinh tóc dài, Girl selfie, Hot girl Việt Nam...):</label>
-<input type="text" id="topic" placeholder="Nhập chủ đề...">
+  <script>
+    function convertToDirectLink(link) {
+      const match = link.match(/\/d\/([a-zA-Z0-9_-]+)\//);
+      if (match && match[1]) {
+        return `https://drive.google.com/uc?export=view&id=${match[1]}`;
+      }
+      return link;
+    }
 
-<button onclick="generatePost()">Tạo bài viết</button>
+    function generatePost() {
+      const keyword = document.getElementById('keyword').value.trim();
+      const imageLink = document.getElementById('imageLink').value.trim();
+      const directLink = convertToDirectLink(imageLink);
 
-<h3>🎯 HTML để đăng Blogger:</h3>
-<textarea id="htmlOutput" rows="10"></textarea>
-<button class="btn-copy" onclick="copyHTML()">📋 Copy HTML</button>
+      const title = `${keyword} cực dễ thương & quyến rũ 💖`;
+      const description = `Bộ ảnh ${keyword} tuyển chọn cực chất, cực cuốn hút dành cho bạn. Click xem ngay loạt ảnh full HD chất lượng cao bên dưới nhé!`;
+      const english = `<em>Beautiful ${keyword} Photos 💖. High-quality, full HD photos of cute and charming girls in topic "${keyword}".</em>`;
+      const imageHTML = `<div><img src="${directLink}" loading="lazy" alt="${keyword}"></div>`;
+      const tags = `<p>#${keyword.replace(/\s+/g, '')} #gái_xinh #girlxinh #blogger</p>`;
 
-<div class="preview" id="previewBox"></div>
+      const fullHTML = `<h2>${title}</h2><p>${description}</p><p>${english}</p>${imageHTML}${tags}`;
 
-<script>
-function generatePost() {
-  const linksRaw = document.getElementById("imageLinks").value.trim();
-  const topic = document.getElementById("topic").value.trim() || "Gái xinh";
-  if (!linksRaw) return alert("Vui lòng dán link ảnh Google Drive!");
+      document.getElementById('resultHTML').value = fullHTML;
+      document.getElementById('previewPost').innerHTML = fullHTML;
+    }
 
-  const links = linksRaw.split(/\n|,/).map(s => s.trim()).filter(Boolean);
-  const imagesHTML = links.map(link => `<img src="${link}" loading="lazy" alt="${topic}">`).join("\n");
-
-  const title = `${topic} cực dễ thương & quyến rũ 💖`;
-  const enTitle = `Beautiful ${topic} Photos 💗`;
-  const content = `<h2>${title}</h2>
-<p>Bộ ảnh ${topic} tuyển chọn cực chất, cực cuốn hút dành cho bạn. Click xem ngay loạt ảnh full HD chất lượng cao bên dưới nhé!</p>
-<p><em>${enTitle}. High-quality, full HD photos of cute and charming girls in topic "${topic}".</em></p>
-<div>${imagesHTML}</div>
-<p>#${topic.replace(/\s+/g, '').toLowerCase()} #gái_xinh #girlxinh #blogger</p>`;
-
-  document.getElementById("htmlOutput").value = content;
-  document.getElementById("previewBox").innerHTML = content;
-}
-
-function copyHTML() {
-  const html = document.getElementById("htmlOutput");
-  html.select();
-  document.execCommand("copy");
-  alert("Đã copy HTML! Dán vào bài viết Blogger để đăng.");
-}
-</script>
-
+    function copyHTML() {
+      const html = document.getElementById('resultHTML');
+      html.select();
+      html.setSelectionRange(0, 99999);
+      document.execCommand("copy");
+      alert("Đã copy mã HTML!");
+    }
+  </script>
 </body>
 </html>
