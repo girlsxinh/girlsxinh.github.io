@@ -61,24 +61,36 @@
       });
     }
 
+    function generateCaption(index, style) {
+      const ideas = [
+        `Vẻ đẹp ${style} cuốn hút ánh nhìn`,
+        `${style} ngọt ngào khiến ai cũng mê`,
+        `Góc nghiêng thần thánh của cô nàng ${style}`,
+        `Phong cách ${style} tự nhiên đầy cá tính`,
+        `Ánh mắt ${style} khiến bạn không thể rời mắt`
+      ];
+      return ideas[index % ideas.length];
+    }
+
     function generatePost() {
       const links = document.getElementById("imageLinks").value.trim().split(/\n+/);
       const style = document.getElementById("style").value;
 
       const year = new Date().getFullYear();
-      const title = `Bộ ảnh gái xinh ${style} mới nhất ${year}`;
-      const description = `Cùng khám phá tuyển tập hình ảnh gái xinh phong cách ${style} đầy quyến rũ và cá tính. Mỗi bức ảnh đều được chọn lọc kỹ lưỡng với chất lượng HD sắc nét, đảm bảo khiến bạn không thể rời mắt. Đây là bộ sưu tập hoàn hảo dành cho những ai yêu thích vẻ đẹp tự nhiên và thần thái cuốn hút. Cập nhật mới nhất ${year}.`;
-      const tags = [`gái xinh`, `hot girl`, `${style}`, `ảnh đẹp`, `gái đẹp`, `photoshoot ${style}`];
+      const title = `Bộ ảnh gái xinh ${style} quyến rũ nhất ${year}`;
+      const description = `Tuyển chọn bộ ảnh gái xinh phong cách ${style} với vẻ đẹp tự nhiên, gợi cảm và cuốn hút. Đây là nguồn cảm hứng cho những ai yêu thích sự trẻ trung, hiện đại và đầy cá tính. Cập nhật đầy đủ với chất lượng ảnh cao, đảm bảo khiến bạn mê mẩn. Cùng chiêm ngưỡng bộ sưu tập đặc sắc dưới đây!`;
+      const tags = [`gái xinh`, `hot girl`, `${style}`, `ảnh đẹp`, `gái đẹp`, `photoshoot ${style}`, `trending ${year}`, `gallery`];
 
       let html = `<h1>${title}</h1>\n<p>${description}</p>\n<ul>`;
       tags.forEach(tag => { html += `<li>#${tag}</li>` });
-      html += `</ul>\n<div class="gallery">`;
+      html += `</ul>\n<div class="gallery" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">`;
 
       let preview = "";
-      links.forEach(link => {
+      links.forEach((link, index) => {
         if (link.includes("lh3.googleusercontent.com") || link.startsWith("data:image")) {
-          html += `\n  <img src="${link.trim()}" alt="${style} ${year}" loading="lazy" />`;
-          preview += `<img src="${link.trim()}" alt="${style} ${year}" />\n`;
+          const caption = generateCaption(index, style);
+          html += `\n  <figure><img src="${link.trim()}" alt="${caption}" loading="lazy" /><figcaption>${caption}</figcaption></figure>`;
+          preview += `<img src="${link.trim()}" alt="${caption}" />\n`;
         }
       });
       html += `\n</div>`;
@@ -98,7 +110,8 @@
             "url": "https://girlsxinh.net/logo.png"
           }
         },
-        "datePublished": new Date().toISOString().split('T')[0]
+        "datePublished": new Date().toISOString().split('T')[0],
+        "keywords": tags.join(', ')
       };
 
       html += `\n<script type="application/ld+json">\n${JSON.stringify(schema, null, 2)}\n<\/script>`;
