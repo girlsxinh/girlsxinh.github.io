@@ -17,6 +17,7 @@
     #copyBtn:hover { background-color: #45a049; }
     .share-buttons { margin-top: 20px; }
     .share-buttons button { margin-right: 5px; background: #2196f3; color: #fff; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; }
+    .hidden { display: none; }
   </style>
 </head>
 <body>
@@ -69,15 +70,12 @@
       });
     }
 
-    function generateCaption(index, style) {
-      const ideas = [
-        `Vẻ đẹp ${style} cuốn hút ánh nhìn`,
-        `${style} ngọt ngào khiến ai cũng mê`,
-        `Góc nghiêng thần thánh của cô nàng ${style}`,
-        `Phong cách ${style} tự nhiên đầy cá tính`,
-        `Ánh mắt ${style} khiến bạn không thể rời mắt`
-      ];
-      return ideas[index % ideas.length];
+    function generateCaption(index, style, link) {
+      const keywords = ["cuốn hút", "ngọt ngào", "tự nhiên", "gợi cảm", "tỏa sáng", "xinh đẹp", "cá tính", "thần thái"];
+      const adjective = keywords[index % keywords.length];
+      const suffix = ["gây thương nhớ", "tràn đầy sức sống", "hớp hồn người xem", "rất nổi bật", "khiến bạn rung động"];
+      const randomSuffix = suffix[Math.floor(Math.random() * suffix.length)];
+      return `${style.charAt(0).toUpperCase() + style.slice(1)} ${adjective}, ${randomSuffix}`;
     }
 
     function generatePost() {
@@ -86,8 +84,8 @@
       const year = new Date().getFullYear();
 
       const title = `Bộ ảnh gái xinh ${style} quyến rũ nhất ${year}`;
-      const description = `Tuyển chọn bộ ảnh gái xinh phong cách ${style} với vẻ đẹp tự nhiên, gợi cảm và cuốn hút. Đây là nguồn cảm hứng cho những ai yêu thích sự trẻ trung, hiện đại và đầy cá tính. Cập nhật đầy đủ với chất lượng ảnh cao, đảm bảo khiến bạn mê mẩn. Cùng chiêm ngưỡng bộ sưu tập đặc sắc dưới đây!`;
-      const tags = [`gái xinh`, `hot girl`, `${style}`, `ảnh đẹp`, `gái đẹp`, `photoshoot ${style}`, `trending ${year}`, `gallery`];
+      const description = `Tuyển chọn bộ ảnh gái xinh phong cách ${style} với vẻ đẹp tự nhiên, gợi cảm và cuốn hút...`;
+      const tags = ["gái xinh", "hot girl", `${style}`, "ảnh đẹp", "gái đẹp", `photoshoot ${style}`, `trending ${year}`, "gallery"];
       const slug = `bo-anh-gai-xinh-${style.replace(/\s+/g, '-')}-${year}`;
 
       let html = `<h1>${title}</h1>\n<p>${description}</p>\n<p><strong>Slug URL:</strong> ${slug}</p>\n<p><strong>Tổng số ảnh:</strong> ${links.length}</p>\n<p><strong>Thời gian đăng gợi ý:</strong> ${new Date().toLocaleString()}</p>\n<ul>`;
@@ -97,7 +95,7 @@
       let preview = "";
       links.forEach((link, index) => {
         if (link.includes("lh3.googleusercontent.com") || link.startsWith("data:image")) {
-          const caption = generateCaption(index, style);
+          const caption = generateCaption(index, style, link);
           html += `\n  <figure><img src="${link.trim()}" alt="${caption}" loading="lazy" /><figcaption>${caption}</figcaption></figure>`;
           preview += `<img src="${link.trim()}" alt="${caption}" />\n`;
         }
@@ -127,7 +125,8 @@
         }
       };
 
-      html += `\n<script type="application/ld+json">\n${JSON.stringify(schema, null, 2)}\n<\/script>`;
+      const safeSchema = JSON.stringify(schema, null, 2).replace(/<\/script>/g, '<\\/script>');
+      html += `\n<script type="application/ld+json">\n${safeSchema}\n</script>`;
 
       document.getElementById("outputHTML").value = html;
       document.getElementById("preview").innerHTML = preview;
