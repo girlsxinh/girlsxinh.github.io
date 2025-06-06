@@ -2,51 +2,65 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Auto Post Tool - Google Photos</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tool Auto Post - GirlXinh.net</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; background: #f9f9f9; }
-    textarea, input { width: 100%; margin-bottom: 10px; padding: 8px; }
-    button { padding: 10px 20px; font-size: 16px; }
-    #preview img { max-width: 100%; margin: 5px 0; }
-    .note { font-size: 14px; color: #555; margin-bottom: 10px; }
+    body { font-family: Arial, sans-serif; padding: 20px; background: #fffbe7; }
+    h1 { color: #d63384; }
+    textarea, input, button { width: 100%; margin-top: 10px; padding: 10px; font-size: 1em; }
+    .preview { margin-top: 20px; padding: 10px; border: 1px solid #ccc; background: #fff; }
+    img { max-width: 100%; margin-top: 10px; }
+    .btn-copy { background: #4CAF50; color: white; border: none; cursor: pointer; }
+    .btn-copy:hover { background: #45a049; }
   </style>
 </head>
 <body>
-  <h2>🖼 Tool Tạo Bài Viết Tự Động (Hỗ trợ Google Photos)</h2>
-  <p class="note">Dán các link ảnh Google Photos (dạng <code>https://lh3.googleusercontent.com/...</code>), mỗi link một dòng.</p>
 
-  <textarea id="imageLinks" rows="6" placeholder="Dán link ảnh Google Photos tại đây..."></textarea>
-  <input id="titleInput" placeholder="Tiêu đề bài viết..." />
-  <button onclick="generatePost()">Tạo bài viết</button>
+<h1>🌸 Tool Auto Post Ảnh Gái Xinh - girlxinh.net</h1>
 
-  <h3>Xem trước:</h3>
-  <div id="preview"></div>
+<label>Dán link ảnh Google Drive (nhiều dòng):</label>
+<textarea id="imageLinks" rows="6" placeholder="https://drive.google.com/uc?id=..."></textarea>
 
-  <h3>HTML bài viết (copy dán vào Blogger):</h3>
-  <textarea id="outputHTML" rows="10"></textarea>
+<label>Chủ đề (ví dụ: Gái xinh tóc dài, Girl selfie, Hot girl Việt Nam...):</label>
+<input type="text" id="topic" placeholder="Nhập chủ đề...">
 
-  <script>
-    function generatePost() {
-      const links = document.getElementById("imageLinks").value.trim().split(/\n+/);
-      const title = document.getElementById("titleInput").value.trim() || "Bộ ảnh gái xinh";
-      let html = `<h2>${title}</h2>\n<div class="gallery">\n`;
-      let preview = "";
+<button onclick="generatePost()">Tạo bài viết</button>
 
-      links.forEach(link => {
-        if (link.includes("lh3.googleusercontent.com")) {
-          html += `<img src="${link.trim()}" alt="${title}" loading="lazy"/>
-`;
-          preview += `<img src="${link.trim()}" alt="${title}" loading="lazy"/>
-`;
-        }
-      });
+<h3>🎯 HTML để đăng Blogger:</h3>
+<textarea id="htmlOutput" rows="10"></textarea>
+<button class="btn-copy" onclick="copyHTML()">📋 Copy HTML</button>
 
-      html += "</div>";
-      document.getElementById("outputHTML").value = html;
-      document.getElementById("preview").innerHTML = preview;
-    }
-  </script>
+<div class="preview" id="previewBox"></div>
+
+<script>
+function generatePost() {
+  const linksRaw = document.getElementById("imageLinks").value.trim();
+  const topic = document.getElementById("topic").value.trim() || "Gái xinh";
+  if (!linksRaw) return alert("Vui lòng dán link ảnh Google Drive!");
+
+  const links = linksRaw.split(/\n|,/).map(s => s.trim()).filter(Boolean);
+  const imagesHTML = links.map(link => `<img src="${link}" loading="lazy" alt="${topic}">`).join("\n");
+
+  const title = `${topic} cực dễ thương & quyến rũ 💖`;
+  const enTitle = `Beautiful ${topic} Photos 💗`;
+  const content = `<h2>${title}</h2>
+<p>Bộ ảnh ${topic} tuyển chọn cực chất, cực cuốn hút dành cho bạn. Click xem ngay loạt ảnh full HD chất lượng cao bên dưới nhé!</p>
+<p><em>${enTitle}. High-quality, full HD photos of cute and charming girls in topic "${topic}".</em></p>
+<div>${imagesHTML}</div>
+<p>#${topic.replace(/\s+/g, '').toLowerCase()} #gái_xinh #girlxinh #blogger</p>`;
+
+  document.getElementById("htmlOutput").value = content;
+  document.getElementById("previewBox").innerHTML = content;
+}
+
+function copyHTML() {
+  const html = document.getElementById("htmlOutput");
+  html.select();
+  document.execCommand("copy");
+  alert("Đã copy HTML! Dán vào bài viết Blogger để đăng.");
+}
+</script>
+
 </body>
 </html>
