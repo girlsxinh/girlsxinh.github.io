@@ -2,52 +2,34 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Tạo bài viết gái xinh - Auto SEO Tool</title>
-  <meta name="description" content="Tạo bài viết gái xinh chuẩn SEO từ ảnh Google Photos, hỗ trợ thẻ heading, schema, tags cho Blogger." />
-  <meta name="keywords" content="gái xinh, ảnh gái đẹp, hot girl, blogger, SEO, Google Photos" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tạo bài viết gái xinh - Tool SEO Tự Động</title>
+  <meta name="description" content="Tạo bài viết gái xinh chuẩn SEO từ ảnh Google Photos, tự động sinh tiêu đề, mô tả, thẻ heading, tags và schema cho Blogger." />
+  <meta name="keywords" content="gái xinh, ảnh hot girl, blogger, SEO, Google Photos, auto post tool" />
   <meta name="author" content="girlsxinh.net" />
-
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    "headline": "Bộ ảnh gái xinh",
-    "image": [],
-    "author": {
-      "@type": "Person",
-      "name": "girlsxinh.net"
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": "girlsxinh.net",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://girlsxinh.net/logo.png"
-      }
-    },
-    "datePublished": "2025-06-06"
-  }
-  </script>
-
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; background: #f9f9f9; }
-    textarea, input { width: 100%; margin-bottom: 10px; padding: 8px; }
-    button { padding: 10px 20px; font-size: 16px; }
-    #preview img { max-width: 100%; margin: 5px 0; }
-    .note { font-size: 14px; color: #555; margin-bottom: 10px; }
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f0f2f5; }
+    h1 { color: #e91e63; }
+    input, textarea, select, button { width: 100%; padding: 10px; margin-bottom: 10px; font-size: 15px; }
+    #preview img { max-width: 100%; margin: 5px 0; border-radius: 8px; box-shadow: 0 0 5px #ccc; }
+    .note { font-size: 13px; color: #666; }
   </style>
 </head>
 <body>
-  <h1>🖼 Tool Viết Bài Gái Xinh Chuẩn SEO (Google Photos)</h1>
-  <p class="note">Dán link ảnh Google Photos (dạng <code>https://lh3.googleusercontent.com/...</code>) vào ô dưới, mỗi ảnh 1 dòng.</p>
+  <h1>🖼 Auto Post Gái Xinh Chuẩn SEO</h1>
+  <p class="note">Dán link ảnh Google Photos dạng <code>https://lh3.googleusercontent.com/...</code>, mỗi ảnh 1 dòng.</p>
 
-  <textarea id="imageLinks" rows="6" placeholder="Dán link ảnh Google Photos tại đây..."></textarea>
-  <input id="titleInput" placeholder="Tiêu đề bài viết..." />
-  <input id="tagsInput" placeholder="Từ khóa SEO (cách nhau bằng dấu phẩy)" />
-  <button onclick="generatePost()">Tạo bài viết</button>
+  <textarea id="imageLinks" rows="6" placeholder="Dán link ảnh tại đây..."></textarea>
+  <select id="style">
+    <option value="hot girl">Hot girl</option>
+    <option value="dễ thương">Dễ thương</option>
+    <option value="học sinh">Học sinh</option>
+    <option value="Hàn Quốc">Hàn Quốc</option>
+    <option value="gợi cảm">Gợi cảm</option>
+  </select>
+  <button onclick="generatePost()">Tạo bài viết tự động</button>
 
-  <h3>Xem trước:</h3>
+  <h3>Xem trước ảnh:</h3>
   <div id="preview"></div>
 
   <h3>HTML bài viết (copy dán vào Blogger):</h3>
@@ -56,24 +38,50 @@
   <script>
     function generatePost() {
       const links = document.getElementById("imageLinks").value.trim().split(/\n+/);
-      const title = document.getElementById("titleInput").value.trim() || "Bộ ảnh gái xinh";
-      const tags = document.getElementById("tagsInput").value.trim();
-      let html = `<h1>${title}</h1>\n`;
-      html += `<p>${tags.split(',').map(tag => `#${tag.trim()}`).join(' ')}</p>\n`;
-      html += `<div class="gallery">\n`;
+      const style = document.getElementById("style").value;
 
+      // Sinh tiêu đề & mô tả tự động
+      const title = `Bộ ảnh gái xinh ${style} mới nhất ${new Date().getFullYear()}`;
+      const description = `Tuyển chọn những hình ảnh gái xinh ${style} cực chất, sắc nét, cập nhật mới nhất hôm nay. Bộ ảnh chuẩn HD dành cho fan yêu thích vẻ đẹp ${style}.`;
+      const tags = [`gái xinh`, `hot girl`, `${style}`, `ảnh đẹp`, `gái đẹp`, `photoshoot ${style}`];
+
+      // Gallery + preview
+      let html = `<h1>${title}</h1>\n<p>${description}</p>\n<p>${tags.map(t => `#${t}`).join(' ')}</p>\n<div class="gallery">\n`;
       let preview = "";
 
       links.forEach(link => {
         if (link.includes("lh3.googleusercontent.com")) {
-          html += `<img src="${link.trim()}" alt="${title}" loading="lazy"/>
-`;
-          preview += `<img src="${link.trim()}" alt="${title}" loading="lazy"/>
-`;
+          html += `<img src="${link.trim()}" alt="${title}" loading="lazy" />\n`;
+          preview += `<img src="${link.trim()}" alt="${title}" />\n`;
         }
       });
 
-      html += "</div>";
+      html += `</div>`;
+
+      // Schema JSON-LD
+      const schema = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": title,
+        "image": links,
+        "description": description,
+        "author": {
+          "@type": "Person",
+          "name": "girlsxinh.net"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "girlsxinh.net",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://girlsxinh.net/logo.png"
+          }
+        },
+        "datePublished": new Date().toISOString().split('T')[0]
+      };
+
+      html += `\n<script type="application/ld+json">\n${JSON.stringify(schema, null, 2)}\n<\/script>`;
+
       document.getElementById("outputHTML").value = html;
       document.getElementById("preview").innerHTML = preview;
     }
