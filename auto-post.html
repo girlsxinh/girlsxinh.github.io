@@ -2,63 +2,50 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <title>Tạo bài viết auto từ ảnh Google Drive</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Auto Post Tool - Google Photos</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; background: #fff0f3; color: #333; }
-    textarea, input[type=text] { width: 100%; padding: 10px; margin: 10px 0; }
-    button { padding: 10px 20px; background: #ff5e78; color: white; border: none; cursor: pointer; }
-    button:hover { background: #e64560; }
-    #output, #preview { margin-top: 20px; }
-    .preview-box { background: white; padding: 15px; border-radius: 10px; }
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f9f9f9; }
+    textarea, input { width: 100%; margin-bottom: 10px; padding: 8px; }
+    button { padding: 10px 20px; font-size: 16px; }
+    #preview img { max-width: 100%; margin: 5px 0; }
+    .note { font-size: 14px; color: #555; margin-bottom: 10px; }
   </style>
 </head>
 <body>
-  <h2>💡 Tạo bài viết auto từ ảnh Google Drive</h2>
+  <h2>🖼 Tool Tạo Bài Viết Tự Động (Hỗ trợ Google Photos)</h2>
+  <p class="note">Dán các link ảnh Google Photos (dạng <code>https://lh3.googleusercontent.com/...</code>), mỗi link một dòng.</p>
 
-  <input type="text" id="keyword" placeholder="Nhập từ khóa, ví dụ: gái xinh">
-  <textarea id="gdrive" rows="3" placeholder="Dán link ảnh Google Drive dạng https://drive.google.com/file/d/.../view?usp=sharing"></textarea>
+  <textarea id="imageLinks" rows="6" placeholder="Dán link ảnh Google Photos tại đây..."></textarea>
+  <input id="titleInput" placeholder="Tiêu đề bài viết..." />
   <button onclick="generatePost()">Tạo bài viết</button>
 
-  <div id="output">
-    <h3>📌 HTML để dán vào Blogger:</h3>
-    <textarea id="html" rows="6" readonly></textarea>
-    <button onclick="copyHTML()">📋 Copy HTML</button>
-  </div>
+  <h3>Xem trước:</h3>
+  <div id="preview"></div>
 
-  <div id="preview">
-    <h3>👀 Xem trước:</h3>
-    <div class="preview-box" id="previewBox"></div>
-  </div>
+  <h3>HTML bài viết (copy dán vào Blogger):</h3>
+  <textarea id="outputHTML" rows="10"></textarea>
 
   <script>
-    function extractDriveId(url) {
-      const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
-      return match ? match[1] : '';
-    }
-
     function generatePost() {
-      const keyword = document.getElementById("keyword").value.trim();
-      const link = document.getElementById("gdrive").value.trim();
-      const id = extractDriveId(link);
-      const imgSrc = id ? `https://drive.google.com/uc?export=view&id=${id}` : '';
+      const links = document.getElementById("imageLinks").value.trim().split(/\n+/);
+      const title = document.getElementById("titleInput").value.trim() || "Bộ ảnh gái xinh";
+      let html = `<h2>${title}</h2>\n<div class="gallery">\n`;
+      let preview = "";
 
-      const title = `${keyword ? keyword : "Gái xinh"} dễ thương & quyến rũ 💖`;
-      const description = `Bộ ảnh tuyển chọn cực chất, cực cuốn hút dành cho bạn. Click xem ngay loạt ảnh full HD chất lượng cao bên dưới nhé!`;
-      const seoText = `<em>Beautiful Photos 💖. High-quality, full HD photos of cute and charming girls in topic "${keyword}".</em>`;
-      const hashtags = `#gái_xinh #girlxinh #blogger`;
+      links.forEach(link => {
+        if (link.includes("lh3.googleusercontent.com")) {
+          html += `<img src="${link.trim()}" alt="${title}" loading="lazy"/>
+`;
+          preview += `<img src="${link.trim()}" alt="${title}" loading="lazy"/>
+`;
+        }
+      });
 
-      const html = `<h2>${title}</h2><p>${description}</p><p>${seoText}</p><div><img src="${imgSrc}" loading="lazy" alt=""></div><p>${hashtags}</p>`;
-
-      document.getElementById("html").value = html;
-      document.getElementById("previewBox").innerHTML = html;
-    }
-
-    function copyHTML() {
-      const html = document.getElementById("html");
-      html.select();
-      document.execCommand("copy");
-      alert("Đã copy HTML!");
+      html += "</div>";
+      document.getElementById("outputHTML").value = html;
+      document.getElementById("preview").innerHTML = preview;
     }
   </script>
 </body>
