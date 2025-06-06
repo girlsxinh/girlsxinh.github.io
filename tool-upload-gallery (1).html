@@ -1,0 +1,67 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Auto Gallery Post Tool</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; max-width: 700px; margin: auto; }
+    h2 { color: #e91e63; }
+    input, button, textarea { width: 100%; padding: 12px; margin-top: 10px; font-size: 16px; }
+    button { background-color: #e91e63; color: white; border: none; cursor: pointer; }
+    button:hover { background-color: #c2185b; }
+    textarea { height: 160px; }
+    .preview img { width: 100px; margin: 5px; border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <h2>🖼️ Upload ảnh & Tạo bài viết HTML (Blogger)</h2>
+  <input type="file" id="imageInput" multiple accept="image/*">
+  <button onclick="uploadImages()">Bắt đầu Upload & Tạo HTML</button>
+  <textarea id="htmlOutput" placeholder="HTML bài viết sẽ xuất hiện ở đây..."></textarea>
+  <div class="preview" id="preview"></div>
+
+  <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbzsTKyO3ymvwmXNLkgBRGfZqDGweeHk6FSfVSLBlYM9ycx5g7R9WUV_or04CleyPD9q/exec";
+
+    async function uploadImages() {
+      const input = document.getElementById("imageInput");
+      const output = document.getElementById("htmlOutput");
+      const preview = document.getElementById("preview");
+      output.value = "";
+      preview.innerHTML = "";
+
+      const files = input.files;
+      if (!files.length) {
+        alert("Vui lòng chọn ảnh!");
+        return;
+      }
+
+      let htmlGallery = "<div class='gallery'>\n";
+      for (let file of files) {
+        try {
+          const res = await fetch(API_URL, {
+            method: "POST",
+            body: file
+          });
+          const data = await res.json();
+          if (data.link) {
+            const imgHTML = `<img src="${data.link}" alt="girl xinh" loading="lazy" />`;
+            htmlGallery += imgHTML + "\n";
+            const img = document.createElement("img");
+            img.src = data.link;
+            preview.appendChild(img);
+          } else {
+            htmlGallery += `<!-- lỗi: ${file.name} -->\n`;
+          }
+        } catch (err) {
+          htmlGallery += `<!-- lỗi upload: ${file.name} -->\n`;
+        }
+      }
+      htmlGallery += "</div>";
+      output.value = htmlGallery;
+    }
+  </script>
+</body>
+</html>
