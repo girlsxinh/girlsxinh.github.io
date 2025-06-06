@@ -71,6 +71,7 @@
     }
 
     function generateCaption(index, style, link) {
+      // AI Gợi ý caption dựa trên style và thứ tự ảnh (mô phỏng)
       const keywords = ["cuốn hút", "ngọt ngào", "tự nhiên", "gợi cảm", "tỏa sáng", "xinh đẹp", "cá tính", "thần thái"];
       const adjective = keywords[index % keywords.length];
       const suffix = ["gây thương nhớ", "tràn đầy sức sống", "hớp hồn người xem", "rất nổi bật", "khiến bạn rung động"];
@@ -84,7 +85,7 @@
       const year = new Date().getFullYear();
 
       const title = `Bộ ảnh gái xinh ${style} quyến rũ nhất ${year}`;
-      const description = `Tuyển chọn bộ ảnh gái xinh phong cách ${style} với vẻ đẹp tự nhiên, gợi cảm và cuốn hút...`;
+      const description = `Tuyển chọn bộ ảnh gái xinh phong cách ${style} với vẻ đẹp tự nhiên, gợi cảm và cuốn hút. Đây là nguồn cảm hứng cho những ai yêu thích sự trẻ trung, hiện đại và đầy cá tính. Cập nhật đầy đủ với chất lượng ảnh cao, đảm bảo khiến bạn mê mẩn. Cùng chiêm ngưỡng bộ sưu tập đặc sắc dưới đây!`;
       const tags = ["gái xinh", "hot girl", `${style}`, "ảnh đẹp", "gái đẹp", `photoshoot ${style}`, `trending ${year}`, "gallery"];
       const slug = `bo-anh-gai-xinh-${style.replace(/\s+/g, '-')}-${year}`;
 
@@ -125,8 +126,7 @@
         }
       };
 
-      const safeSchema = JSON.stringify(schema, null, 2).replace(/<\/script>/g, '<\\/script>');
-      html += `\n<script type="application/ld+json">\n${safeSchema}\n</script>`;
+      html += `\n<script type="application/ld+json">\n${JSON.stringify(schema, null, 2)}\n<\/script>`;
 
       document.getElementById("outputHTML").value = html;
       document.getElementById("preview").innerHTML = preview;
