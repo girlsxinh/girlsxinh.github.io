@@ -72,21 +72,6 @@
       return ideas[index % ideas.length];
     }
 
-    function generateHashtags(description) {
-      const words = description.toLowerCase().replace(/[^\w\s]/g, '').split(/\s+/);
-      const commonWords = ['là', 'và', 'của', 'trong', 'với', 'cho', 'được', 'các', 'này', 'đây', 'một', 'những'];
-      const filtered = words.filter((word, index, self) => word.length > 3 && !commonWords.includes(word) && self.indexOf(word) === index);
-      return filtered.slice(0, 10).map(w => `#${w}`);
-    }
-
-    function generateSlug(text) {
-      return text.toLowerCase()
-        .normalize('NFD').replace(/\p{Diacritic}/gu, '')
-        .replace(/[^a-z0-9\s-]/g, '')
-        .trim().replace(/\s+/g, '-')
-        .replace(/-+/g, '-');
-    }
-
     function generatePost() {
       const links = document.getElementById("imageLinks").value.trim().split(/\n+/);
       const style = document.getElementById("style").value;
@@ -96,12 +81,11 @@
       const adj = randomAdjs[Math.floor(Math.random() * randomAdjs.length)];
 
       const title = `Bộ ảnh gái xinh ${style} ${adj} nhất ${year}`;
-      const slug = generateSlug(title);
       const description = `Khám phá ngay bộ ảnh gái xinh theo phong cách ${style} cực kỳ ${adj} được yêu thích trong năm ${year}. Mỗi bức hình mang đậm dấu ấn cá nhân và thần thái nổi bật, chắc chắn khiến bạn mê mẩn. Bộ sưu tập này là lựa chọn hoàn hảo cho những ai yêu thích sự mới lạ và cảm hứng từ cái đẹp.`;
-      const tags = generateHashtags(description);
+      const tags = ["gái xinh", "hot girl", style, "ảnh đẹp", "gái đẹp", `photoshoot ${style}`, `trending ${year}`, "gallery"];
 
-      let html = `<h1>${title}</h1>\n<p>${description}</p>\n<p><strong>Slug:</strong> ${slug}</p>\n<ul>`;
-      tags.forEach(tag => { html += `<li>${tag}</li>` });
+      let html = `<h1>${title}</h1>\n<p>${description}</p>\n<ul>`;
+      tags.forEach(tag => { html += `<li>#${tag}</li>` });
       html += `</ul>\n<div class="gallery" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">`;
 
       let preview = "";
@@ -130,14 +114,10 @@
           }
         },
         "datePublished": new Date().toISOString().split('T')[0],
-        "keywords": tags.map(tag => tag.replace('#', '')).join(', '),
-        "mainEntityOfPage": {
-          "@type": "WebPage",
-          "@id": `https://www.girlsxinh.net/${slug}.html`
-        }
+        "keywords": tags.join(', ')
       };
 
-      html += `\n<script type="application/ld+json">\n${JSON.stringify(schema, null, 2)}\n</script>`;
+      html += `\n<script type="application/ld+json">\n${JSON.stringify(schema, null, 2)}\n<\/script>`;
 
       document.getElementById("outputHTML").value = html;
       document.getElementById("preview").innerHTML = preview;
