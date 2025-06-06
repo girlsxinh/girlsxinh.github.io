@@ -15,8 +15,6 @@
     .note { font-size: 13px; color: #666; }
     #copyBtn { background-color: #4CAF50; color: white; border: none; cursor: pointer; }
     #copyBtn:hover { background-color: #45a049; }
-    .share-buttons { margin-top: 20px; }
-    .share-buttons button { margin-right: 5px; background: #2196f3; color: #fff; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; }
   </style>
 </head>
 <body>
@@ -40,12 +38,6 @@
   <h3>HTML bài viết (copy dán vào Blogger):</h3>
   <textarea id="outputHTML" rows="20"></textarea>
   <button id="copyBtn" onclick="copyToClipboard()">📋 Sao chép HTML</button>
-
-  <div class="share-buttons">
-    <button onclick="share('facebook')">Chia sẻ Facebook</button>
-    <button onclick="share('zalo')">Chia sẻ Zalo</button>
-    <button onclick="share('telegram')">Chia sẻ Telegram</button>
-  </div>
 
   <script>
     document.getElementById('uploadInput').addEventListener('change', handleUpload);
@@ -80,26 +72,36 @@
       return ideas[index % ideas.length];
     }
 
-    function extractHashtagsFromText(text) {
-      const words = text.toLowerCase().match(/\b\w{4,}\b/g) || [];
-      const stopwords = ['những', 'khiến', 'cùng', 'đầy', 'đảm', 'với', 'cho', 'đó', 'các', 'bạn', 'một', 'này', 'được'];
-      const filtered = [...new Set(words.filter(w => !stopwords.includes(w)))];
-      return filtered.slice(0, 10);
+    function generateHashtags(description) {
+      const words = description.toLowerCase().replace(/[^\w\s]/g, '').split(/\s+/);
+      const commonWords = ['là', 'và', 'của', 'trong', 'với', 'cho', 'được', 'các', 'này', 'đây', 'một', 'những'];
+      const filtered = words.filter((word, index, self) => word.length > 3 && !commonWords.includes(word) && self.indexOf(word) === index);
+      return filtered.slice(0, 10).map(w => `#${w}`);
+    }
+
+    function generateSlug(text) {
+      return text.toLowerCase()
+        .normalize('NFD').replace(/\p{Diacritic}/gu, '')
+        .replace(/[^a-z0-9\s-]/g, '')
+        .trim().replace(/\s+/g, '-')
+        .replace(/-+/g, '-');
     }
 
     function generatePost() {
       const links = document.getElementById("imageLinks").value.trim().split(/\n+/);
       const style = document.getElementById("style").value;
+
       const year = new Date().getFullYear();
+      const randomAdjs = ["rực rỡ", "ấn tượng", "tinh khôi", "quyến rũ", "bùng nổ"];
+      const adj = randomAdjs[Math.floor(Math.random() * randomAdjs.length)];
 
-      const title = `Bộ ảnh gái xinh ${style} quyến rũ nhất ${year}`;
-      const description = `Tuyển chọn bộ ảnh gái xinh phong cách ${style} với vẻ đẹp tự nhiên, gợi cảm và cuốn hút. Đây là nguồn cảm hứng cho những ai yêu thích sự trẻ trung, hiện đại và đầy cá tính. Cập nhật đầy đủ với chất lượng ảnh cao, đảm bảo khiến bạn mê mẩn. Cùng chiêm ngưỡng bộ sưu tập đặc sắc dưới đây!`;
-      const hashtags = extractHashtagsFromText(description);
-      const tags = [`gái xinh`, `hot girl`, `${style}`, `ảnh đẹp`, ...hashtags];
-      const slug = `bo-anh-gai-xinh-${style.replace(/\s+/g, '-')}-${year}`;
+      const title = `Bộ ảnh gái xinh ${style} ${adj} nhất ${year}`;
+      const slug = generateSlug(title);
+      const description = `Khám phá ngay bộ ảnh gái xinh theo phong cách ${style} cực kỳ ${adj} được yêu thích trong năm ${year}. Mỗi bức hình mang đậm dấu ấn cá nhân và thần thái nổi bật, chắc chắn khiến bạn mê mẩn. Bộ sưu tập này là lựa chọn hoàn hảo cho những ai yêu thích sự mới lạ và cảm hứng từ cái đẹp.`;
+      const tags = generateHashtags(description);
 
-      let html = `<h1>${title}</h1>\n<p>${description}</p>\n<p><strong>Slug URL:</strong> ${slug}</p>\n<p><strong>Tổng số ảnh:</strong> ${links.length}</p>\n<p><strong>Thời gian đăng gợi ý:</strong> ${new Date().toLocaleString()}</p>\n<ul>`;
-      tags.forEach(tag => { html += `<li>#${tag}</li>` });
+      let html = `<h1>${title}</h1>\n<p>${description}</p>\n<p><strong>Slug:</strong> ${slug}</p>\n<ul>`;
+      tags.forEach(tag => { html += `<li>${tag}</li>` });
       html += `</ul>\n<div class="gallery" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">`;
 
       let preview = "";
@@ -128,14 +130,14 @@
           }
         },
         "datePublished": new Date().toISOString().split('T')[0],
-        "keywords": tags.join(', '),
+        "keywords": tags.map(tag => tag.replace('#', '')).join(', '),
         "mainEntityOfPage": {
           "@type": "WebPage",
-          "@id": `https://www.girlsxinh.net/${slug}`
+          "@id": `https://www.girlsxinh.net/${slug}.html`
         }
       };
 
-      html += `\n<script type="application/ld+json">\n${JSON.stringify(schema, null, 2)}\n<\/script>`;
+      html += `\n<script type="application/ld+json">\n${JSON.stringify(schema, null, 2)}\n</script>`;
 
       document.getElementById("outputHTML").value = html;
       document.getElementById("preview").innerHTML = preview;
@@ -147,18 +149,6 @@
       output.setSelectionRange(0, 99999);
       document.execCommand("copy");
       alert("📋 HTML đã được sao chép!");
-    }
-
-    function share(platform) {
-      const title = encodeURIComponent(document.title);
-      const url = encodeURIComponent(window.location.href);
-      let shareUrl = "";
-
-      if (platform === "facebook") shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
-      if (platform === "zalo") shareUrl = `https://zalo.me/share?url=${url}`;
-      if (platform === "telegram") shareUrl = `https://t.me/share/url?url=${url}&text=${title}`;
-
-      window.open(shareUrl, '_blank');
     }
   </script>
 </body>
