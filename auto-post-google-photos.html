@@ -1,0 +1,52 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Auto Post Tool - Google Photos</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f9f9f9; }
+    textarea, input { width: 100%; margin-bottom: 10px; padding: 8px; }
+    button { padding: 10px 20px; font-size: 16px; }
+    #preview img { max-width: 100%; margin: 5px 0; }
+    .note { font-size: 14px; color: #555; margin-bottom: 10px; }
+  </style>
+</head>
+<body>
+  <h2>🖼 Tool Tạo Bài Viết Tự Động (Hỗ trợ Google Photos)</h2>
+  <p class="note">Dán các link ảnh Google Photos (dạng <code>https://lh3.googleusercontent.com/...</code>), mỗi link một dòng.</p>
+
+  <textarea id="imageLinks" rows="6" placeholder="Dán link ảnh Google Photos tại đây..."></textarea>
+  <input id="titleInput" placeholder="Tiêu đề bài viết..." />
+  <button onclick="generatePost()">Tạo bài viết</button>
+
+  <h3>Xem trước:</h3>
+  <div id="preview"></div>
+
+  <h3>HTML bài viết (copy dán vào Blogger):</h3>
+  <textarea id="outputHTML" rows="10"></textarea>
+
+  <script>
+    function generatePost() {
+      const links = document.getElementById("imageLinks").value.trim().split(/\n+/);
+      const title = document.getElementById("titleInput").value.trim() || "Bộ ảnh gái xinh";
+      let html = `<h2>${title}</h2>\n<div class="gallery">\n`;
+      let preview = "";
+
+      links.forEach(link => {
+        if (link.includes("lh3.googleusercontent.com")) {
+          html += `<img src="${link.trim()}" alt="${title}" loading="lazy"/>
+`;
+          preview += `<img src="${link.trim()}" alt="${title}" loading="lazy"/>
+`;
+        }
+      });
+
+      html += "</div>";
+      document.getElementById("outputHTML").value = html;
+      document.getElementById("preview").innerHTML = preview;
+    }
+  </script>
+</body>
+</html>
