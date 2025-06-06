@@ -70,13 +70,12 @@
       });
     }
 
-    function generateCaption(index, style, link) {
-      // AI Gợi ý caption dựa trên style và thứ tự ảnh (mô phỏng)
-      const keywords = ["cuốn hút", "ngọt ngào", "tự nhiên", "gợi cảm", "tỏa sáng", "xinh đẹp", "cá tính", "thần thái"];
-      const adjective = keywords[index % keywords.length];
-      const suffix = ["gây thương nhớ", "tràn đầy sức sống", "hớp hồn người xem", "rất nổi bật", "khiến bạn rung động"];
-      const randomSuffix = suffix[Math.floor(Math.random() * suffix.length)];
-      return `${style.charAt(0).toUpperCase() + style.slice(1)} ${adjective}, ${randomSuffix}`;
+    function generateCaption(index, style) {
+      const adjectives = ["cuốn hút", "ngọt ngào", "tự nhiên", "gợi cảm", "tỏa sáng", "xinh đẹp", "cá tính", "thần thái"];
+      const suffixes = ["gây thương nhớ", "tràn đầy sức sống", "hớp hồn người xem", "rất nổi bật", "khiến bạn rung động"];
+      const adj = adjectives[index % adjectives.length];
+      const suffix = suffixes[Math.floor(Math.random() * suffixes.length)];
+      return `${style.charAt(0).toUpperCase() + style.slice(1)} ${adj}, ${suffix}`;
     }
 
     function generatePost() {
@@ -84,8 +83,8 @@
       const style = document.getElementById("style").value;
       const year = new Date().getFullYear();
 
-      const title = `Bộ ảnh gái xinh ${style} quyến rũ nhất ${year}`;
-      const description = `Tuyển chọn bộ ảnh gái xinh phong cách ${style} với vẻ đẹp tự nhiên, gợi cảm và cuốn hút. Đây là nguồn cảm hứng cho những ai yêu thích sự trẻ trung, hiện đại và đầy cá tính. Cập nhật đầy đủ với chất lượng ảnh cao, đảm bảo khiến bạn mê mẩn. Cùng chiêm ngưỡng bộ sưu tập đặc sắc dưới đây!`;
+      const title = `TOP ${links.length} ảnh gái xinh ${style} siêu hấp dẫn ${year}`;
+      const description = `Khám phá bộ sưu tập gồm ${links.length} hình ảnh gái xinh phong cách ${style}, nổi bật bởi nét đẹp hiện đại, gợi cảm và cuốn hút. Mỗi bức ảnh mang một thần thái riêng, thể hiện cá tính và sức hút đầy mê hoặc. Đây là nguồn cảm hứng tuyệt vời dành cho các tín đồ yêu thích vẻ đẹp tự nhiên, trẻ trung và đầy quyến rũ.`;
       const tags = ["gái xinh", "hot girl", `${style}`, "ảnh đẹp", "gái đẹp", `photoshoot ${style}`, `trending ${year}`, "gallery"];
       const slug = `bo-anh-gai-xinh-${style.replace(/\s+/g, '-')}-${year}`;
 
@@ -96,7 +95,7 @@
       let preview = "";
       links.forEach((link, index) => {
         if (link.includes("lh3.googleusercontent.com") || link.startsWith("data:image")) {
-          const caption = generateCaption(index, style, link);
+          const caption = generateCaption(index, style);
           html += `\n  <figure><img src="${link.trim()}" alt="${caption}" loading="lazy" /><figcaption>${caption}</figcaption></figure>`;
           preview += `<img src="${link.trim()}" alt="${caption}" />\n`;
         }
