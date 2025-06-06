@@ -13,6 +13,8 @@
     input, textarea, select, button { width: 100%; padding: 10px; margin-bottom: 10px; font-size: 15px; }
     #preview img { max-width: 100%; margin: 5px 0; border-radius: 8px; box-shadow: 0 0 5px #ccc; }
     .note { font-size: 13px; color: #666; }
+    #copyBtn { background-color: #4CAF50; color: white; border: none; cursor: pointer; }
+    #copyBtn:hover { background-color: #45a049; }
   </style>
 </head>
 <body>
@@ -34,6 +36,7 @@
 
   <h3>HTML bài viết (copy dán vào Blogger):</h3>
   <textarea id="outputHTML" rows="15"></textarea>
+  <button id="copyBtn" onclick="copyToClipboard()">📋 Sao chép HTML</button>
 
   <script>
     function generatePost() {
@@ -84,6 +87,14 @@
 
       document.getElementById("outputHTML").value = html;
       document.getElementById("preview").innerHTML = preview;
+    }
+
+    function copyToClipboard() {
+      const output = document.getElementById("outputHTML");
+      output.select();
+      output.setSelectionRange(0, 99999);
+      document.execCommand("copy");
+      alert("📋 HTML đã được sao chép!");
     }
   </script>
 </body>
