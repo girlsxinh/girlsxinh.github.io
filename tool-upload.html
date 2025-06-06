@@ -1,0 +1,63 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Upload Ảnh Lấy Link - Blogger Tool</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; }
+    h2 { color: #e91e63; }
+    input, button, textarea { width: 100%; padding: 12px; margin-top: 10px; font-size: 16px; }
+    button { background-color: #e91e63; color: white; border: none; cursor: pointer; }
+    button:hover { background-color: #c2185b; }
+    textarea { height: 150px; }
+    .preview img { width: 100px; margin: 5px; border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <h2>📸 Upload Ảnh & Lấy Link - GirlXinh Blogger Tool</h2>
+  <input type="file" id="imageInput" multiple accept="image/*">
+  <button onclick="uploadImages()">Tải ảnh lên Google Drive</button>
+  <textarea id="output" placeholder="Link ảnh sẽ hiện ở đây..."></textarea>
+  <div class="preview" id="preview"></div>
+
+  <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbznTC3ahKsShrNUhEeHs8QPCcF006MgtdNs-1DIhM39fY8e2LSFT60b_yRYKzfZrU3v/exec";
+
+    async function uploadImages() {
+      const input = document.getElementById("imageInput");
+      const output = document.getElementById("output");
+      const preview = document.getElementById("preview");
+      output.value = "";
+      preview.innerHTML = "";
+
+      const files = input.files;
+      if (!files.length) {
+        alert("Vui lòng chọn ảnh!");
+        return;
+      }
+
+      for (let file of files) {
+        try {
+          const res = await fetch(API_URL, {
+            method: "POST",
+            body: file
+          });
+          const data = await res.json();
+          if (data.link) {
+            output.value += data.link + "\n";
+            const img = document.createElement("img");
+            img.src = data.link;
+            preview.appendChild(img);
+          } else {
+            output.value += "❌ Lỗi: " + file.name + "\n";
+          }
+        } catch (err) {
+          output.value += "❌ Lỗi upload: " + file.name + "\n";
+        }
+      }
+    }
+  </script>
+</body>
+</html>
