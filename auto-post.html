@@ -3,62 +3,62 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Auto Post Tool</title>
+  <title>Tạo bài viết auto từ ảnh Google Drive</title>
   <style>
-    body { font-family: Arial; padding: 20px; background: #fdf6f6; }
-    h2 { color: #e91e63; }
-    textarea { width: 100%; height: 180px; }
-    input, button { padding: 10px; font-size: 16px; width: 100%; margin-top: 10px; }
-    .preview { margin-top: 20px; background: white; padding: 15px; border-radius: 10px; }
-    .copy-btn { background: #4caf50; color: white; border: none; cursor: pointer; margin-top: 10px; }
-    .copy-btn:hover { background: #45a049; }
+    body { font-family: Arial, sans-serif; padding: 20px; background: #fff0f3; color: #333; }
+    textarea, input[type=text] { width: 100%; padding: 10px; margin: 10px 0; }
+    button { padding: 10px 20px; background: #ff5e78; color: white; border: none; cursor: pointer; }
+    button:hover { background: #e64560; }
+    #output, #preview { margin-top: 20px; }
+    .preview-box { background: white; padding: 15px; border-radius: 10px; }
   </style>
 </head>
 <body>
-  <h1>🧠 Tạo bài viết auto từ ảnh Google Drive</h1>
-  <input type="text" id="keyword" placeholder="Nhập từ khóa, ví dụ: ngọc trinh">
-  <textarea id="imageLink" placeholder="Dán link ảnh Google Drive ở đây..."></textarea>
+  <h2>💡 Tạo bài viết auto từ ảnh Google Drive</h2>
+
+  <input type="text" id="keyword" placeholder="Nhập từ khóa, ví dụ: gái xinh">
+  <textarea id="gdrive" rows="3" placeholder="Dán link ảnh Google Drive dạng https://drive.google.com/file/d/.../view?usp=sharing"></textarea>
   <button onclick="generatePost()">Tạo bài viết</button>
 
-  <h3>📌 HTML để đăng Blogger:</h3>
-  <textarea id="resultHTML" readonly></textarea>
-  <button class="copy-btn" onclick="copyHTML()">📋 Copy HTML</button>
+  <div id="output">
+    <h3>📌 HTML để dán vào Blogger:</h3>
+    <textarea id="html" rows="6" readonly></textarea>
+    <button onclick="copyHTML()">📋 Copy HTML</button>
+  </div>
 
-  <div class="preview" id="previewPost"></div>
+  <div id="preview">
+    <h3>👀 Xem trước:</h3>
+    <div class="preview-box" id="previewBox"></div>
+  </div>
 
   <script>
-    function convertToDirectLink(link) {
-      const match = link.match(/\/d\/([a-zA-Z0-9_-]+)\//);
-      if (match && match[1]) {
-        return `https://drive.google.com/uc?export=view&id=${match[1]}`;
-      }
-      return link;
+    function extractDriveId(url) {
+      const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+      return match ? match[1] : '';
     }
 
     function generatePost() {
-      const keyword = document.getElementById('keyword').value.trim();
-      const imageLink = document.getElementById('imageLink').value.trim();
-      const directLink = convertToDirectLink(imageLink);
+      const keyword = document.getElementById("keyword").value.trim();
+      const link = document.getElementById("gdrive").value.trim();
+      const id = extractDriveId(link);
+      const imgSrc = id ? `https://drive.google.com/uc?export=view&id=${id}` : '';
 
-      const title = `${keyword} cực dễ thương & quyến rũ 💖`;
-      const description = `Bộ ảnh ${keyword} tuyển chọn cực chất, cực cuốn hút dành cho bạn. Click xem ngay loạt ảnh full HD chất lượng cao bên dưới nhé!`;
-      const english = `<em>Beautiful ${keyword} Photos 💖. High-quality, full HD photos of cute and charming girls in topic "${keyword}".</em>`;
-      const imageHTML = `<div><img src="${directLink}" loading="lazy" alt="${keyword}"></div>`;
-      const tags = `<p>#${keyword.replace(/\s+/g, '')} #gái_xinh #girlxinh #blogger</p>`;
+      const title = `${keyword ? keyword : "Gái xinh"} dễ thương & quyến rũ 💖`;
+      const description = `Bộ ảnh tuyển chọn cực chất, cực cuốn hút dành cho bạn. Click xem ngay loạt ảnh full HD chất lượng cao bên dưới nhé!`;
+      const seoText = `<em>Beautiful Photos 💖. High-quality, full HD photos of cute and charming girls in topic "${keyword}".</em>`;
+      const hashtags = `#gái_xinh #girlxinh #blogger`;
 
-      const fullHTML = `<h2>${title}</h2><p>${description}</p><p>${english}</p>${imageHTML}${tags}`;
+      const html = `<h2>${title}</h2><p>${description}</p><p>${seoText}</p><div><img src="${imgSrc}" loading="lazy" alt=""></div><p>${hashtags}</p>`;
 
-      document.getElementById('resultHTML').value = fullHTML;
-      document.getElementById('previewPost').innerHTML = fullHTML;
+      document.getElementById("html").value = html;
+      document.getElementById("previewBox").innerHTML = html;
     }
 
     function copyHTML() {
-      const html = document.getElementById('resultHTML');
+      const html = document.getElementById("html");
       html.select();
-      html.setSelectionRange(0, 99999);
       document.execCommand("copy");
-      alert("Đã copy mã HTML!");
+      alert("Đã copy HTML!");
     }
   </script>
 </body>
