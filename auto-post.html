@@ -19,8 +19,9 @@
 </head>
 <body>
   <h1>🖼 Auto Post Gái Xinh Chuẩn SEO</h1>
-  <p class="note">Dán link ảnh Google Photos dạng <code>https://lh3.googleusercontent.com/...</code>, mỗi ảnh 1 dòng.</p>
+  <p class="note">Dán link ảnh Google Photos dạng <code>https://lh3.googleusercontent.com/...</code>, mỗi ảnh 1 dòng. Hoặc chọn ảnh bên dưới để tải lên.</p>
 
+  <input type="file" id="uploadInput" multiple accept="image/*" />
   <textarea id="imageLinks" rows="6" placeholder="Dán link ảnh tại đây..."></textarea>
   <select id="style">
     <option value="hot girl">Hot girl</option>
@@ -35,43 +36,60 @@
   <div id="preview"></div>
 
   <h3>HTML bài viết (copy dán vào Blogger):</h3>
-  <textarea id="outputHTML" rows="15"></textarea>
+  <textarea id="outputHTML" rows="20"></textarea>
   <button id="copyBtn" onclick="copyToClipboard()">📋 Sao chép HTML</button>
 
   <script>
+    document.getElementById('uploadInput').addEventListener('change', handleUpload);
+
+    function handleUpload(event) {
+      const files = event.target.files;
+      let readerPromises = [];
+
+      for (let i = 0; i < files.length; i++) {
+        const reader = new FileReader();
+        const promise = new Promise(resolve => {
+          reader.onload = e => resolve(e.target.result);
+        });
+        reader.readAsDataURL(files[i]);
+        readerPromises.push(promise);
+      }
+
+      Promise.all(readerPromises).then(dataURLs => {
+        const textarea = document.getElementById("imageLinks");
+        textarea.value += dataURLs.join("\n") + "\n";
+      });
+    }
+
     function generatePost() {
       const links = document.getElementById("imageLinks").value.trim().split(/\n+/);
       const style = document.getElementById("style").value;
 
-      // Sinh tiêu đề & mô tả tự động
-      const title = `Bộ ảnh gái xinh ${style} mới nhất ${new Date().getFullYear()}`;
-      const description = `Tuyển chọn những hình ảnh gái xinh ${style} cực chất, sắc nét, cập nhật mới nhất hôm nay. Bộ ảnh chuẩn HD dành cho fan yêu thích vẻ đẹp ${style}.`;
+      const year = new Date().getFullYear();
+      const title = `Bộ ảnh gái xinh ${style} mới nhất ${year}`;
+      const description = `Cùng khám phá tuyển tập hình ảnh gái xinh phong cách ${style} đầy quyến rũ và cá tính. Mỗi bức ảnh đều được chọn lọc kỹ lưỡng với chất lượng HD sắc nét, đảm bảo khiến bạn không thể rời mắt. Đây là bộ sưu tập hoàn hảo dành cho những ai yêu thích vẻ đẹp tự nhiên và thần thái cuốn hút. Cập nhật mới nhất ${year}.`;
       const tags = [`gái xinh`, `hot girl`, `${style}`, `ảnh đẹp`, `gái đẹp`, `photoshoot ${style}`];
 
-      // Gallery + preview
-      let html = `<h1>${title}</h1>\n<p>${description}</p>\n<p>${tags.map(t => `#${t}`).join(' ')}</p>\n<div class="gallery">\n`;
-      let preview = "";
+      let html = `<h1>${title}</h1>\n<p>${description}</p>\n<ul>`;
+      tags.forEach(tag => { html += `<li>#${tag}</li>` });
+      html += `</ul>\n<div class="gallery">`;
 
+      let preview = "";
       links.forEach(link => {
-        if (link.includes("lh3.googleusercontent.com")) {
-          html += `<img src="${link.trim()}" alt="${title}" loading="lazy" />\n`;
-          preview += `<img src="${link.trim()}" alt="${title}" />\n`;
+        if (link.includes("lh3.googleusercontent.com") || link.startsWith("data:image")) {
+          html += `\n  <img src="${link.trim()}" alt="${style} ${year}" loading="lazy" />`;
+          preview += `<img src="${link.trim()}" alt="${style} ${year}" />\n`;
         }
       });
+      html += `\n</div>`;
 
-      html += `</div>`;
-
-      // Schema JSON-LD
       const schema = {
         "@context": "https://schema.org",
         "@type": "BlogPosting",
         "headline": title,
         "image": links,
         "description": description,
-        "author": {
-          "@type": "Person",
-          "name": "girlsxinh.net"
-        },
+        "author": { "@type": "Person", "name": "girlsxinh.net" },
         "publisher": {
           "@type": "Organization",
           "name": "girlsxinh.net",
