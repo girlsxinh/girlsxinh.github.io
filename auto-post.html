@@ -15,7 +15,6 @@
     .note { font-size: 13px; color: #666; }
     #copyBtn { background-color: #4CAF50; color: white; border: none; cursor: pointer; }
     #copyBtn:hover { background-color: #45a049; }
-    .caption-input { width: 100%; margin-bottom: 5px; font-size: 13px; padding: 5px; }
   </style>
 </head>
 <body>
@@ -24,7 +23,6 @@
 
   <input type="file" id="uploadInput" multiple accept="image/*" />
   <textarea id="imageLinks" rows="6" placeholder="Dán link ảnh tại đây..."></textarea>
-  <div id="captionsContainer"></div>
   <select id="style">
     <option value="hot girl">Hot girl</option>
     <option value="dễ thương">Dễ thương</option>
@@ -43,7 +41,6 @@
 
   <script>
     document.getElementById('uploadInput').addEventListener('change', handleUpload);
-    document.getElementById('imageLinks').addEventListener('input', updateCaptionInputs);
 
     function handleUpload(event) {
       const files = event.target.files;
@@ -61,22 +58,6 @@
       Promise.all(readerPromises).then(dataURLs => {
         const textarea = document.getElementById("imageLinks");
         textarea.value += dataURLs.join("\n") + "\n";
-        updateCaptionInputs();
-      });
-    }
-
-    function updateCaptionInputs() {
-      const links = document.getElementById("imageLinks").value.trim().split(/\n+/);
-      const container = document.getElementById("captionsContainer");
-      container.innerHTML = '';
-      links.forEach((link, index) => {
-        if (link.trim()) {
-          const input = document.createElement("input");
-          input.className = "caption-input";
-          input.placeholder = `Caption cho ảnh ${index + 1}`;
-          input.id = `caption-${index}`;
-          container.appendChild(input);
-        }
       });
     }
 
@@ -126,8 +107,7 @@
       let preview = "";
       links.forEach((link, index) => {
         if (link.includes("lh3.googleusercontent.com") || link.startsWith("data:image")) {
-          const userCaption = document.getElementById(`caption-${index}`)?.value.trim();
-          const caption = userCaption || generateCaption(index, style);
+          const caption = generateCaption(index, style);
           html += `\n  <figure><img src="${link.trim()}" alt="${caption}" loading="lazy" /><figcaption>${caption}</figcaption></figure>`;
           preview += `<img src="${link.trim()}" alt="${caption}" />\n`;
         }
