@@ -15,6 +15,9 @@
     .note { font-size: 13px; color: #666; }
     #copyBtn { background-color: #4CAF50; color: white; border: none; cursor: pointer; }
     #copyBtn:hover { background-color: #45a049; }
+    .caption-input { width: 100%; margin-bottom: 5px; font-size: 13px; padding: 5px; }
+    .share-buttons { margin-top: 20px; text-align: center; }
+    .share-buttons a { margin: 0 10px; text-decoration: none; font-size: 20px; }
   </style>
 </head>
 <body>
@@ -23,6 +26,7 @@
 
   <input type="file" id="uploadInput" multiple accept="image/*" />
   <textarea id="imageLinks" rows="6" placeholder="Dán link ảnh tại đây..."></textarea>
+  <div id="captionsContainer"></div>
   <select id="style">
     <option value="hot girl">Hot girl</option>
     <option value="dễ thương">Dễ thương</option>
@@ -41,6 +45,7 @@
 
   <script>
     document.getElementById('uploadInput').addEventListener('change', handleUpload);
+    document.getElementById('imageLinks').addEventListener('input', updateCaptionInputs);
 
     function handleUpload(event) {
       const files = event.target.files;
@@ -58,6 +63,22 @@
       Promise.all(readerPromises).then(dataURLs => {
         const textarea = document.getElementById("imageLinks");
         textarea.value += dataURLs.join("\n") + "\n";
+        updateCaptionInputs();
+      });
+    }
+
+    function updateCaptionInputs() {
+      const links = document.getElementById("imageLinks").value.trim().split(/\n+/);
+      const container = document.getElementById("captionsContainer");
+      container.innerHTML = '';
+      links.forEach((link, index) => {
+        if (link.trim()) {
+          const input = document.createElement("input");
+          input.className = "caption-input";
+          input.placeholder = `Caption cho ảnh ${index + 1}`;
+          input.id = `caption-${index}`;
+          container.appendChild(input);
+        }
       });
     }
 
@@ -72,28 +93,54 @@
       return ideas[index % ideas.length];
     }
 
+    function generateHashtags(description) {
+      const words = description.toLowerCase().replace(/[^\w\s]/g, '').split(/\s+/);
+      const commonWords = ['là', 'và', 'của', 'trong', 'với', 'cho', 'được', 'các', 'này', 'đây', 'một', 'những'];
+      const filtered = words.filter((word, index, self) => word.length > 3 && !commonWords.includes(word) && self.indexOf(word) === index);
+      return filtered.slice(0, 10).map(w => `#${w}`);
+    }
+
+    function generateSlug(text) {
+      return text.toLowerCase()
+        .normalize('NFD').replace(/\p{Diacritic}/gu, '')
+        .replace(/[^a-z0-9\s-]/g, '')
+        .trim().replace(/\s+/g, '-')
+        .replace(/-+/g, '-');
+    }
+
     function generatePost() {
       const links = document.getElementById("imageLinks").value.trim().split(/\n+/);
       const style = document.getElementById("style").value;
 
       const year = new Date().getFullYear();
-      const title = `Bộ ảnh gái xinh ${style} quyến rũ nhất ${year}`;
-      const description = `Tuyển chọn bộ ảnh gái xinh phong cách ${style} với vẻ đẹp tự nhiên, gợi cảm và cuốn hút. Đây là nguồn cảm hứng cho những ai yêu thích sự trẻ trung, hiện đại và đầy cá tính. Cập nhật đầy đủ với chất lượng ảnh cao, đảm bảo khiến bạn mê mẩn. Cùng chiêm ngưỡng bộ sưu tập đặc sắc dưới đây!`;
-      const tags = [`gái xinh`, `hot girl`, `${style}`, `ảnh đẹp`, `gái đẹp`, `photoshoot ${style}`, `trending ${year}`, `gallery`];
+      const randomAdjs = ["rực rỡ", "ấn tượng", "tinh khôi", "quyến rũ", "bùng nổ"];
+      const adj = randomAdjs[Math.floor(Math.random() * randomAdjs.length)];
 
-      let html = `<h1>${title}</h1>\n<p>${description}</p>\n<ul>`;
-      tags.forEach(tag => { html += `<li>#${tag}</li>` });
+      const title = `Bộ ảnh gái xinh ${style} ${adj} nhất ${year}`;
+      const slug = generateSlug(title);
+      const description = `Khám phá ngay bộ ảnh gái xinh theo phong cách ${style} cực kỳ ${adj} được yêu thích trong năm ${year}. Mỗi bức hình mang đậm dấu ấn cá nhân và thần thái nổi bật, chắc chắn khiến bạn mê mẩn. Bộ sưu tập này là lựa chọn hoàn hảo cho những ai yêu thích sự mới lạ và cảm hứng từ cái đẹp.`;
+      const tags = generateHashtags(description);
+
+      let html = `<h1>${title}</h1>\n<p>${description}</p>\n<p><strong>Slug:</strong> ${slug}</p>\n<ul>`;
+      tags.forEach(tag => { html += `<li>${tag}</li>` });
       html += `</ul>\n<div class="gallery" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">`;
 
       let preview = "";
       links.forEach((link, index) => {
         if (link.includes("lh3.googleusercontent.com") || link.startsWith("data:image")) {
-          const caption = generateCaption(index, style);
+          const userCaption = document.getElementById(`caption-${index}`)?.value.trim();
+          const caption = userCaption || generateCaption(index, style);
           html += `\n  <figure><img src="${link.trim()}" alt="${caption}" loading="lazy" /><figcaption>${caption}</figcaption></figure>`;
           preview += `<img src="${link.trim()}" alt="${caption}" />\n`;
         }
       });
       html += `\n</div>`;
+
+      html += `<div class="share-buttons">
+        <a href="https://www.facebook.com/sharer/sharer.php?u=https://www.girlsxinh.net/${slug}.html" target="_blank">🔗 Facebook</a>
+        <a href="https://zalo.me/share?url=https://www.girlsxinh.net/${slug}.html" target="_blank">📱 Zalo</a>
+        <a href="https://t.me/share/url?url=https://www.girlsxinh.net/${slug}.html" target="_blank">📨 Telegram</a>
+      </div>`;
 
       const schema = {
         "@context": "https://schema.org",
@@ -111,10 +158,14 @@
           }
         },
         "datePublished": new Date().toISOString().split('T')[0],
-        "keywords": tags.join(', ')
+        "keywords": tags.map(tag => tag.replace('#', '')).join(', '),
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": `https://www.girlsxinh.net/${slug}.html`
+        }
       };
 
-      html += `\n<script type="application/ld+json">\n${JSON.stringify(schema, null, 2)}\n<\/script>`;
+      html += `\n<script type="application/ld+json">\n${JSON.stringify(schema, null, 2)}\n</script>`;
 
       document.getElementById("outputHTML").value = html;
       document.getElementById("preview").innerHTML = preview;
