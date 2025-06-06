@@ -17,7 +17,6 @@
     #copyBtn:hover { background-color: #45a049; }
     .share-buttons { margin-top: 20px; }
     .share-buttons button { margin-right: 5px; background: #2196f3; color: #fff; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; }
-    .hidden { display: none; }
   </style>
 </head>
 <body>
@@ -71,11 +70,21 @@
     }
 
     function generateCaption(index, style) {
-      const adjectives = ["cuốn hút", "ngọt ngào", "tự nhiên", "gợi cảm", "tỏa sáng", "xinh đẹp", "cá tính", "thần thái"];
-      const suffixes = ["gây thương nhớ", "tràn đầy sức sống", "hớp hồn người xem", "rất nổi bật", "khiến bạn rung động"];
-      const adj = adjectives[index % adjectives.length];
-      const suffix = suffixes[Math.floor(Math.random() * suffixes.length)];
-      return `${style.charAt(0).toUpperCase() + style.slice(1)} ${adj}, ${suffix}`;
+      const ideas = [
+        `Vẻ đẹp ${style} cuốn hút ánh nhìn`,
+        `${style} ngọt ngào khiến ai cũng mê`,
+        `Góc nghiêng thần thánh của cô nàng ${style}`,
+        `Phong cách ${style} tự nhiên đầy cá tính`,
+        `Ánh mắt ${style} khiến bạn không thể rời mắt`
+      ];
+      return ideas[index % ideas.length];
+    }
+
+    function extractHashtagsFromText(text) {
+      const words = text.toLowerCase().match(/\b\w{4,}\b/g) || [];
+      const stopwords = ['những', 'khiến', 'cùng', 'đầy', 'đảm', 'với', 'cho', 'đó', 'các', 'bạn', 'một', 'này', 'được'];
+      const filtered = [...new Set(words.filter(w => !stopwords.includes(w)))];
+      return filtered.slice(0, 10);
     }
 
     function generatePost() {
@@ -83,9 +92,10 @@
       const style = document.getElementById("style").value;
       const year = new Date().getFullYear();
 
-      const title = `TOP ${links.length} ảnh gái xinh ${style} siêu hấp dẫn ${year}`;
-      const description = `Khám phá bộ sưu tập gồm ${links.length} hình ảnh gái xinh phong cách ${style}, nổi bật bởi nét đẹp hiện đại, gợi cảm và cuốn hút. Mỗi bức ảnh mang một thần thái riêng, thể hiện cá tính và sức hút đầy mê hoặc. Đây là nguồn cảm hứng tuyệt vời dành cho các tín đồ yêu thích vẻ đẹp tự nhiên, trẻ trung và đầy quyến rũ.`;
-      const tags = ["gái xinh", "hot girl", `${style}`, "ảnh đẹp", "gái đẹp", `photoshoot ${style}`, `trending ${year}`, "gallery"];
+      const title = `Bộ ảnh gái xinh ${style} quyến rũ nhất ${year}`;
+      const description = `Tuyển chọn bộ ảnh gái xinh phong cách ${style} với vẻ đẹp tự nhiên, gợi cảm và cuốn hút. Đây là nguồn cảm hứng cho những ai yêu thích sự trẻ trung, hiện đại và đầy cá tính. Cập nhật đầy đủ với chất lượng ảnh cao, đảm bảo khiến bạn mê mẩn. Cùng chiêm ngưỡng bộ sưu tập đặc sắc dưới đây!`;
+      const hashtags = extractHashtagsFromText(description);
+      const tags = [`gái xinh`, `hot girl`, `${style}`, `ảnh đẹp`, ...hashtags];
       const slug = `bo-anh-gai-xinh-${style.replace(/\s+/g, '-')}-${year}`;
 
       let html = `<h1>${title}</h1>\n<p>${description}</p>\n<p><strong>Slug URL:</strong> ${slug}</p>\n<p><strong>Tổng số ảnh:</strong> ${links.length}</p>\n<p><strong>Thời gian đăng gợi ý:</strong> ${new Date().toLocaleString()}</p>\n<ul>`;
