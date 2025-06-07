@@ -72,29 +72,17 @@
       return ideas[index % ideas.length];
     }
 
-    function suggestTitle(style, year) {
-      const templates = [
-        `TOP những bộ ảnh ${style} hot nhất ${year}`,
-        `Tuyển chọn ảnh ${style} đẹp rụng tim ${year}`,
-        `Khám phá vẻ đẹp ${style} nổi bật năm ${year}`,
-        `Bộ sưu tập gái xinh ${style} cuốn hút năm ${year}`
-      ];
-      return templates[Math.floor(Math.random() * templates.length)];
-    }
-
-    function suggestTags(style, year) {
-      const baseTags = ["gái xinh", "hot girl", style, "ảnh đẹp", "trending", "blog ảnh"];
-      return [...new Set([...baseTags, `${style} ${year}`, `photoshoot ${style}`, `nét đẹp ${style}`])];
-    }
-
     function generatePost() {
       const links = document.getElementById("imageLinks").value.trim().split(/\n+/);
       const style = document.getElementById("style").value;
-      const year = new Date().getFullYear();
 
-      const title = suggestTitle(style, year);
-      const description = `Khám phá ngay ${links.length} bức ảnh theo phong cách ${style} được yêu thích nhất năm ${year}. Bộ ảnh mang đậm vẻ đẹp tự nhiên, cá tính, và đầy sức hút của những cô nàng ${style}. Mỗi bức hình là một khoảnh khắc cuốn hút, ghi lại nét đẹp rạng ngời khiến bạn không thể rời mắt.`;
-      const tags = suggestTags(style, year);
+      const year = new Date().getFullYear();
+      const randomAdjs = ["rực rỡ", "ấn tượng", "tinh khôi", "quyến rũ", "bùng nổ"];
+      const adj = randomAdjs[Math.floor(Math.random() * randomAdjs.length)];
+
+      const title = `Bộ ảnh gái xinh ${style} ${adj} nhất ${year}`;
+      const description = `Khám phá ngay bộ ảnh gái xinh theo phong cách ${style} cực kỳ ${adj} được yêu thích trong năm ${year}. Mỗi bức hình mang đậm dấu ấn cá nhân và thần thái nổi bật, chắc chắn khiến bạn mê mẩn. Bộ sưu tập này là lựa chọn hoàn hảo cho những ai yêu thích sự mới lạ và cảm hứng từ cái đẹp.`;
+      const tags = ["gái xinh", "hot girl", style, "ảnh đẹp", "gái đẹp", `photoshoot ${style}`, `trending ${year}`, "gallery"];
 
       let html = `<h1>${title}</h1>\n<p>${description}</p>\n<ul>`;
       tags.forEach(tag => { html += `<li>#${tag}</li>` });
@@ -129,8 +117,7 @@
         "keywords": tags.join(', ')
       };
 
-      const safeSchema = JSON.stringify(schema, null, 2).replace(/<\/script>/g, '<\\/script>');
-      html += `\n<script type="application/ld+json">\n${safeSchema}\n</script>`;
+      html += `\n<script type="application/ld+json">\n${JSON.stringify(schema, null, 2)}\n<\/script>`;
 
       document.getElementById("outputHTML").value = html;
       document.getElementById("preview").innerHTML = preview;
