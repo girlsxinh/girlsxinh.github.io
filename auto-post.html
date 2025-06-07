@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tạo bài viết gái xinh - Tool SEO Tự Động</title>
-  <meta name="description" content="Tạo bài viết gái xinh chuẩn SEO từ ảnh Google Photos, tự động sinh tiêu đề, mô tả, thẻ heading, tags và schema cho Blogger." />
-  <meta name="keywords" content="gái xinh, ảnh hot girl, blogger, SEO, Google Photos, auto post tool" />
+  <title>Tạo bài viết gái xinh - Tool SEO Tự Động Nâng Cấp</title>
+  <meta name="description" content="Công cụ tạo bài viết gái xinh chuẩn SEO từ ảnh Google Photos. Gợi ý tiêu đề hấp dẫn, nội dung cuốn hút, heading rõ ràng, tags phong phú và schema chi tiết." />
+  <meta name="keywords" content="gái xinh, hot girl, blogger, SEO, Google Photos, auto post tool, ảnh đẹp, bài viết tự động" />
   <meta name="author" content="girlsxinh.net" />
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; background: #f0f2f5; }
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f8f9fa; }
     h1 { color: #e91e63; }
     input, textarea, select, button { width: 100%; padding: 10px; margin-bottom: 10px; font-size: 15px; }
     #preview img { max-width: 100%; margin: 5px 0; border-radius: 8px; box-shadow: 0 0 5px #ccc; }
@@ -18,7 +18,7 @@
   </style>
 </head>
 <body>
-  <h1>🖼 Auto Post Gái Xinh Chuẩn SEO</h1>
+  <h1>🖼 Auto Post Gái Xinh Chuẩn SEO - Nâng Cấp</h1>
   <p class="note">Dán link ảnh Google Photos dạng <code>https://lh3.googleusercontent.com/...</code>, mỗi ảnh 1 dòng. Hoặc chọn ảnh bên dưới để tải lên.</p>
 
   <input type="file" id="uploadInput" multiple accept="image/*" />
@@ -63,11 +63,11 @@
 
     function generateCaption(index, style) {
       const ideas = [
-        `Vẻ đẹp ${style} cuốn hút ánh nhìn`,
-        `${style} ngọt ngào khiến ai cũng mê`,
-        `Góc nghiêng thần thánh của cô nàng ${style}`,
-        `Phong cách ${style} tự nhiên đầy cá tính`,
-        `Ánh mắt ${style} khiến bạn không thể rời mắt`
+        `Vẻ đẹp ${style} khiến bao trái tim tan chảy`,
+        `Khoảnh khắc ${style} không thể rời mắt`,
+        `Nét đẹp ${style} đầy cuốn hút`,
+        `Thần thái ${style} đỉnh cao`,
+        `Phong cách ${style} gây thương nhớ`
       ];
       return ideas[index % ideas.length];
     }
@@ -75,35 +75,52 @@
     function generatePost() {
       const links = document.getElementById("imageLinks").value.trim().split(/\n+/);
       const style = document.getElementById("style").value;
-
       const year = new Date().getFullYear();
-      const randomAdjs = ["rực rỡ", "ấn tượng", "tinh khôi", "quyến rũ", "bùng nổ"];
-      const adj = randomAdjs[Math.floor(Math.random() * randomAdjs.length)];
+      const adjectives = ["đốn tim", "đỉnh cao", "visual cực mạnh", "hút hồn", "bùng nổ sắc đẹp"];
+      const title = `Top ảnh gái xinh phong cách ${style} ${adjectives[Math.floor(Math.random()*adjectives.length)]} ${year}`;
 
-      const title = `Bộ ảnh gái xinh ${style} ${adj} nhất ${year}`;
-      const description = `Khám phá ngay bộ ảnh gái xinh theo phong cách ${style} cực kỳ ${adj} được yêu thích trong năm ${year}. Mỗi bức hình mang đậm dấu ấn cá nhân và thần thái nổi bật, chắc chắn khiến bạn mê mẩn. Bộ sưu tập này là lựa chọn hoàn hảo cho những ai yêu thích sự mới lạ và cảm hứng từ cái đẹp.`;
-      const tags = ["gái xinh", "hot girl", style, "ảnh đẹp", "gái đẹp", `photoshoot ${style}`, `trending ${year}`, "gallery"];
+      const intro = `<h2>Giới thiệu bộ ảnh</h2>
+<p>Trong thế giới số hiện đại, hình ảnh luôn là ngôn ngữ mạnh mẽ để truyền tải cảm xúc và cái đẹp. Bộ ảnh dưới đây là tập hợp những khoảnh khắc gái xinh phong cách ${style}, mang đến trải nghiệm thị giác đầy ấn tượng và cảm xúc.</p>`;
 
-      let html = `<h1>${title}</h1>\n<p>${description}</p>\n<ul>`;
-      tags.forEach(tag => { html += `<li>#${tag}</li>` });
-      html += `</ul>\n<div class="gallery" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">`;
+      const detail = `<h2>Chi tiết hình ảnh</h2>
+<p>Mỗi bức ảnh được lựa chọn đều thể hiện cá tính và thần thái riêng, từ ánh mắt, nụ cười đến cách tạo dáng. Phong cách ${style} trong năm ${year} thực sự lên ngôi với vẻ ngoài vừa gần gũi, vừa nổi bật. Đây sẽ là nguồn cảm hứng tuyệt vời cho những ai yêu cái đẹp.</p>`;
 
+      const tags = [
+        "gái xinh", "hot girl", "ảnh đẹp", "gái đẹp", style, 
+        `trending ${year}`, "visual", "ảnh chân dung", "influencer", "profile pic"
+      ];
+
+      let html = \`<h1>\${title}</h1>
+\${intro}
+\${detail}
+<h2>Hình ảnh nổi bật</h2>
+<div class="gallery" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">\`;
       let preview = "";
+      let imageSchema = [];
+
       links.forEach((link, index) => {
         if (link.includes("lh3.googleusercontent.com") || link.startsWith("data:image")) {
           const caption = generateCaption(index, style);
-          html += `\n  <figure><img src="${link.trim()}" alt="${caption}" loading="lazy" /><figcaption>${caption}</figcaption></figure>`;
-          preview += `<img src="${link.trim()}" alt="${caption}" />\n`;
+          html += \`<figure><img src="\${link.trim()}" alt="\${caption}" loading="lazy" /><figcaption>\${caption}</figcaption></figure>\`;
+          preview += \`<img src="\${link.trim()}" alt="\${caption}" />\`;
+          imageSchema.push({
+            "@type": "ImageObject",
+            "contentUrl": link.trim(),
+            "caption": caption
+          });
         }
       });
-      html += `\n</div>`;
+      html += "</div>";
+
+      html += "<h2>Tags liên quan</h2><ul>";
+      tags.forEach(tag => { html += \`<li>#\${tag}</li>\`; });
+      html += "</ul>";
 
       const schema = {
         "@context": "https://schema.org",
         "@type": "BlogPosting",
         "headline": title,
-        "image": links,
-        "description": description,
+        "description": "Bộ ảnh gái xinh phong cách " + style + " năm " + year + " với thần thái đỉnh cao và visual thu hút.",
         "author": { "@type": "Person", "name": "girlsxinh.net" },
         "publisher": {
           "@type": "Organization",
@@ -114,10 +131,13 @@
           }
         },
         "datePublished": new Date().toISOString().split('T')[0],
-        "keywords": tags.join(', ')
+        "image": imageSchema,
+        "keywords": tags.join(", ")
       };
 
-      html += `\n<script type="application/ld+json">\n${JSON.stringify(schema, null, 2)}\n<\/script>`;
+      html += \`<script type="application/ld+json">
+\${JSON.stringify(schema, null, 2)}
+</script>\`;
 
       document.getElementById("outputHTML").value = html;
       document.getElementById("preview").innerHTML = preview;
