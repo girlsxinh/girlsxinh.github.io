@@ -1,4 +1,345 @@
-<!DOCTYPE html>
+<script>
+    let selectedStyle = 'hot girl';
+    let selectedContentLength = 'medium';
+    
+    // Custom Select functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      initializeCustomSelects();
+    });
+    
+    function initializeCustomSelects() {
+      const selects = document.querySelectorAll('.custom-select');
+      
+      selects.forEach(select => {
+        const selectSelected = select.querySelector('.select-selected');
+        const selectItems = select.querySelector('.select-items');
+        const selectOptions = selectItems.querySelectorAll('div');
+        
+        selectSelected.addEventListener('click', function() {
+          selectItems.classList.toggle('select-hide');
+          selectSelected.classList.toggle('select-arrow-active');
+        });
+        
+        selectOptions.forEach(option => {
+          option.addEventListener('click', function() {
+            const value = this.getAttribute('data-value');
+            const text = this.textContent;
+            
+            selectSelected.querySelector('span').textContent = text;
+            
+            if (select.id === 'contentLengthSelect') {
+              selectedContentLength = value;
+            } else {
+              selectedStyle = value;
+            }
+            
+            selectOptions.forEach(opt => opt.classList.remove('same-as-selected'));
+            this.classList.add('same-as-selected');
+            
+            selectItems.classList.add('select-hide');
+            selectSelected.classList.remove('select-arrow-active');
+          });
+        });
+      });
+      
+      // Close dropdown when clicking outside
+      document.addEventListener('click', function(e) {
+        if (!e.target.closest('.custom-select')) {
+          document.querySelectorAll('.select-items').forEach(items => {
+            items.classList.add('select-hide');
+          });
+          document.querySelectorAll('.select-selected').forEach(selected => {
+            selected.classList.remove('select-arrow-active');
+          });
+        }
+      });
+    }
+
+    document.getElementById('uploadInput').addEventListener('change', handleUpload);
+
+    function showStatus(message, type = 'success') {
+      const status = document.getElementById('status');
+      status.textContent = message;
+      status.className = `status ${type}`;
+      status.style.display = 'block';
+      
+      setTimeout(() => {
+        status.style.display = 'none';
+      }, 3000);
+    }
+
+    function validateImage(file) {
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+      const maxSize = 5 * 1024 * 1024; // 5MB
+      
+      if (!allowedTypes.includes(file.type)) {
+        throw new Error('Chỉ hỗ trợ file ảnh: JPG, PNG, GIF, WebP');
+      }
+      if (file.size > maxSize) {
+        throw new Error('File quá lớn (tối đa 5MB)');
+      }
+    }
+
+    async function handleUpload(event) {
+      const files = Array.from(event.target.files);
+      
+      try {
+        showStatus('Đang xử lý ảnh...', 'success');
+        
+        const dataURLs = await Promise.all(files.map(file => {
+          validateImage(file);
+          return new Promise(resolve => {
+            const reader = new FileReader();
+            reader.onload = e => resolve(e.target.result);
+            reader.readAsDataURL(file);
+          });
+        }));
+
+        const textarea = document.getElementById("imageLinks");
+        textarea.value += dataURLs.join("\n") + "\n";
+        
+        showStatus(`✅ Đã tải lên ${files.length} ảnh thành công!`, 'success');
+      } catch (error) {
+        showStatus('❌ ' + error.message, 'error');
+      }
+    }
+
+    function generateSEOContent(style, targetKeyword, customKeywords, contentLength) {
+      const currentYear = new Date().getFullYear();
+      const randomAdjs = ["rực rỡ", "ấn tượng", "tinh khôi", "quyến rũ", "bùng nổ", "xuất sắc", "tuyệt đẹp", "nổi bật", "thu hút", "cuốn hút"];
+      const adj = randomAdjs[Math.floor(Math.random() * randomAdjs.length)];
+      
+      const focusKeyword = targetKeyword || `gái xinh ${style}`;
+      const keywords = customKeywords ? customKeywords.split(',').map(k => k.trim()) : [];
+      
+      const baseKeywords = ["gái xinh", "hot girl", style, "ảnh đẹp", "gái đẹp", `photoshoot ${style}`, `trending ${currentYear}`, "gallery"];
+      const allKeywords = [...baseKeywords, ...keywords].filter(k => k);
+      
+      const title = `${focusKeyword} ${adj} nhất ${currentYear} - Bộ sưu tập độc quyền`;
+      
+      let content = {
+        title,
+        metaDescription: `Khám phá bộ sưu tập ${focusKeyword} ${adj} nhất ${currentYear}. ${contentLength === 'short' ? 'Những hình ảnh tuyển chọn đặc biệt.' : contentLength === 'medium' ? 'Bộ ảnh chất lượng cao với phong cách độc đáo, thần thái nổi bật.' : 'Bộ sưu tập ảnh chuyên nghiệp với nhiều góc độ, phong cách đa dạng và chất lường hình ảnh tuyệt vời.'}`,
+        introduction: '',
+        sections: [],
+        keywords: allKeywords
+      };
+      
+      // Generate content based on length
+      switch(contentLength) {
+        case 'short':
+          content.introduction = `Bộ sưu tập ${focusKeyword} này mang đến những khoảnh khắc ${adj} nhất trong năm ${currentYear}. Mỗi bức ảnh đều được tuyển chọn kỹ lưỡng để mang lại trải nghiệm thị giác tuyệt vời.`;
+          content.sections = [
+            { heading: `Điểm nổi bật của bộ ảnh ${style}`, content: `Phong cách ${style} luôn được yêu thích bởi sự ${adj} và tự nhiên. Những bức ảnh này thể hiện rõ cá tính và thần thái riêng biệt.` }
+          ];
+          break;
+          
+        case 'medium':
+          content.introduction = `Chào mừng bạn đến với bộ sưu tập ${focusKeyword} ${adj} nhất năm ${currentYear}! Đây là tuyển tập những hình ảnh được chọn lọc kỹ càng, thể hiện vẻ đẹp tự nhiên và phong cách ${style} đầy cuốn hút.`;
+          content.sections = [
+            { 
+              heading: `Vẻ đẹp ${style} qua từng khung hình`, 
+              content: `Mỗi bức ảnh trong bộ sưu tập này đều mang một câu chuyện riêng. Phong cách ${style} được thể hiện một cách tinh tế, tạo nên những khoảnh khắc ${adj} khó quên. Từ ánh mắt đến nụ cười, mọi chi tiết đều được chăm chút tỉ mỉ.` 
+            },
+            { 
+              heading: `Phong cách chụp ảnh chuyên nghiệp`, 
+              content: `Những bức ảnh được thực hiện với kỹ thuật chụp chuyên nghiệp, ánh sáng tự nhiên và góc máy đa dạng. Điều này tạo nên sự sinh động và chân thực trong từng khung hình.` 
+            }
+          ];
+          break;
+          
+        case 'long':
+          content.introduction = `Khám phá ngay bộ sưu tập ${focusKeyword} ${adj} nhất trong năm ${currentYear}! Đây không chỉ là một tuyển tập ảnh thông thường, mà còn là hành trình khám phá vẻ đẹp ${style} qua lăng kính nghệ thuật. Mỗi bức hình đều kể một câu chuyện riêng, thể hiện cá tính và phong cách độc đáo.`;
+          content.sections = [
+            { 
+              heading: `Nghệ thuật chụp ảnh ${style} hiện đại`, 
+              content: `Phong cách ${style} trong nhiếp ảnh hiện đại đã trở thành một xu hướng được yêu thích. Không chỉ đơn thuần là việc ghi lại hình ảnh, mà còn là cách thể hiện cảm xúc và cá tính qua từng khung hình. Bộ sưu tập này thể hiện rõ sự tinh tế trong việc sử dụng ánh sáng, màu sắc và góc chụp.` 
+            },
+            { 
+              heading: `Đặc điểm nổi bật của phong cách ${style}`, 
+              content: `Phong cách ${style} được đặc trưng bởi sự tự nhiên, chân thực và đầy cảm xúc. Những đường nét mềm mại, ánh mắt biểu cảm và nụ cười tỏa sáng tạo nên sức hút đặc biệt. Màu sắc được sử dụng hài hòa, tạo cảm giác ấm áp và gần gũi.` 
+            },
+            { 
+              heading: `Kỹ thuật và thiết bị chụp chuyên nghiệp`, 
+              content: `Để có được những bức ảnh chất lượng như vậy, việc sử dụng thiết bị chuyên nghiệp và kỹ thuật chụp tinh tế là vô cùng quan trọng. Từ việc chọn ống kính phù hợp đến cách sử dụng ánh sáng tự nhiên, mọi yếu tố đều được tính toán kỹ lưỡng.` 
+            }
+          ];
+          break;
+          
+        case 'detailed':
+          content.introduction = `Chào mừng bạn đến với bộ sưu tập ${focusKeyword} đỉnh cao nhất năm ${currentYear}! Đây là thành quả của quá trình tuyển chọn và sáng tạo nghiêm túc, mang đến cho bạn những trải nghiệm thị giác tuyệt vời nhất. Phong cách ${style} không chỉ là một xu hướng, mà còn là nghệ thuật thể hiện vẻ đẹp tự nhiên và cá tính riêng biệt.`;
+          content.sections = [
+            { 
+              heading: `Lịch sử và xu hướng của phong cách ${style}`, 
+              content: `Phong cách ${style} đã trải qua nhiều giai đoạn phát triển và ngày càng được hoàn thiện. Từ những năm đầu với cách tiếp cận đơn giản, đến nay đã trở thành một nghệ thuật tinh tế với nhiều biến thể phong phú. Xu hướng hiện tại tập trung vào sự tự nhiên, chân thực và thể hiện cá tính mạnh mẽ.` 
+            },
+            { 
+              heading: `Phân tích chi tiết về vẻ đẹp ${style}`, 
+              content: `Vẻ đẹp ${style} không chỉ nằm ở bề ngoài mà còn thể hiện qua thần thái, cử chỉ và cách biểu đạt cảm xúc. Những đặc điểm như ánh mắt sâu thẳm, nụ cười tự nhiên, và cách tạo dáng tinh tế đều góp phần tạo nên sức hút đặc biệt. Màu sắc trang phục và phụ kiện cũng được lựa chọn cẩn thận để hài hòa với tổng thể.` 
+            },
+            { 
+              heading: `Kỹ thuật nhiếp ảnh chuyên nghiệp`, 
+              content: `Để tạo ra những bức ảnh chất lượng cao, việc áp dụng các kỹ thuật nhiếp ảnh chuyên nghiệp là không thể thiếu. Từ việc sử dụng ánh sáng tự nhiên một cách khéo léo, đến cách chọn góc chụp phù hợp và xử lý hậu kỳ tinh tế. Mỗi bức ảnh đều trải qua quá trình chỉnh sửa cẩn thận để đạt được màu sắc và độ sắc nét hoàn hảo.` 
+            },
+            { 
+              heading: `Ý nghĩa văn hóa và xã hội`, 
+              content: `Phong cách ${style} không chỉ là xu hướng thẩm mỹ mà còn phản ánh những giá trị văn hóa và xã hội hiện đại. Nó thể hiện sự tự tin, độc lập và cách nhìn tích cực về vẻ đẹp tự nhiên. Điều này góp phần thay đổi chuẩn mực về cái đẹp và khuyến khích mọi người tự tin thể hiện bản thân.` 
+            },
+            { 
+              heading: `Tương lai của xu hướng ${style}`, 
+              content: `Với sự phát triển không ngừng của công nghệ và thay đổi trong sở thích thẩm mỹ, phong cách ${style} sẽ tiếp tục evolve và mang đến những điều mới mẻ. Xu hướng tương lai có thể sẽ tập trung nhiều hơn vào tính bền vững, sự đa dạng và việc thể hiện cá tính độc đáo của từng cá nhân.` 
+            }
+          ];
+          break;
+      }
+      
+      return content;
+    }
+
+    function generateCaption(index, style, targetKeyword) {
+      const keyword = targetKeyword || style;
+      const ideas = [
+        `Vẻ đẹp ${keyword} cuốn hút ánh nhìn`,
+        `${keyword} ngọt ngào khiến ai cũng mê`,
+        `Góc nghiêng thần thánh của cô nàng ${style}`,
+        `Phong cách ${keyword} tự nhiên đầy cá tính`,
+        `Ánh mắt ${style} khiến bạn không thể rời mắt`,
+        `Nụ cười ${keyword} tỏa sáng rực rỡ`,
+        `Dáng vẻ ${style} thu hút mọi ánh nhìn`,
+        `Thần thái ${keyword} đầy quyến rũ`,
+        `Phong cách ${style} hiện đại và tinh tế`,
+        `Khoảnh khắc ${keyword} đáng nhớ`
+      ];
+      return ideas[index % ideas.length];
+    }
+
+    function generatePost() {
+      try {
+        const links = document.getElementById("imageLinks").value.trim().split(/\n+/).filter(link => link);
+        
+        if (links.length === 0) {
+          showStatus('❌ Vui lòng thêm ít nhất một ảnh!', 'error');
+          return;
+        }
+
+        const style = selectedStyle;
+        const targetKeyword = document.getElementById("targetKeyword").value.trim();
+        const customKeywords = document.getElementById("customKeywords").value.trim();
+        const contentLength = selectedContentLength;
+        
+        // Get SEO options
+        const includeMetaTags = document.getElementById("includeMetaTags").checked;
+        const includeHeadings = document.getElementById("includeHeadings").checked;
+        const includeAltText = document.getElementById("includeAltText").checked;
+        const includeSchema = document.getElementById("includeSchema").checked;
+        const includeSocialMeta = document.getElementById("includeSocialMeta").checked;
+
+        const seoContent = generateSEOContent(style, targetKeyword, customKeywords, contentLength);
+        
+        let html = '';
+        
+        // Add Meta Tags
+        if (includeMetaTags) {
+          html += `<!-- SEO Meta Tags -->\n`;
+          html += `<meta name="description" content="${seoContent.metaDescription}" />\n`;
+          html += `<meta name="keywords" content="${seoContent.keywords.join(', ')}" />\n`;
+          html += `<meta name="robots" content="index, follow" />\n`;
+          html += `<link rel="canonical" href="${window.location.href}" />\n\n`;
+        }
+        
+        // Add Open Graph Tags
+        if (includeSocialMeta) {
+          html += `<!-- Open Graph Meta Tags -->\n`;
+          html += `<meta property="og:title" content="${seoContent.title}" />\n`;
+          html += `<meta property="og:description" content="${seoContent.metaDescription}" />\n`;
+          html += `<meta property="og:type" content="article" />\n`;
+          html += `<meta property="og:url" content="${window.location.href}" />\n`;
+          if (links.length > 0) {
+            html += `<meta property="og:image" content="${links[0].trim()}" />\n`;
+          }
+          html += `<meta name="twitter:card" content="summary_large_image" />\n`;
+          html += `<meta name="twitter:title" content="${seoContent.title}" />\n`;
+          html += `<meta name="twitter:description" content="${seoContent.metaDescription}" />\n\n`;
+        }
+        
+        // Add main content
+        html += `<article>\n`;
+        html += `  <header>\n`;
+        html += `    <h1>${seoContent.title}</h1>\n`;
+        html += `    <p class="intro">${seoContent.introduction}</p>\n`;
+        html += `  </header>\n\n`;
+        
+        // Add content sections
+        if (includeHeadings && seoContent.sections.length > 0) {
+          seoContent.sections.forEach((section, index) => {
+            html += `  <section>\n`;
+            html += `    <h${index < 2 ? '2' : '3'}>${section.heading}</h${index < 2 ? '2' : '3'}>\n`;
+            html += `    <p>${section.content}</p>\n`;
+            html += `  </section>\n\n`;
+          });
+        }
+        
+        // Add tags
+        html += `  <div class="tags" style="margin: 20px 0;">\n`;
+        seoContent.keywords.forEach(tag => { 
+          html += `    <span class="tag" style="display: inline-block; background: #e91e63; color: white; padding: 5px 10px; margin: 2px; border-radius: 15px; font-size: 12px;">#${tag}</span>\n`; 
+        });
+        html += `  </div>\n\n`;
+        
+        // Add image gallery
+        html += `  <div class="gallery" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 30px 0;">\n`;
+
+        let preview = "";
+        let validLinks = [];
+        
+        links.forEach((link, index) => {
+          const trimmedLink = link.trim();
+          if (trimmedLink.includes("lh3.googleusercontent.com") || trimmedLink.startsWith("data:image") || trimmedLink.match(/\.(jpg|jpeg|png|gif|webp)$/i)) {
+            const caption = generateCaption(index, style, targetKeyword);
+            const altText = includeAltText ? `${caption} - ${seoContent.keywords.slice(0,3).join(', ')}` : caption;
+            
+            html += `    <figure style="margin: 0;">\n`;
+            html += `      <img src="${trimmedLink}" alt="${altText}" loading="lazy" style="width: 100%; height: 300px; object-fit: cover; border-radius: 8px;" />\n`;
+            html += `      <figcaption style="text-align: center; margin-top: 8px; font-style: italic; color: #666;">${caption}</figcaption>\n`;
+            html += `    </figure>\n`;
+            
+            preview += `<img src="${trimmedLink}" alt="${altText}" />\n`;
+            validLinks.push(trimmedLink);
+          }
+        });
+        
+        html += `  </div>\n`;
+        html += `</article>\n\n`;
+
+        // Add Schema Markup
+        if (includeSchema) {
+          const schema = {
+            "@context": "https://schema.org",
+            "@type": "BlogPosting",
+            "headline": seoContent.title,
+            "description": seoContent.metaDescription,
+            "image": validLinks,
+            "author": {
+              "@type": "Person",
+              "name": "girlsxinh.net"
+            },
+            "publisher": {
+              "@type": "Organization",
+              "name": "girlsxinh.net",
+              "logo": {
+                "@type": "ImageObject",
+                "url": "https://girlsxinh.net/logo.png"
+              }
+            },
+            "datePublished": new Date().toISOString(),
+            "dateModified": new Date().toISOString(),
+            "keywords": seoContent.keywords.join(', '),
+            "wordCount": seoContent.sections.reduce((acc, section) => acc + section.content.split(' ').length, 0),
+            "articleSection": "Photography",
+            "genre": "Lifestyle"
+          };
+
+          html += `<script type="application/ld+json">\n${JSON.stringify(schema, null, 2)}\n<!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
@@ -181,6 +522,83 @@
     
     .select-hide {
       display: none;
+    }
+    
+    input[type="text"] {
+      width: 100%;
+      padding: 15px;
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: border-color 0.3s ease;
+    }
+    
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #e91e63;
+    }
+    
+    .checkbox-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 10px;
+    }
+    
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 6px;
+      transition: background 0.2s ease;
+    }
+    
+    .checkbox-item:hover {
+      background: rgba(233, 30, 99, 0.1);
+    }
+    
+    .checkbox-item input[type="checkbox"] {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+      width: 0;
+      height: 0;
+    }
+    
+    .checkmark {
+      position: relative;
+      height: 20px;
+      width: 20px;
+      background: #eee;
+      border-radius: 4px;
+      margin-right: 10px;
+      transition: all 0.2s ease;
+    }
+    
+    .checkbox-item:hover input ~ .checkmark {
+      background: #ccc;
+    }
+    
+    .checkbox-item input:checked ~ .checkmark {
+      background: #e91e63;
+    }
+    
+    .checkmark:after {
+      content: "";
+      position: absolute;
+      display: none;
+      left: 7px;
+      top: 3px;
+      width: 5px;
+      height: 10px;
+      border: solid white;
+      border-width: 0 3px 3px 0;
+      transform: rotate(45deg);
+    }
+    
+    .checkbox-item input:checked ~ .checkmark:after {
+      display: block;
     }
     
     .arrow {
