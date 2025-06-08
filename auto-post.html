@@ -72,17 +72,32 @@
       return ideas[index % ideas.length];
     }
 
+    function suggestTitle(style, year) {
+  const adjectives = ["gợi cảm", "xinh đẹp", "thần thái", "cuốn hút", "đáng yêu", "nổi bật", "năng động", "trẻ trung"];
+  const topics = ["gái xinh", "hot girl", "nét đẹp", "bộ ảnh", "góc nghiêng", "vẻ ngoài"];
+  const patterns = [
+    `TOP ${Math.floor(Math.random() * 10) + 5} ${topics[Math.floor(Math.random() * topics.length)]} ${style} ${adjectives[Math.floor(Math.random() * adjectives.length)]} ${year}`,
+    `Chiêm ngưỡng loạt ảnh ${style} ${adjectives[Math.floor(Math.random() * adjectives.length)]} nhất ${year}`,
+    `Cập nhật xu hướng ${style} ${year} với bộ ảnh ${adjectives[Math.floor(Math.random() * adjectives.length)]}`,
+    `Khám phá vẻ đẹp ${adjectives[Math.floor(Math.random() * adjectives.length)]} của ${style} năm ${year}`
+  ];
+  return patterns[Math.floor(Math.random() * patterns.length)];
+}
+    }
+
+    function suggestTags(style, year) {
+      const baseTags = ["gái xinh", "hot girl", style, "ảnh đẹp", "trending", "blog ảnh"];
+      return [...new Set([...baseTags, `${style} ${year}`, `photoshoot ${style}`, `nét đẹp ${style}`])];
+    }
+
     function generatePost() {
       const links = document.getElementById("imageLinks").value.trim().split(/\n+/);
       const style = document.getElementById("style").value;
-
       const year = new Date().getFullYear();
-      const randomAdjs = ["rực rỡ", "ấn tượng", "tinh khôi", "quyến rũ", "bùng nổ"];
-      const adj = randomAdjs[Math.floor(Math.random() * randomAdjs.length)];
 
-      const title = `Bộ ảnh gái xinh ${style} ${adj} nhất ${year}`;
-      const description = `Khám phá ngay bộ ảnh gái xinh theo phong cách ${style} cực kỳ ${adj} được yêu thích trong năm ${year}. Mỗi bức hình mang đậm dấu ấn cá nhân và thần thái nổi bật, chắc chắn khiến bạn mê mẩn. Bộ sưu tập này là lựa chọn hoàn hảo cho những ai yêu thích sự mới lạ và cảm hứng từ cái đẹp.`;
-      const tags = ["gái xinh", "hot girl", style, "ảnh đẹp", "gái đẹp", `photoshoot ${style}`, `trending ${year}`, "gallery"];
+      const title = suggestTitle(style, year);
+      const description = `Khám phá ngay ${links.length} bức ảnh theo phong cách ${style} được yêu thích nhất năm ${year}. Bộ ảnh mang đậm vẻ đẹp tự nhiên, cá tính, và đầy sức hút của những cô nàng ${style}. Mỗi bức hình là một khoảnh khắc cuốn hút, ghi lại nét đẹp rạng ngời khiến bạn không thể rời mắt.`;
+      const tags = suggestTags(style, year);
 
       let html = `<h1>${title}</h1>\n<p>${description}</p>\n<ul>`;
       tags.forEach(tag => { html += `<li>#${tag}</li>` });
@@ -117,7 +132,8 @@
         "keywords": tags.join(', ')
       };
 
-      html += `\n<script type="application/ld+json">\n${JSON.stringify(schema, null, 2)}\n<\/script>`;
+      const safeSchema = JSON.stringify(schema, null, 2).replace(/<\/script>/g, '<\\/script>');
+      html += `\n<script type="application/ld+json">\n${safeSchema}\n</script>`;
 
       document.getElementById("outputHTML").value = html;
       document.getElementById("preview").innerHTML = preview;
