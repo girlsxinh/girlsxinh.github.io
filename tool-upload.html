@@ -3,61 +3,110 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Upload Ảnh Lấy Link - Blogger Tool</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body { font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; }
-    h2 { color: #e91e63; }
-    input, button, textarea { width: 100%; padding: 12px; margin-top: 10px; font-size: 16px; }
-    button { background-color: #e91e63; color: white; border: none; cursor: pointer; }
-    button:hover { background-color: #c2185b; }
-    textarea { height: 150px; }
-    .preview img { width: 100px; margin: 5px; border-radius: 8px; }
-  </style>
+  <title>Tool Blogger + Imgur (An Toàn GitHub)</title>
+  <script src="config.js"></script> <!-- Chứa key riêng không public -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
-  <h2>📸 Upload Ảnh & Lấy Link - GirlXinh Blogger Tool</h2>
-  <input type="file" id="imageInput" multiple accept="image/*">
-  <button onclick="uploadImages()">Tải ảnh lên Google Drive</button>
-  <textarea id="output" placeholder="Link ảnh sẽ hiện ở đây..."></textarea>
-  <div class="preview" id="preview"></div>
+<h3>1. Đăng nhập Google (Blogger API)</h3>
+<div id="g_id_onload"
+     data-client_id=GOOGLE_CLIENT_ID
+     data-context="use"
+     data-ux_mode="popup"
+     data-callback="handleCredentialResponse">
+</div>
 
-  <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbznTC3ahKsShrNUhEeHs8QPCcF006MgtdNs-1DIhM39fY8e2LSFT60b_yRYKzfZrU3v/exec";
+<div class="dropzone" style="border:2px dashed #ccc;padding:20px;width:300px;">Kéo ảnh Imgur vào đây</div>
+<div class="status"></div>
 
-    async function uploadImages() {
-      const input = document.getElementById("imageInput");
-      const output = document.getElementById("output");
-      const preview = document.getElementById("preview");
-      output.value = "";
-      preview.innerHTML = "";
+<h3>2. Viết Bài Blogger SEO</h3>
+<input type="text" id="blogTitle" placeholder="Tiêu đề SEO"><br>
+<textarea id="blogContent" placeholder="Nội dung" rows="5" cols="50"></textarea><br>
+<input type="text" id="blogTags" placeholder="Tags cách nhau bởi dấu phẩy"><br>
+<button id="generateSEO">Gợi Ý SEO</button>
+<button id="insertImages">Chèn Ảnh Tự Động</button>
+<button id="postToBlogger">Đăng Lên Blogger</button>
 
-      const files = input.files;
-      if (!files.length) {
-        alert("Vui lòng chọn ảnh!");
-        return;
-      }
+<script>
+let access_token = '';
+const allLinks = [];
 
-      for (let file of files) {
-        try {
-          const res = await fetch(API_URL, {
-            method: "POST",
-            body: file
-          });
-          const data = await res.json();
-          if (data.link) {
-            output.value += data.link + "\n";
-            const img = document.createElement("img");
-            img.src = data.link;
-            preview.appendChild(img);
-          } else {
-            output.value += "❌ Lỗi: " + file.name + "\n";
-          }
-        } catch (err) {
-          output.value += "❌ Lỗi upload: " + file.name + "\n";
-        }
-      }
+function handleCredentialResponse(response) {
+  const id_token = response.credential;
+  fetch('https://oauth2.googleapis.com/token', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+    body: new URLSearchParams({
+      'client_id': GOOGLE_CLIENT_ID,
+      'client_secret': GOOGLE_CLIENT_SECRET,
+      'grant_type': 'authorization_code',
+      'code': id_token,
+      'redirect_uri': 'postmessage'
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    access_token = data.access_token;
+    alert("✅ Đăng nhập Google thành công!");
+  });
+}
+
+document.getElementById('generateSEO').onclick = () => {
+  document.getElementById('blogTitle').value = "Bộ Sưu Tập Ảnh Hot " + new Date().getFullYear();
+  document.getElementById('blogTags').value = "gái xinh, hot girl, wallpaper, hình đẹp";
+};
+
+document.getElementById('insertImages').onclick = () => {
+  document.getElementById('blogContent').value += allLinks.map(link => `<img src="${link}" style="max-width:100%">`).join('\n');
+};
+
+document.getElementById('postToBlogger').onclick = async () => {
+  const title = document.getElementById('blogTitle').value;
+  const content = document.getElementById('blogContent').value;
+  const tags = document.getElementById('blogTags').value.split(',').map(x => x.trim());
+
+  const res = await fetch(`https://www.googleapis.com/blogger/v3/blogs/${BLOGGER_BLOG_ID}/posts/`, {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Bearer ' + access_token,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      kind: "blogger#post",
+      title: title,
+      content: content,
+      labels: tags
+    })
+  });
+  const result = await res.json();
+  alert("✅ Đã đăng bài: " + result.url);
+};
+
+function uploadImage(file) {
+  const formData = new FormData();
+  formData.append("image", file);
+  fetch("https://api.imgur.com/3/image", {
+    method: "POST",
+    headers: { Authorization: "Client-ID " + IMGUR_CLIENT_ID },
+    body: formData
+  })
+  .then(res => res.json())
+  .then(data => {
+    if(data.success) {
+      const link = data.data.link;
+      allLinks.push(link);
+      document.querySelector('.status').innerHTML += `<img src="${link}" width="100">`;
     }
-  </script>
+  });
+}
+
+const dz = document.querySelector('.dropzone');
+dz.addEventListener('dragover', e => e.preventDefault());
+dz.addEventListener('drop', e => {
+  e.preventDefault();
+  const files = e.dataTransfer.files;
+  for (const file of files) uploadImage(file);
+});
+</script>
 </body>
 </html>
