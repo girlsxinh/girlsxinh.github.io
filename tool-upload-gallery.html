@@ -1,562 +1,116 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tạo bài viết gái xinh - Tool SEO Tự Động</title>
-  <meta name="description" content="Tạo bài viết gái xinh chuẩn SEO từ ảnh Google Photos, tự động sinh tiêu đề, mô tả, thẻ heading, tags và schema cho Blogger." />
-  <meta name="keywords" content="gái xinh, ảnh hot girl, blogger, SEO, Google Photos, auto post tool" />
-  <meta name="author" content="girlsxinh.net" />
-  <style>
-    * { box-sizing: border-box; }
-    body { 
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-      margin: 0;
-      padding: 20px; 
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      min-height: 100vh;
-    }
-    
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      background: white;
-      border-radius: 15px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-      overflow: hidden;
-    }
-    
-    .header {
-      background: linear-gradient(135deg, #e91e63, #f06292);
-      color: white;
-      padding: 30px;
-      text-align: center;
-    }
-    
-    .header h1 {
-      margin: 0;
-      font-size: 2.5em;
-      font-weight: 300;
-    }
-    
-    .header p {
-      margin: 10px 0 0 0;
-      opacity: 0.9;
-      font-size: 1.1em;
-    }
-    
-    .main-content {
-      padding: 30px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 30px;
-    }
-    
-    .input-section, .output-section {
-      background: #f8f9fa;
-      padding: 25px;
-      border-radius: 12px;
-      border: 1px solid #e9ecef;
-    }
-    
-    .input-section h3, .output-section h3 {
-      margin-top: 0;
-      color: #495057;
-      font-size: 1.3em;
-      border-bottom: 2px solid #e91e63;
-      padding-bottom: 10px;
-    }
-    
-    .form-group {
-      margin-bottom: 20px;
-    }
-    
-    .form-group label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 600;
-      color: #495057;
-    }
-    
-    .file-upload {
-      position: relative;
-      display: inline-block;
-      width: 100%;
-    }
-    
-    .file-upload input[type=file] {
-      position: absolute;
-      left: -9999px;
-    }
-    
-    .file-upload-btn {
-      display: block;
-      width: 100%;
-      padding: 15px;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 16px;
-      transition: all 0.3s ease;
-      text-align: center;
-    }
-    
-    .file-upload-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
-    }
-    
-    textarea {
-      width: 100%;
-      padding: 15px;
-      border: 2px solid #e9ecef;
-      border-radius: 8px;
-      font-size: 14px;
-      font-family: inherit;
-      resize: vertical;
-      transition: border-color 0.3s ease;
-    }
-    
-    textarea:focus {
-      outline: none;
-      border-color: #e91e63;
-    }
-    
-    .custom-select {
-      position: relative;
-      width: 100%;
-    }
-    
-    .select-selected {
-      background: white;
-      border: 2px solid #e9ecef;
-      border-radius: 8px;
-      padding: 15px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    
-    .select-selected:hover {
-      border-color: #e91e63;
-    }
-    
-    .select-selected.select-arrow-active {
-      border-color: #e91e63;
-      border-bottom-left-radius: 0;
-      border-bottom-right-radius: 0;
-    }
-    
-    .select-items {
-      position: absolute;
-      background: white;
-      top: 100%;
-      left: 0;
-      right: 0;
-      z-index: 99;
-      border: 2px solid #e91e63;
-      border-top: none;
-      border-radius: 0 0 8px 8px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    }
-    
-    .select-items div {
-      padding: 15px;
-      cursor: pointer;
-      transition: background 0.2s ease;
-    }
-    
-    .select-items div:hover {
-      background: #f8f9fa;
-    }
-    
-    .select-items div.same-as-selected {
-      background: #e91e63;
-      color: white;
-    }
-    
-    .select-hide {
-      display: none;
-    }
-    
-    .arrow {
-      width: 0;
-      height: 0;
-      border-left: 6px solid transparent;
-      border-right: 6px solid transparent;
-      border-top: 6px solid #666;
-      transition: transform 0.3s ease;
-    }
-    
-    .select-arrow-active .arrow {
-      transform: rotate(180deg);
-    }
-    
-    .generate-btn {
-      width: 100%;
-      padding: 18px;
-      background: linear-gradient(135deg, #e91e63, #f06292);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 18px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      margin-top: 20px;
-    }
-    
-    .generate-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(233, 30, 99, 0.3);
-    }
-    
-    .copy-btn {
-      width: 100%;
-      padding: 15px;
-      background: #28a745;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      margin-top: 15px;
-    }
-    
-    .copy-btn:hover {
-      background: #218838;
-      transform: translateY(-1px);
-    }
-    
-    #preview {
-      margin-top: 20px;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 15px;
-    }
-    
-    #preview img {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-      border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      transition: transform 0.2s ease;
-    }
-    
-    #preview img:hover {
-      transform: scale(1.05);
-    }
-    
-    .note {
-      font-size: 14px;
-      color: #6c757d;
-      background: #fff3cd;
-      padding: 12px;
-      border-radius: 6px;
-      border-left: 4px solid #ffc107;
-      margin-bottom: 20px;
-    }
-    
-    .status {
-      padding: 10px;
-      border-radius: 6px;
-      margin: 10px 0;
-      display: none;
-    }
-    
-    .status.success {
-      background: #d4edda;
-      color: #155724;
-      border: 1px solid #c3e6cb;
-    }
-    
-    .status.error {
-      background: #f8d7da;
-      color: #721c24;
-      border: 1px solid #f5c6cb;
-    }
-    
-    @media (max-width: 768px) {
-      .main-content {
-        grid-template-columns: 1fr;
-        gap: 20px;
-        padding: 20px;
-      }
-      
-      .header h1 {
-        font-size: 2em;
-      }
-      
-      #preview {
-        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-        gap: 10px;
-      }
-    }
-  </style>
+  <meta charset="UTF-8">
+  <title>Tool Blogger + Imgur</title>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <h1>🖼 Auto Post Gái Xinh Chuẩn SEO</h1>
-      <p>Công cụ tạo bài viết tự động với SEO tối ưu</p>
-    </div>
-    
-    <div class="main-content">
-      <div class="input-section">
-        <h3>📝 Thông tin đầu vào</h3>
-        
-        <div class="note">
-          Dán link ảnh Google Photos dạng <code>https://lh3.googleusercontent.com/...</code>, mỗi ảnh 1 dòng. Hoặc chọn ảnh từ máy tính.
-        </div>
-        
-        <div class="form-group">
-          <label for="uploadInput">📁 Chọn ảnh từ máy:</label>
-          <div class="file-upload">
-            <input type="file" id="uploadInput" multiple accept="image/*" />
-            <label for="uploadInput" class="file-upload-btn">
-              🔍 Chọn ảnh (có thể chọn nhiều)
-            </label>
-          </div>
-        </div>
-        
-        <div class="form-group">
-          <label for="imageLinks">🔗 Hoặc dán link ảnh:</label>
-          <textarea id="imageLinks" rows="6" placeholder="Dán link ảnh tại đây, mỗi link một dòng..."></textarea>
-        </div>
-        
-        <div class="form-group">
-          <label>🎨 Chọn phong cách:</label>
-          <div class="custom-select">
-            <div class="select-selected">
-              <span>Hot girl</span>
-              <div class="arrow"></div>
-            </div>
-            <div class="select-items select-hide">
-              <div data-value="hot girl">🔥 Hot girl</div>
-              <div data-value="dễ thương">😊 Dễ thương</div>
-              <div data-value="học sinh">📚 Học sinh</div>
-              <div data-value="Hàn Quốc">🇰🇷 Hàn Quốc</div>
-              <div data-value="gợi cảm">💋 Gợi cảm</div>
-              <div data-value="trong sáng">✨ Trong sáng</div>
-              <div data-value="cá tính">⚡ Cá tính</div>
-            </div>
-          </div>
-        </div>
-        
-        <button class="generate-btn" onclick="generatePost()">
-          ✨ Tạo bài viết tự động
-        </button>
-        
-        <div id="status" class="status"></div>
-      </div>
-      
-      <div class="output-section">
-        <h3>👀 Xem trước kết quả</h3>
-        <div id="preview"></div>
-        
-        <h3 style="margin-top: 30px;">📋 HTML bài viết</h3>
-        <textarea id="outputHTML" rows="15" placeholder="HTML sẽ xuất hiện ở đây sau khi tạo..."></textarea>
-        <button class="copy-btn" onclick="copyToClipboard()">
-          📋 Sao chép HTML
-        </button>
-      </div>
-    </div>
-  </div>
+<h3>1. Đăng nhập Google (Blogger API)</h3>
+<div id="g_id_onload"
+     data-client_id="YOUR_GOOGLE_CLIENT_ID"
+     data-context="use"
+     data-ux_mode="popup"
+     data-callback="handleCredentialResponse">
+</div>
 
-  <script>
-    let selectedStyle = 'hot girl';
-    
-    // Custom Select functionality
-    document.addEventListener('DOMContentLoaded', function() {
-      const selectSelected = document.querySelector('.select-selected');
-      const selectItems = document.querySelector('.select-items');
-      const selectOptions = selectItems.querySelectorAll('div');
-      
-      selectSelected.addEventListener('click', function() {
-        selectItems.classList.toggle('select-hide');
-        selectSelected.classList.toggle('select-arrow-active');
-      });
-      
-      selectOptions.forEach(option => {
-        option.addEventListener('click', function() {
-          const value = this.getAttribute('data-value');
-          const text = this.textContent;
-          
-          selectSelected.querySelector('span').textContent = text;
-          selectedStyle = value;
-          
-          selectOptions.forEach(opt => opt.classList.remove('same-as-selected'));
-          this.classList.add('same-as-selected');
-          
-          selectItems.classList.add('select-hide');
-          selectSelected.classList.remove('select-arrow-active');
-        });
-      });
-      
-      // Close dropdown when clicking outside
-      document.addEventListener('click', function(e) {
-        if (!e.target.closest('.custom-select')) {
-          selectItems.classList.add('select-hide');
-          selectSelected.classList.remove('select-arrow-active');
-        }
-      });
-    });
+<div class="dropzone" style="border:2px dashed #ccc;padding:20px;width:300px;">Kéo ảnh Imgur vào đây</div>
+<div class="status"></div>
 
-    document.getElementById('uploadInput').addEventListener('change', handleUpload);
+<h3>2. Viết Bài Blogger SEO</h3>
+<input type="text" id="blogTitle" placeholder="Tiêu đề SEO"><br>
+<textarea id="blogContent" placeholder="Nội dung" rows="5" cols="50"></textarea><br>
+<input type="text" id="blogTags" placeholder="Tags cách nhau bởi dấu phẩy"><br>
+<button id="generateSEO">Gợi Ý SEO</button>
+<button id="insertImages">Chèn Ảnh Tự Động</button>
+<button id="postToBlogger">Đăng Lên Blogger</button>
 
-    function showStatus(message, type = 'success') {
-      const status = document.getElementById('status');
-      status.textContent = message;
-      status.className = `status ${type}`;
-      status.style.display = 'block';
-      
-      setTimeout(() => {
-        status.style.display = 'none';
-      }, 3000);
+<script>
+const IMGUR_CLIENT_ID = 'YOUR_IMGUR_CLIENT_ID'; // đổi ID thật
+const BLOGGER_BLOG_ID = 'YOUR_BLOGGER_BLOG_ID'; // đổi ID thật
+const GOOGLE_CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID';
+const GOOGLE_CLIENT_SECRET = 'YOUR_GOOGLE_CLIENT_SECRET';
+
+let access_token = '';
+const allLinks = [];
+
+// Google Sign-in
+function handleCredentialResponse(response) {
+  const id_token = response.credential;
+  fetch('https://oauth2.googleapis.com/token', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+    body: new URLSearchParams({
+      'client_id': GOOGLE_CLIENT_ID,
+      'client_secret': GOOGLE_CLIENT_SECRET,
+      'grant_type': 'authorization_code',
+      'code': id_token,
+      'redirect_uri': 'postmessage'
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    access_token = data.access_token;
+    alert("✅ Đăng nhập Google thành công!");
+  });
+}
+
+document.getElementById('generateSEO').onclick = () => {
+  document.getElementById('blogTitle').value = "Bộ Sưu Tập Ảnh Hot " + new Date().getFullYear();
+  document.getElementById('blogTags').value = "gái xinh, hot girl, wallpaper, hình đẹp";
+};
+
+document.getElementById('insertImages').onclick = () => {
+  document.getElementById('blogContent').value += allLinks.map(link => `<img src="${link}" style="max-width:100%">`).join('\n');
+};
+
+document.getElementById('postToBlogger').onclick = async () => {
+  const title = document.getElementById('blogTitle').value;
+  const content = document.getElementById('blogContent').value;
+  const tags = document.getElementById('blogTags').value.split(',').map(x => x.trim());
+
+  const res = await fetch(`https://www.googleapis.com/blogger/v3/blogs/${BLOGGER_BLOG_ID}/posts/`, {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Bearer ' + access_token,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      kind: "blogger#post",
+      title: title,
+      content: content,
+      labels: tags
+    })
+  });
+  const result = await res.json();
+  alert("✅ Đã đăng bài: " + result.url);
+};
+
+function uploadImage(file) {
+  const formData = new FormData();
+  formData.append("image", file);
+  fetch("https://api.imgur.com/3/image", {
+    method: "POST",
+    headers: { Authorization: "Client-ID " + IMGUR_CLIENT_ID },
+    body: formData
+  })
+  .then(res => res.json())
+  .then(data => {
+    if(data.success) {
+      const link = data.data.link;
+      allLinks.push(link);
+      document.querySelector('.status').innerHTML += `<img src="${link}" width="100">`;
     }
+  });
+}
 
-    function validateImage(file) {
-      const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-      const maxSize = 5 * 1024 * 1024; // 5MB
-      
-      if (!allowedTypes.includes(file.type)) {
-        throw new Error('Chỉ hỗ trợ file ảnh: JPG, PNG, GIF, WebP');
-      }
-      if (file.size > maxSize) {
-        throw new Error('File quá lớn (tối đa 5MB)');
-      }
-    }
-
-    async function handleUpload(event) {
-      const files = Array.from(event.target.files);
-      
-      try {
-        showStatus('Đang xử lý ảnh...', 'success');
-        
-        const dataURLs = await Promise.all(files.map(file => {
-          validateImage(file);
-          return new Promise(resolve => {
-            const reader = new FileReader();
-            reader.onload = e => resolve(e.target.result);
-            reader.readAsDataURL(file);
-          });
-        }));
-
-        const textarea = document.getElementById("imageLinks");
-        textarea.value += dataURLs.join("\n") + "\n";
-        
-        showStatus(`✅ Đã tải lên ${files.length} ảnh thành công!`, 'success');
-      } catch (error) {
-        showStatus('❌ ' + error.message, 'error');
-      }
-    }
-
-    function generateCaption(index, style) {
-      const ideas = [
-        `Vẻ đẹp ${style} cuốn hút ánh nhìn`,
-        `${style} ngọt ngào khiến ai cũng mê`,
-        `Góc nghiêng thần thánh của cô nàng ${style}`,
-        `Phong cách ${style} tự nhiên đầy cá tính`,
-        `Ánh mắt ${style} khiến bạn không thể rời mắt`,
-        `Nụ cười ${style} tỏa sáng rực rỡ`,
-        `Dáng vẻ ${style} thu hút mọi ánh nhìn`,
-        `Thần thái ${style} đầy quyến rũ`
-      ];
-      return ideas[index % ideas.length];
-    }
-
-    function generatePost() {
-      try {
-        const links = document.getElementById("imageLinks").value.trim().split(/\n+/).filter(link => link);
-        
-        if (links.length === 0) {
-          showStatus('❌ Vui lòng thêm ít nhất một ảnh!', 'error');
-          return;
-        }
-
-        const style = selectedStyle;
-        const year = new Date().getFullYear();
-        const randomAdjs = ["rực rỡ", "ấn tượng", "tinh khôi", "quyến rũ", "bùng nổ", "xuất sắc", "tuyệt đẹp"];
-        const adj = randomAdjs[Math.floor(Math.random() * randomAdjs.length)];
-
-        const title = `Bộ ảnh gái xinh ${style} ${adj} nhất ${year}`;
-        const description = `Khám phá ngay bộ ảnh gái xinh theo phong cách ${style} cực kỳ ${adj} được yêu thích trong năm ${year}. Mỗi bức hình mang đậm dấu ấn cá nhân và thần thái nổi bật, chắc chắn khiến bạn mê mẩn. Bộ sưu tập này là lựa chọn hoàn hảo cho những ai yêu thích sự mới lạ và cảm hứng từ cái đẹp.`;
-        const tags = ["gái xinh", "hot girl", style, "ảnh đẹp", "gái đẹp", `photoshoot ${style}`, `trending ${year}`, "gallery"];
-
-        let html = `<h1>${title}</h1>\n<p>${description}</p>\n<div class="tags">`;
-        tags.forEach(tag => { html += `<span class="tag">#${tag}</span> `; });
-        html += `</div>\n<div class="gallery" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 20px 0;">`;
-
-        let preview = "";
-        let validLinks = [];
-        
-        links.forEach((link, index) => {
-          const trimmedLink = link.trim();
-          if (trimmedLink.includes("lh3.googleusercontent.com") || trimmedLink.startsWith("data:image") || trimmedLink.match(/\.(jpg|jpeg|png|gif|webp)$/i)) {
-            const caption = generateCaption(index, style);
-            html += `\n  <figure style="margin: 0;"><img src="${trimmedLink}" alt="${caption}" loading="lazy" style="width: 100%; height: 300px; object-fit: cover; border-radius: 8px;" /><figcaption style="text-align: center; margin-top: 8px; font-style: italic; color: #666;">${caption}</figcaption></figure>`;
-            preview += `<img src="${trimmedLink}" alt="${caption}" />\n`;
-            validLinks.push(trimmedLink);
-          }
-        });
-        
-        html += `\n</div>`;
-
-        const schema = {
-          "@context": "https://schema.org",
-          "@type": "BlogPosting",
-          "headline": title,
-          "image": validLinks,
-          "description": description,
-          "author": { "@type": "Person", "name": "girlsxinh.net" },
-          "publisher": {
-            "@type": "Organization",
-            "name": "girlsxinh.net",
-            "logo": {
-              "@type": "ImageObject",
-              "url": "https://girlsxinh.net/logo.png"
-            }
-          },
-          "datePublished": new Date().toISOString().split('T')[0],
-          "keywords": tags.join(', ')
-        };
-
-        html += `\n\n<script type="application/ld+json">\n${JSON.stringify(schema, null, 2)}\n<\/script>`;
-
-        document.getElementById("outputHTML").value = html;
-        document.getElementById("preview").innerHTML = preview;
-        
-        showStatus(`✅ Đã tạo bài viết với ${validLinks.length} ảnh!`, 'success');
-      } catch (error) {
-        showStatus('❌ Có lỗi xảy ra: ' + error.message, 'error');
-      }
-    }
-
-    async function copyToClipboard() {
-      const output = document.getElementById("outputHTML");
-      
-      if (!output.value.trim()) {
-        showStatus('❌ Chưa có nội dung để sao chép!', 'error');
-        return;
-      }
-      
-      try {
-        await navigator.clipboard.writeText(output.value);
-        showStatus('📋 HTML đã được sao chép!', 'success');
-      } catch (err) {
-        // Fallback for older browsers
-        output.select();
-        output.setSelectionRange(0, 99999);
-        document.execCommand("copy");
-        showStatus('📋 HTML đã được sao chép!', 'success');
-      }
-    }
-  </script>
+const dz = document.querySelector('.dropzone');
+dz.addEventListener('dragover', e => e.preventDefault());
+dz.addEventListener('drop', e => {
+  e.preventDefault();
+  const files = e.dataTransfer.files;
+  for (const file of files) uploadImage(file);
+});
+</script>
 </body>
 </html>
