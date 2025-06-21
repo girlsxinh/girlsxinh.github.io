@@ -489,8 +489,23 @@
         const randomAdjs = ["rực rỡ", "ấn tượng", "tinh khôi", "quyến rũ", "bùng nổ", "xuất sắc", "tuyệt đẹp"];
         const adj = randomAdjs[Math.floor(Math.random() * randomAdjs.length)];
 
-        const title = `Bộ ảnh gái xinh ${style} ${adj} nhất ${year}`;
-        const description = `Khám phá ngay bộ ảnh gái xinh theo phong cách ${style} cực kỳ ${adj} được yêu thích trong năm ${year}. Mỗi bức hình mang đậm dấu ấn cá nhân và thần thái nổi bật, chắc chắn khiến bạn mê mẩn. Bộ sưu tập này là lựa chọn hoàn hảo cho những ai yêu thích sự mới lạ và cảm hứng từ cái đẹp.`;
+        const titleIdeas = [
+          `Chiêm ngưỡng bộ ảnh gái xinh ${style} ${adj} khiến bạn không thể rời mắt`,
+          `BST gái xinh phong cách ${style} ${adj} nhất năm ${year}`,
+          `Ngắm nhìn gái xinh ${style} với thần thái ${adj} đốn tim cư dân mạng`,
+          `Top ảnh gái xinh ${style} cực ${adj} được yêu thích trong ${year}`,
+          `Ảnh gái xinh phong cách ${style} mang nét đẹp ${adj} khó cưỡng`
+        ];
+        const title = titleIdeas[Math.floor(Math.random() * titleIdeas.length)];
+
+        const descriptionIdeas = [
+          `Khám phá loạt ảnh gái xinh theo phong cách ${style} cực kỳ ${adj}. Mỗi khung hình là một cảm xúc riêng biệt, chạm đến trái tim người xem.`,
+          `Bộ ảnh gái xinh ${style} này mang đến vẻ đẹp ${adj} khó cưỡng, cực kỳ cuốn hút và đang rất thịnh hành trong cộng đồng mạng.`,
+          `Nếu bạn yêu thích phong cách ${style}, đừng bỏ lỡ tuyển tập ảnh ${adj} này. Một thế giới sắc đẹp gói gọn trong từng khung hình.`,
+          `Vẻ đẹp của gái xinh phong cách ${style} trong loạt ảnh này chắc chắn sẽ khiến bạn trầm trồ bởi thần thái ${adj} và sự cuốn hút tự nhiên.`,
+          `Tuyển chọn ảnh gái xinh ${style} ${adj} được săn đón nhất ${year}. Mỗi bức ảnh là một điểm nhấn không thể bỏ lỡ!`
+        ];
+        const description = descriptionIdeas[Math.floor(Math.random() * descriptionIdeas.length)];
         
         const extraKeywords = {
           "hot girl": ["gái xinh sexy", "ảnh hot girl", "body chuẩn", "trending girl"],
