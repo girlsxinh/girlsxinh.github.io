@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Tool Upload Ảnh & Thay Link Blogger</title>
   <style>
     body { font-family: Arial, sans-serif; padding: 20px; max-width: 800px; margin: auto; }
@@ -18,10 +18,10 @@
 <h2>1️⃣ Dán đoạn HTML bài viết chứa ảnh cũ</h2>
 <textarea id="htmlInput" rows="10" placeholder="Dán đoạn HTML từ bài viết Blogger vào đây..."></textarea>
 
-<h2>2️⃣ Chọn ảnh mới từ máy tính (đúng số lượng ảnh cũ)</h2>
+<h2>2️⃣ Chọn ảnh mới từ máy tính (ít nhất 1 ảnh)</h2>
 <input type="file" id="fileInput" multiple accept="image/*" />
 
-<br><br>
+<br /><br />
 <button onclick="uploadAndReplace()">⬆️ Upload & 🔁 Thay Link Ảnh</button>
 
 <h2>✅ Kết quả HTML mới (đã thay link)</h2>
@@ -63,29 +63,36 @@
     const html = document.getElementById('htmlInput').value;
     const files = document.getElementById('fileInput').files;
 
-    if(!html) {
+    if (!html) {
       alert('⚠️ Vui lòng dán đoạn HTML bài viết trước.');
       return;
     }
-    if(files.length === 0) {
-      alert('⚠️ Vui lòng chọn ảnh mới từ máy tính.');
+    if (files.length === 0) {
+      alert('⚠️ Vui lòng chọn ít nhất 1 ảnh.');
       return;
     }
 
     const regex = /https:\/\/blogger\.googleusercontent\.com\/img\/a\/[^\s"'<>]+/g;
     const oldUrls = html.match(regex);
-    if(!oldUrls || oldUrls.length !== files.length) {
-      alert(`⚠️ Số ảnh trong HTML (${oldUrls?.length || 0}) KHÔNG khớp với số ảnh bạn chọn (${files.length}).`);
+
+    if (!oldUrls || oldUrls.length === 0) {
+      alert('❌ Không tìm thấy ảnh cũ trong đoạn HTML.');
       return;
+    }
+
+    // Tạo mảng file, nếu thiếu thì lặp lại ảnh đầu
+    const fileArray = Array.from(files);
+    while (fileArray.length < oldUrls.length) {
+      fileArray.push(files[0]);
     }
 
     let newHtml = html;
 
-    for(let i = 0; i < files.length; i++) {
+    for (let i = 0; i < oldUrls.length; i++) {
       try {
-        const newUrl = await uploadFile(files[i]);
+        const newUrl = await uploadFile(fileArray[i]);
         newHtml = newHtml.replace(oldUrls[i], newUrl);
-      } catch(e) {
+      } catch (e) {
         alert('❌ Lỗi upload ảnh: ' + e);
         return;
       }
