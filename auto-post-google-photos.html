@@ -498,14 +498,54 @@
         ];
         const title = titleIdeas[Math.floor(Math.random() * titleIdeas.length)];
 
-        const descriptionIdeas = [
-          `Khám phá loạt ảnh gái xinh theo phong cách ${style} cực kỳ ${adj}. Mỗi khung hình là một cảm xúc riêng biệt, chạm đến trái tim người xem.`,
-          `Bộ ảnh gái xinh ${style} này mang đến vẻ đẹp ${adj} khó cưỡng, cực kỳ cuốn hút và đang rất thịnh hành trong cộng đồng mạng.`,
-          `Nếu bạn yêu thích phong cách ${style}, đừng bỏ lỡ tuyển tập ảnh ${adj} này. Một thế giới sắc đẹp gói gọn trong từng khung hình.`,
-          `Vẻ đẹp của gái xinh phong cách ${style} trong loạt ảnh này chắc chắn sẽ khiến bạn trầm trồ bởi thần thái ${adj} và sự cuốn hút tự nhiên.`,
-          `Tuyển chọn ảnh gái xinh ${style} ${adj} được săn đón nhất ${year}. Mỗi bức ảnh là một điểm nhấn không thể bỏ lỡ!`
+        const descriptionPresets = {
+          "hot girl": [
+            `Khám phá bộ ảnh hot girl với vẻ đẹp bốc lửa, quyến rũ mọi ánh nhìn.`,
+            `Tuyển chọn ảnh hot girl mới nhất với phong cách sexy đầy mê hoặc.`,
+            `Gái xinh hot girl trong loạt ảnh cực chất, phong cách táo bạo và thần thái ngút trời.`
+          ],
+          "dễ thương": [
+            `Cùng ngắm những cô nàng dễ thương với nụ cười tỏa nắng và ánh mắt trong veo.`,
+            `Gái xinh dễ thương khiến bạn “tan chảy” bởi nét đẹp tự nhiên và ngây thơ.`,
+            `Ảnh gái dễ thương đáng yêu như thiên thần, nhẹ nhàng mà lôi cuốn.`
+          ],
+          "áo dài": [
+            `Vẻ đẹp Việt dịu dàng trong tà áo dài trắng tinh khôi.`,
+            `Ảnh nữ sinh áo dài thướt tha khiến bao trái tim rung động.`,
+            `Gái xinh mặc áo dài mang vẻ đẹp truyền thống nhưng đầy cuốn hút.`
+          ],
+          "bikini": [
+            `Ngắm nhìn gái xinh trong bộ bikini nóng bỏng, khoe body cực gắt.`,
+            `Tuyển tập ảnh bikini gợi cảm, đầy sức sống giữa mùa hè.`,
+            `Bikini sexy cùng thần thái hút hồn – gái xinh không thể rời mắt.`
+          ],
+          "gái gọi": [
+            `Ảnh gái gọi nghệ thuật đầy khiêu khích, đường cong nóng bỏng khó cưỡng.`,
+            `Chùm ảnh gái gọi táo bạo, gợi cảm nhưng vẫn giữ nét tinh tế.`,
+            `Vẻ đẹp mời gọi và thần thái tự tin tạo nên bộ ảnh khó quên.`
+          ],
+          "jav": [
+            `Bộ ảnh JAV cực nét với thần thái quyến rũ và vóc dáng chuẩn idol.`,
+            `Ảnh JAV chọn lọc – gợi cảm và nghệ thuật trong từng góc máy.`,
+            `Gái xinh phong cách JAV khiến người xem “đứng hình” vì quá cuốn hút.`
+          ],
+          "ảnh sex": [
+            `Bộ ảnh sex nghệ thuật với đường cong và góc nhìn đầy cảm xúc.`,
+            `Tuyển chọn ảnh sex đẹp, tinh tế và không phản cảm.`,
+            `Ảnh nude nghệ thuật, tôn vinh vẻ đẹp cơ thể đầy mê hoặc.`
+          ],
+          "khoe hàng": [
+            `Gái xinh khéo léo khoe da thịt trong những bức ảnh đầy gợi cảm.`,
+            `Ảnh khoe hàng nhưng vẫn giữ nét duyên dáng và thẩm mỹ.`,
+            `Show hàng tinh tế – nơi gợi cảm gặp nghệ thuật.`
+          ]
+        };
+
+        const descriptionList = descriptionPresets[style] || [
+          `Khám phá bộ ảnh gái xinh phong cách ${style} cực kỳ ${adj}, cuốn hút và đầy cảm hứng.`,
+          `Tuyển tập ảnh gái xinh ${style} ${adj} mới nhất năm ${year}.`
         ];
-        const description = descriptionIdeas[Math.floor(Math.random() * descriptionIdeas.length)];
+        const description = descriptionList[Math.floor(Math.random() * descriptionList.length)];
         
         const extraKeywords = {
           "hot girl": ["gái xinh sexy", "ảnh hot girl", "body chuẩn", "trending girl"],
