@@ -1,107 +1,100 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html>
 <head>
   <meta charset="UTF-8">
-  <title>Upload ảnh và đăng Blogger</title>
+  <title>Tool Upload Ảnh & Thay Link Blogger</title>
   <style>
-    /* Giữ nguyên CSS từ mã gốc */
-    /* ... (copy toàn bộ phần style trong mã của bạn ở đây) ... */
+    body { font-family: Arial, sans-serif; padding: 20px; max-width: 800px; margin: auto; }
+    textarea { width: 100%; font-family: monospace; margin-top: 10px; }
+    input[type="file"] { margin-top: 10px; }
+    button { padding: 10px 20px; margin-top: 20px; font-size: 16px; }
+    h2 { margin-top: 30px; }
   </style>
-  <script src="https://apis.google.com/js/api.js"></script>
 </head>
 <body>
-  <div class="dropzone"><div class="infoimg"></div></div>
-  <div class="status"></div>
-  <button id="copyAllLinksBtn">📋 Copy tất cả link ảnh</button>
-  <br><br>
-  <input type="text" id="keywords" placeholder="Nhập từ khóa SEO (vd: ảnh gái xinh Việt Nam, bikini...)" style="width: 80%;">
-  <button id="generatePost">📝 Tạo bài viết Blogger</button>
 
-  <script>
-    const allLinks = [];
-    const copyBtn = document.getElementById('copyAllLinksBtn');
+<h1>🚀 Tool Upload Ảnh & Tự Động Thay Link Trong HTML (Blogger)</h1>
 
-    function updateCopyButton() {
-      if (allLinks.length > 0) copyBtn.style.display = 'block';
+<h2>1️⃣ Dán đoạn HTML bài viết chứa ảnh cũ</h2>
+<textarea id="htmlInput" rows="10" placeholder="Dán đoạn HTML từ bài viết Blogger vào đây..."></textarea>
+
+<h2>2️⃣ Chọn ảnh mới từ máy tính (đúng số lượng ảnh cũ)</h2>
+<input type="file" id="fileInput" multiple accept="image/*" />
+
+<br><br>
+<button onclick="uploadAndReplace()">⬆️ Upload & 🔁 Thay Link Ảnh</button>
+
+<h2>✅ Kết quả HTML mới (đã thay link)</h2>
+<textarea id="htmlOutput" rows="10" readonly></textarea>
+
+<script>
+  const GAS_URL = 'https://script.google.com/macros/s/AKfycbwDZuYvVmHqQrF45XE-QqmCZClgChjcBRDuTUZkCOFE7W1KjB1tHIgRz4Q5VyDkuNdL/exec';
+
+  async function uploadFile(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = async function(e) {
+        const base64Data = e.target.result.split(',')[1];
+        try {
+          const resp = await fetch(GAS_URL, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: new URLSearchParams({
+              file: base64Data,
+              fileName: file.name,
+              mimeType: file.type
+            })
+          });
+          const data = await resp.json();
+          if(data.url) {
+            resolve(data.url);
+          } else {
+            reject(data.error || 'Lỗi upload');
+          }
+        } catch(err) {
+          reject(err);
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  async function uploadAndReplace() {
+    const html = document.getElementById('htmlInput').value;
+    const files = document.getElementById('fileInput').files;
+
+    if(!html) {
+      alert('⚠️ Vui lòng dán đoạn HTML bài viết trước.');
+      return;
+    }
+    if(files.length === 0) {
+      alert('⚠️ Vui lòng chọn ảnh mới từ máy tính.');
+      return;
     }
 
-    function generateSeoContent(keywords) {
-      const title = `Tổng hợp ${keywords} mới nhất cực chất`;
-      const description = `Bộ sưu tập ${keywords.toLowerCase()} chất lượng cao với các chủ đề hot như gái xinh Việt, Nhật, bikini, áo dài và hơn thế nữa.`;
-      const hashtags = keywords.toLowerCase().split(',').map(k => `#${k.trim().replace(/\s+/g, '')}`);
-      return { title, description, hashtags };
+    const regex = /https:\/\/blogger\.googleusercontent\.com\/img\/a\/[^\s"'<>]+/g;
+    const oldUrls = html.match(regex);
+    if(!oldUrls || oldUrls.length !== files.length) {
+      alert(`⚠️ Số ảnh trong HTML (${oldUrls?.length || 0}) KHÔNG khớp với số ảnh bạn chọn (${files.length}).`);
+      return;
     }
 
-    function generatePostContent(imageLinks) {
-      return imageLinks.map(link =>
-        `<p><img src="${link}" alt="gái xinh" style="width:100%;max-width:800px;margin:10px auto;display:block;"/></p>`
-      ).join('\n');
-    }
+    let newHtml = html;
 
-    function createBloggerPost(title, content, labels) {
-      const blogId = '4779196080303412305';
-      const body = JSON.stringify({ title, content, labels });
-
-      gapi.client.request({
-        path: `/blogger/v3/blogs/${blogId}/posts/`,
-        method: 'POST',
-        body: body
-      }).then(function(response) {
-        alert('✅ Bài viết đã được đăng lên Blogger!');
-        console.log(response);
-      }, function(error) {
-        alert('❌ Đăng bài thất bại');
-        console.error(error);
-      });
-    }
-
-    document.getElementById('generatePost').onclick = () => {
-      const kw = document.getElementById('keywords').value.trim();
-      if (!kw || allLinks.length === 0) {
-        alert('⚠️ Nhập từ khóa và tải ít nhất một ảnh trước!');
+    for(let i = 0; i < files.length; i++) {
+      try {
+        const newUrl = await uploadFile(files[i]);
+        newHtml = newHtml.replace(oldUrls[i], newUrl);
+      } catch(e) {
+        alert('❌ Lỗi upload ảnh: ' + e);
         return;
       }
-      const seo = generateSeoContent(kw);
-      const content = `<p>${seo.description}</p>` + generatePostContent(allLinks);
-      createBloggerPost(seo.title, content, seo.hashtags);
-    };
-
-    function initClient() {
-      gapi.client.init({
-        apiKey: 'AIzaSyDUMMY_REPLACE_WITH_REAL_KEY', // Cần thay bằng API Key nếu có
-        clientId: '847908118054-dqsv7a47c8hajilv1e0k8e0gp5qdknlo.apps.googleusercontent.com',
-        discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest'],
-        scope: 'https://www.googleapis.com/auth/blogger'
-      }).then(() => gapi.auth2.getAuthInstance().signIn());
     }
-    gapi.load('client:auth2', initClient);
 
-    var feedback = function(res) {
-      if (res.success === true) {
-        const get_link = res.data.link.replace(/^http:\/\//i, 'https://');
-        allLinks.push(get_link);
-        document.querySelector('.status').classList.add('bg-success');
-        document.querySelector('.status').innerHTML +=
-          '<div class="linkimg"><input class="image-url" onclick="this.select()" value="' + get_link + '"/></div>' +
-          '<div class="showimg"><img class="img" style="max-width:100%;margin-bottom:10px;" src="' + get_link + '"/></div>';
-        updateCopyButton();
-      }
-    };
+    document.getElementById('htmlOutput').value = newHtml;
+    alert('✅ Hoàn tất! Đã thay tất cả link ảnh.');
+  }
+</script>
 
-    new Imgur({
-      clientid: '1460dad30d4be9a',
-      callback: feedback
-    });
-
-    copyBtn.addEventListener('click', () => {
-      const temp = document.createElement('textarea');
-      temp.value = allLinks.join('\n');
-      document.body.appendChild(temp);
-      temp.select();
-      document.execCommand('copy');
-      document.body.removeChild(temp);
-      alert("✅ Đã copy " + allLinks.length + " link ảnh!");
-    });
-  </script>
 </body>
 </html>
