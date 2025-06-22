@@ -405,8 +405,18 @@
       <input class="form-control" id="tags" placeholder="hotgirl, xinh đẹp, fashion, beauty" type="text"/>
      </div>
      <div class="form-group">
-      <label>
-       Mô tả ngắn:
+      <label>Phong cách viết bài (AI):</label>
+      <select class="form-control" id="writingStyle">
+  <option value="ngẫu nhiên">Ngẫu nhiên</option>
+  <option value="mô tả chi tiết">Mô tả chi tiết</option>
+  <option value="giải trí">Giải trí</option>
+  <option value="ngắn gọn">Ngắn gọn</option>
+  <option value="tự sự">Tự sự</option>
+  <option value="truyền cảm">Truyền cảm</option>
+</select>
+    </div>
+
+    
       </label>
       <textarea class="form-control" id="description" placeholder="Mô tả ngắn về nội dung bài viết..." rows="3"></textarea>
      </div>
@@ -995,76 +1005,133 @@ ${previewContent}
       document.getElementById('description').value = 'Bộ sưu tập hình ảnh các cô gái xinh đẹp, được tuyển chọn kỹ lưỡng với chất lượng HD cao cấp.';
     });
   </script>
-  <!-- ✅ Tích hợp AI vào Tool SEO: Gồm caption ảnh AI, mở bài AI, hashtag AI -->
-  <script>
-   const OPENAI_PROXY_URL = "http://localhost:3001/openai";
+  <!DOCTYPE html>
+  <html lang="vi">
+   <head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>
+     Tool Tạo Bài Viết SEO Tự Động
+    </title>
+   </head>
+   <body>
+    <div style="margin-top: 20px;">
+     <button class="btn btn-success" onclick="generateIntroFromAI()">
+      ✍️ AI Viết Mở Bài
+     </button>
+     <button class="btn btn-warning" onclick="suggestHashtagsFromAI()">
+      🎯 AI Gợi Ý Hashtag
+     </button>
+    </div>
+    <script>
+     const OPENAI_PROXY_URL = "http://localhost:3001/openai";
 
-async function callOpenAI(messages) {
-  const res = await fetch(OPENAI_PROXY_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ messages })
-  });
-  const data = await res.json();
-  return data.choices?.[0]?.message?.content.trim() || "Không có phản hồi từ AI.";
-}
+  async function callOpenAI(messages) {
+    const res = await fetch(OPENAI_PROXY_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ messages })
+    });
+    const data = await res.json();
+    return data.choices?.[0]?.message?.content.trim() || "Không có phản hồi từ AI.";
+  }
 
-async function generateImageCaptionAI(imageUrl, keyword) {
+  async async function generateImageCaptionAI(imageUrl, keyword) {
+  let style = document.getElementById('writingStyle')?.value || 'mô tả chi tiết';
+  if (style === 'ngẫu nhiên') {
+    const styles = ['mô tả chi tiết', 'giải trí', 'ngắn gọn', 'tự sự', 'truyền cảm'];
+    style = styles[Math.floor(Math.random() * styles.length)];
+  }
+  const moods = ["tự nhiên", "trẻ trung", "năng động", "bí ẩn", "cuốn hút"];
+  const angles = ["góc nhìn của độc giả", "như một chuyên gia", "theo phong cách kể chuyện"];
+  const mood = moods[Math.floor(Math.random() * moods.length)];
+  const angle = angles[Math.floor(Math.random() * angles.length)];
+
   return await callOpenAI([
     { role: "system", content: "Bạn là chuyên gia viết caption ảnh cho bài viết SEO" },
-    { role: "user", content: `Viết caption ảnh ngắn (dưới 20 từ), hấp dẫn cho ảnh sau: ${imageUrl}, theo chủ đề "${keyword}".` }
+    { role: "user", content: `Viết caption ảnh ngắn (dưới 20 từ), hấp dẫn cho ảnh: ${imageUrl}, theo chủ đề \"${keyword}\" với phong cách \"${style}\", tông \"${mood}\", viết ${angle}.` }
   ]);
 }
+  return await callOpenAI([
+    { role: "system", content: "Bạn là chuyên gia viết caption ảnh cho bài viết SEO" },
+    { role: "user", content: `Viết caption ảnh ngắn (dưới 20 từ), hấp dẫn cho ảnh: ${imageUrl}, theo chủ đề \"${keyword}\" và phong cách \"${style}\".` }
+  ]);
+},
+      { role: "user", content: `Viết caption ảnh ngắn (dưới 20 từ), hấp dẫn cho ảnh sau: ${imageUrl}, theo chủ đề "${keyword}".` }
+    ]);
+  }
 
-async function generateSEOBodyAI(topic, keyword, description) {
+  async async function generateSEOBodyAI(topic, keyword, description) {
+  let style = document.getElementById('writingStyle')?.value || 'mô tả chi tiết';
+  if (style === 'ngẫu nhiên') {
+    const styles = ['mô tả chi tiết', 'giải trí', 'ngắn gọn', 'tự sự', 'truyền cảm'];
+    style = styles[Math.floor(Math.random() * styles.length)];
+  }
+  const moods = ["tự nhiên", "trẻ trung", "năng động", "bí ẩn", "cuốn hút"];
+  const angles = ["góc nhìn của độc giả", "như một chuyên gia", "theo phong cách kể chuyện"];
+  const mood = moods[Math.floor(Math.random() * moods.length)];
+  const angle = angles[Math.floor(Math.random() * angles.length)];
+
   return await callOpenAI([
     { role: "system", content: "Bạn là chuyên gia viết bài SEO tiếng Việt." },
-    { role: "user", content: `Viết đoạn mở đầu hấp dẫn cho bài viết về "${topic}" (từ khóa: ${keyword}). ${description ? "Gợi ý nội dung: " + description : ""}` }
+    { role: "user", content: `Viết đoạn mở đầu hấp dẫn cho bài viết về \"${topic}\" (từ khóa: ${keyword}), theo phong cách: ${style}, tông \"${mood}\", viết ${angle}. ${description ? "Gợi ý nội dung: " + description : ""}` }
   ]);
 }
-
-async function generateHashtagsAI(keyword) {
   return await callOpenAI([
-    { role: "system", content: "Bạn là chuyên gia mạng xã hội." },
-    { role: "user", content: `Tạo 10 hashtag không dấu, dạng #tag, cho từ khóa "${keyword}".` }
+    { role: "system", content: "Bạn là chuyên gia viết bài SEO tiếng Việt." },
+    { role: "user", content: `Viết đoạn mở đầu hấp dẫn cho bài viết về \"${topic}\" (từ khóa: ${keyword}), theo phong cách: ${style}. ${description ? "Gợi ý nội dung: " + description : ""}` }
   ]);
-}
+},
+      { role: "user", content: `Viết đoạn mở đầu hấp dẫn cho bài viết về "${topic}" (từ khóa: ${keyword}). ${description ? "Gợi ý nội dung: " + description : ""}` }
+    ]);
+  }
 
-async function generateIntroFromAI() {
-  const topic = document.getElementById('mainTopic').value;
-  const keyword = document.getElementById('mainKeyword').value;
-  const desc = document.getElementById('description').value;
+  async function generateHashtagsAI(keyword) {
+    return await callOpenAI([
+      { role: "system", content: "Bạn là chuyên gia mạng xã hội." },
+      { role: "user", content: `Tạo 10 hashtag không dấu, dạng #tag, cho từ khóa "${keyword}".` }
+    ]);
+  }
 
-  showStatus('info', '✍️ Đang tạo mở bài bằng AI...');
-  const intro = await generateSEOBodyAI(topic, keyword, desc);
-  document.getElementById('description').value = intro;
-  showStatus('success', '✅ Đã tạo đoạn mở bài từ AI!');
-}
+  async function generateIntroFromAI() {
+    const topic = document.getElementById('mainTopic').value;
+    const keyword = document.getElementById('mainKeyword').value;
+    const desc = document.getElementById('description').value;
 
-async function suggestHashtagsFromAI() {
-  const keyword = document.getElementById('mainKeyword').value;
-  showStatus('info', '🔍 Đang gợi ý hashtag từ AI...');
-  const hashtags = await generateHashtagsAI(keyword);
-  document.getElementById('tags').value = hashtags.replace(/#/g, '').replace(/\s+/g, ', ');
-  showStatus('success', '✅ Hashtag đã được cập nhật!');
-}
+    showStatus('info', '✍️ Đang tạo mở bài bằng AI...');
+    const intro = await generateSEOBodyAI(topic, keyword, desc);
+    document.getElementById('description').value = intro;
+    showStatus('success', '✅ Đã tạo đoạn mở bài từ AI!');
+  }
 
-async function displayUploadedImage(url) {
-  const container = document.querySelector('.uploaded-images');
-  const keyword = document.getElementById('mainKeyword').value || 'gái xinh';
-  const captionText = await generateImageCaptionAI(url, keyword);
-  const imageItem = document.createElement('div');
-  imageItem.className = 'image-item';
-  imageItem.innerHTML = `
-    <img src="${url}" alt="Ảnh" class="image-preview">
-    <input type="text" class="image-url" value="${url}" readonly onclick="this.select()">
-    <p style="margin-top: 10px; font-style: italic; color: #666;">${captionText}</p>
-    <button class="btn" style="background: #dc3545; margin-top: 10px;" onclick="removeImage('${url}')">
-      🗑️ Xóa
-    </button>
-  `;
-  container.appendChild(imageItem);
-}
-  </script>
+  async function suggestHashtagsFromAI() {
+    const keyword = document.getElementById('mainKeyword').value;
+    showStatus('info', '🔍 Đang gợi ý hashtag từ AI...');
+    const hashtags = await generateHashtagsAI(keyword);
+    document.getElementById('tags').value = hashtags.replace(/#/g, '').replace(/\s+/g, ', ');
+    showStatus('success', '✅ Hashtag đã được cập nhật!');
+  }
+
+  async function displayUploadedImage(url) {
+    const container = document.querySelector('.uploaded-images');
+    const keyword = document.getElementById('mainKeyword').value || 'gái xinh';
+
+    const captionText = await generateImageCaptionAI(url, keyword);
+
+    const imageItem = document.createElement('div');
+    imageItem.className = 'image-item';
+    imageItem.innerHTML = `
+      <img src="${url}" alt="Ảnh" class="image-preview">
+      <input type="text" class="image-url" value="${url}" readonly onclick="this.select()">
+      <p style="margin-top: 10px; font-style: italic; color: #666;">${captionText}</p>
+      <button class="btn" style="background: #dc3545; margin-top: 10px;" onclick="removeImage('${url}')">
+        🗑️ Xóa
+      </button>
+    `;
+    container.appendChild(imageItem);
+  }
+    </script>
+   </body>
+  </html>
  </body>
 </html>
