@@ -1,97 +1,235 @@
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Tool SEO AI Tự Động</title>
+  <title>Upload ảnh lên Imgur</title>
+  <style>
+    body.loading .loading-modal { display: block; }
+    .dropzone {
+      border: 2px dashed #999;
+      border-radius: 10px;
+      position: relative;
+      margin: 0 auto;
+      clear: both;
+    }
+    .infoimg {
+      margin: 0 auto;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+    .dropzone p {
+      margin: 0;
+      text-align: center;
+      width: 100%;
+      font-weight: bold;
+      color: #999;
+    }
+    .input {
+      height: 100%;
+      left: 0;
+      outline: 0;
+      opacity: 0;
+      position: absolute;
+      top: 0;
+      width: 100%;
+      cursor: pointer;
+    }
+    .status {
+      border-radius: 5px;
+      text-align: center;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .image-url {
+      width: calc(100% - 10px);
+      padding: 5px;
+      border: 1px solid #999;
+      border-radius: 5px;
+      color: #333;
+    }
+    .linkimg { margin: 20px 0; }
+    .dropzone.dropzone-dragging { border-color: #000; }
+    .loading-modal {
+      background-color: rgba(255,255,255,.8);
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+    }
+    .loading-table {
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 15%;
+      margin-bottom: 15%;
+    }
+    #copyAllLinksBtn {
+      margin: 20px auto;
+      display: none;
+      padding: 10px 20px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+  </style>
 </head>
 <body>
+  <div class="dropzone">
+    <div class="infoimg"></div>
+  </div>
+  <div class="status"></div>
+  <button id="copyAllLinksBtn">📋 Copy tất cả link ảnh</button>
 
-<!-- ✅ Tích hợp AI vào Tool SEO: Gồm caption ảnh AI, mở bài AI, hashtag AI -->
-<!-- 🌟 Chèn đoạn này vào trong phần <body> -->
+  <script type="text/javascript">
+    (function (root, factory) {
+      if (typeof define === 'function' && define.amd) {
+        define([], factory);
+      } else if (typeof exports === 'object') {
+        module.exports = factory();
+      } else {
+        root.Imgur = factory();
+      }
+    }(this, function () {
+      var Imgur = function (options) {
+        if (!this || !(this instanceof Imgur)) return new Imgur(options);
+        if (!options) options = {};
+        if (!options.clientid) throw 'Provide a valid Client Id here: https://api.imgur.com/';
+        this.clientid = options.clientid;
+        this.endpoint = 'https://api.imgur.com/3/image';
+        this.callback = options.callback || undefined;
+        this.dropzone = document.querySelectorAll('.dropzone');
+        this.infoimg = document.querySelectorAll('.infoimg');
+        this.run();
+      };
+      Imgur.prototype = {
+        createEls: function (name, props, text) {
+          var el = document.createElement(name), p;
+          for (p in props) if (props.hasOwnProperty(p)) el[p] = props[p];
+          if (text) el.appendChild(document.createTextNode(text));
+          return el;
+        },
+        insertAfter: function (ref, node) {
+          ref.parentNode.insertBefore(node, ref.nextSibling);
+        },
+        post: function (path, data, callback) {
+          var xhttp = new XMLHttpRequest();
+          xhttp.open('POST', path, true);
+          xhttp.setRequestHeader('Authorization', 'Client-ID ' + this.clientid);
+          xhttp.onreadystatechange = function () {
+            if (this.readyState === 4) {
+              if (this.status >= 200 && this.status < 300) {
+                var response = '';
+                try { response = JSON.parse(this.responseText); } catch (err) { response = this.responseText; }
+                callback.call(window, response);
+              } else {
+                throw new Error(this.status + " - " + this.statusText);
+              }
+            }
+          };
+          xhttp.send(data);
+          xhttp = null;
+        },
+        createDragZone: function () {
+          var p1 = this.createEls('p', {}, 'Kéo file ảnh vào đây');
+          var p2 = this.createEls('p', {}, 'Hoặc click để chọn ảnh');
+          var input = this.createEls('input', { type: 'file', className: 'input', accept: 'image/*', multiple: true });
+          this.infoimg.forEach(zone => { zone.appendChild(p1); zone.appendChild(p2); });
+          this.dropzone.forEach(zone => { zone.appendChild(input); this.status(zone); this.upload(zone); });
+        },
+        loading: function () {
+          var div = this.createEls('div', { className: 'loading-modal' });
+          var table = this.createEls('table', { className: 'loading-table' });
+          var img = this.createEls('img', { className: 'loading-image', src: 'https://firebasestorage.googleapis.com/v0/b/huydc-090288.appspot.com/o/Images%20Upload%2Floading-spin.svg?alt=media&token=8a1fd8dc-30b2-4b74-acc6-9e4ce55a89b0' });
+          div.appendChild(table); table.appendChild(img); document.body.appendChild(div);
+        },
+        status: function (el) {
+          var div = this.createEls('div', { className: 'status' });
+          this.insertAfter(el, div);
+        },
+        matchFiles: function (file, zone) {
+          var status = zone.nextSibling;
+          if (file.type.match(/image/) && file.type !== 'image/svg+xml') {
+            document.body.classList.add('loading');
+            status.classList.remove('bg-success', 'bg-danger');
+            status.innerHTML = '';
+            var fd = new FormData();
+            fd.append('image', file);
+            this.post(this.endpoint, fd, function (data) {
+              document.body.classList.remove('loading');
+              if (typeof this.callback === 'function') this.callback.call(this, data);
+            }.bind(this));
+          } else {
+            status.classList.remove('bg-success');
+            status.classList.add('bg-danger');
+            status.innerHTML = 'Invalid file type';
+          }
+        },
+        upload: function (zone) {
+          var events = ['dragenter', 'dragleave', 'dragover', 'drop'];
+          zone.addEventListener('change', function (e) {
+            if (e.target && e.target.nodeName === 'INPUT' && e.target.type === 'file') {
+              Array.from(e.target.files).forEach(file => this.matchFiles(file, zone));
+            }
+          }.bind(this), false);
+          events.forEach(event => {
+            zone.addEventListener(event, function (e) {
+              if (e.target && e.target.nodeName === 'INPUT' && e.target.type === 'file') {
+                if (event === 'dragleave' || event === 'drop') {
+                  e.target.parentNode.classList.remove('dropzone-dragging');
+                } else {
+                  e.target.parentNode.classList.add('dropzone-dragging');
+                }
+              }
+            }, false);
+          });
+        },
+        run: function () {
+          if (!document.querySelector('.loading-modal')) this.loading();
+          this.createDragZone();
+        }
+      };
+      return Imgur;
+    }));
 
-<div style="margin-top: 20px;">
-  <button class="btn btn-success" onclick="generateIntroFromAI()">✍️ AI Viết Mở Bài</button>
-  <button class="btn btn-warning" onclick="suggestHashtagsFromAI()">🎯 AI Gợi Ý Hashtag</button>
-</div>
+    const allLinks = [];
+    const copyBtn = document.getElementById('copyAllLinksBtn');
 
-<script>
-const OPENAI_PROXY_URL = "http://localhost:3001/openai";
+    function updateCopyButton() {
+      if (allLinks.length > 0) copyBtn.style.display = 'block';
+    }
 
-async function callOpenAI(messages) {
-  const res = await fetch(OPENAI_PROXY_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ messages })
-  });
-  const data = await res.json();
-  return data.choices?.[0]?.message?.content.trim() || "Không có phản hồi từ AI.";
-}
+    var feedback = function(res) {
+      if (res.success === true) {
+        const get_link = res.data.link.replace(/^http:\/\//i, 'https://');
+        allLinks.push(get_link);
+        document.querySelector('.status').classList.add('bg-success');
+        document.querySelector('.status').innerHTML +=
+          '<div class="linkimg"><input class="image-url" onclick="this.select()" value="' + get_link + '"/></div>' +
+          '<div class="showimg"><img class="img" style="max-width:100%;margin-bottom:10px;" src="' + get_link + '"/></div>';
+        updateCopyButton();
+      }
+    };
 
-// 🖼️ Caption ảnh AI
-async function generateImageCaptionAI(imageUrl, keyword) {
-  return await callOpenAI([
-    { role: "system", content: "Bạn là chuyên gia viết caption ảnh cho bài viết SEO" },
-    { role: "user", content: `Viết caption ảnh ngắn (dưới 20 từ), hấp dẫn cho ảnh sau: ${imageUrl}, theo chủ đề "${keyword}".` }
-  ]);
-}
+    new Imgur({
+      clientid: '3a8be4390ef3eb8',
+      callback: feedback
+    });
 
-// ✍️ Đoạn mở bài AI
-async function generateSEOBodyAI(topic, keyword, description) {
-  return await callOpenAI([
-    { role: "system", content: "Bạn là chuyên gia viết bài SEO tiếng Việt." },
-    { role: "user", content: `Viết đoạn mở đầu hấp dẫn cho bài viết về "${topic}" (từ khóa: ${keyword}). ${description ? "Gợi ý nội dung: " + description : ""}` }
-  ]);
-}
-
-// 🔖 Hashtag AI
-async function generateHashtagsAI(keyword) {
-  return await callOpenAI([
-    { role: "system", content: "Bạn là chuyên gia mạng xã hội." },
-    { role: "user", content: `Tạo 10 hashtag không dấu, dạng #tag, cho từ khóa "${keyword}".` }
-  ]);
-}
-
-// Nút tạo mở bài AI
-async function generateIntroFromAI() {
-  const topic = document.getElementById('mainTopic').value;
-  const keyword = document.getElementById('mainKeyword').value;
-  const desc = document.getElementById('description').value;
-
-  showStatus('info', '✍️ Đang tạo mở bài bằng AI...');
-  const intro = await generateSEOBodyAI(topic, keyword, desc);
-  document.getElementById('description').value = intro;
-  showStatus('success', '✅ Đã tạo đoạn mở bài từ AI!');
-}
-
-// Nút gợi ý hashtag AI
-async function suggestHashtagsFromAI() {
-  const keyword = document.getElementById('mainKeyword').value;
-  showStatus('info', '🔍 Đang gợi ý hashtag từ AI...');
-  const hashtags = await generateHashtagsAI(keyword);
-  document.getElementById('tags').value = hashtags.replace(/#/g, '').replace(/\s+/g, ', ');
-  showStatus('success', '✅ Hashtag đã được cập nhật!');
-}
-
-// ✅ Gọi caption AI cho từng ảnh khi upload xong
-async function displayUploadedImage(url) {
-  const container = document.querySelector('.uploaded-images');
-  const keyword = document.getElementById('mainKeyword').value || 'gái xinh';
-
-  const captionText = await generateImageCaptionAI(url, keyword);
-
-  const imageItem = document.createElement('div');
-  imageItem.className = 'image-item';
-  imageItem.innerHTML = `
-    <img src="${url}" alt="Ảnh" class="image-preview">
-    <input type="text" class="image-url" value="${url}" readonly onclick="this.select()">
-    <p style="margin-top: 10px; font-style: italic; color: #666;">${captionText}</p>
-    <button class="btn" style="background: #dc3545; margin-top: 10px;" onclick="removeImage('${url}')">
-      🗑️ Xóa
-    </button>
-  `;
-  container.appendChild(imageItem);
-}
-</script>
-
+    copyBtn.addEventListener('click', () => {
+      const temp = document.createElement('textarea');
+      temp.value = allLinks.join('\n');
+      document.body.appendChild(temp);
+      temp.select();
+      document.execCommand('copy');
+      document.body.removeChild(temp);
+      alert("✅ Đã copy " + allLinks.length + " link ảnh!");
+    });
+  </script>
 </body>
 </html>
