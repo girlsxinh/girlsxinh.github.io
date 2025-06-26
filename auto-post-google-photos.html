@@ -1,647 +1,235 @@
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tạo bài viết gái xinh - Tool SEO Tự Động</title>
-  <meta name="description" content="Tạo bài viết gái xinh chuẩn SEO từ ảnh Google Photos, tự động sinh tiêu đề, mô tả, thẻ heading, tags và schema cho Blogger." />
-  <meta name="keywords" content="gái xinh, ảnh hot girl, blogger, SEO, Google Photos, auto post tool" />
-  <meta name="author" content="girlsxinh.net" />
+  <meta charset="UTF-8">
+  <title>Upload ảnh lên Imgur</title>
   <style>
-    * { box-sizing: border-box; }
-    body { 
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-      margin: 0;
-      padding: 20px; 
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      min-height: 100vh;
-    }
-    
-    .container {
-      max-width: 1200px;
+    body.loading .loading-modal { display: block; }
+    .dropzone {
+      border: 2px dashed #999;
+      border-radius: 10px;
+      position: relative;
       margin: 0 auto;
-      background: white;
-      border-radius: 15px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-      overflow: hidden;
+      clear: both;
     }
-    
-    .header {
-      background: linear-gradient(135deg, #e91e63, #f06292);
-      color: white;
-      padding: 30px;
-      text-align: center;
+    .infoimg {
+      margin: 0 auto;
+      margin-top: 20px;
+      margin-bottom: 20px;
     }
-    
-    .header h1 {
+    .dropzone p {
       margin: 0;
-      font-size: 2.5em;
-      font-weight: 300;
-    }
-    
-    .header p {
-      margin: 10px 0 0 0;
-      opacity: 0.9;
-      font-size: 1.1em;
-    }
-    
-    .main-content {
-      padding: 30px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 30px;
-    }
-    
-    .input-section, .output-section {
-      background: #f8f9fa;
-      padding: 25px;
-      border-radius: 12px;
-      border: 1px solid #e9ecef;
-    }
-    
-    .input-section h3, .output-section h3 {
-      margin-top: 0;
-      color: #495057;
-      font-size: 1.3em;
-      border-bottom: 2px solid #e91e63;
-      padding-bottom: 10px;
-    }
-    
-    .form-group {
-      margin-bottom: 20px;
-    }
-    
-    .form-group label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 600;
-      color: #495057;
-    }
-    
-    .file-upload {
-      position: relative;
-      display: inline-block;
-      width: 100%;
-    }
-    
-    .file-upload input[type=file] {
-      position: absolute;
-      left: -9999px;
-    }
-    
-    .file-upload-btn {
-      display: block;
-      width: 100%;
-      padding: 15px;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 16px;
-      transition: all 0.3s ease;
       text-align: center;
-    }
-    
-    .file-upload-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
-    }
-    
-    textarea {
       width: 100%;
-      padding: 15px;
-      border: 2px solid #e9ecef;
-      border-radius: 8px;
-      font-size: 14px;
-      font-family: inherit;
-      resize: vertical;
-      transition: border-color 0.3s ease;
+      font-weight: bold;
+      color: #999;
     }
-    
-    textarea:focus {
-      outline: none;
-      border-color: #e91e63;
-    }
-    
-    .custom-select {
-      position: relative;
-      width: 100%;
-    }
-    
-    .select-selected {
-      background: white;
-      border: 2px solid #e9ecef;
-      border-radius: 8px;
-      padding: 15px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    
-    .select-selected:hover {
-      border-color: #e91e63;
-    }
-    
-    .select-selected.select-arrow-active {
-      border-color: #e91e63;
-      border-bottom-left-radius: 0;
-      border-bottom-right-radius: 0;
-    }
-    
-    .select-items {
-      position: absolute;
-      background: white;
-      top: 100%;
+    .input {
+      height: 100%;
       left: 0;
-      right: 0;
-      z-index: 99;
-      border: 2px solid #e91e63;
-      border-top: none;
-      border-radius: 0 0 8px 8px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    }
-    
-    .select-items div {
-      padding: 15px;
-      cursor: pointer;
-      transition: background 0.2s ease;
-    }
-    
-    .select-items div:hover {
-      background: #f8f9fa;
-    }
-    
-    .select-items div.same-as-selected {
-      background: #e91e63;
-      color: white;
-    }
-    
-    .select-hide {
-      display: none;
-    }
-    
-    .arrow {
-      width: 0;
-      height: 0;
-      border-left: 6px solid transparent;
-      border-right: 6px solid transparent;
-      border-top: 6px solid #666;
-      transition: transform 0.3s ease;
-    }
-    
-    .select-arrow-active .arrow {
-      transform: rotate(180deg);
-    }
-    
-    .generate-btn {
+      outline: 0;
+      opacity: 0;
+      position: absolute;
+      top: 0;
       width: 100%;
-      padding: 18px;
-      background: linear-gradient(135deg, #e91e63, #f06292);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 18px;
-      font-weight: 600;
       cursor: pointer;
-      transition: all 0.3s ease;
-      margin-top: 20px;
     }
-    
-    .generate-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(233, 30, 99, 0.3);
-    }
-    
-    .copy-btn {
-      width: 100%;
-      padding: 15px;
-      background: #28a745;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      margin-top: 15px;
-    }
-    
-    .copy-btn:hover {
-      background: #218838;
-      transform: translateY(-1px);
-    }
-    
-    #preview {
-      margin-top: 20px;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 15px;
-    }
-    
-    #preview img {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-      border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      transition: transform 0.2s ease;
-    }
-    
-    #preview img:hover {
-      transform: scale(1.05);
-    }
-    
-    .note {
-      font-size: 14px;
-      color: #6c757d;
-      background: #fff3cd;
-      padding: 12px;
-      border-radius: 6px;
-      border-left: 4px solid #ffc107;
-      margin-bottom: 20px;
-    }
-    
     .status {
-      padding: 10px;
-      border-radius: 6px;
-      margin: 10px 0;
+      border-radius: 5px;
+      text-align: center;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .image-url {
+      width: calc(100% - 10px);
+      padding: 5px;
+      border: 1px solid #999;
+      border-radius: 5px;
+      color: #333;
+    }
+    .linkimg { margin: 20px 0; }
+    .dropzone.dropzone-dragging { border-color: #000; }
+    .loading-modal {
+      background-color: rgba(255,255,255,.8);
       display: none;
+      position: fixed;
+      z-index: 1000;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
     }
-    
-    .status.success {
-      background: #d4edda;
-      color: #155724;
-      border: 1px solid #c3e6cb;
+    .loading-table {
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 15%;
+      margin-bottom: 15%;
     }
-    
-    .status.error {
-      background: #f8d7da;
-      color: #721c24;
-      border: 1px solid #f5c6cb;
-    }
-    
-    @media (max-width: 768px) {
-      .main-content {
-        grid-template-columns: 1fr;
-        gap: 20px;
-        padding: 20px;
-      }
-      
-      .header h1 {
-        font-size: 2em;
-      }
-      
-      #preview {
-        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-        gap: 10px;
-      }
+    #copyAllLinksBtn {
+      margin: 20px auto;
+      display: none;
+      padding: 10px 20px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <h1>🖼 Auto Post Gái Xinh Chuẩn SEO</h1>
-      <p>Công cụ tạo bài viết tự động với SEO tối ưu</p>
-    </div>
-    
-    <div class="main-content">
-      <div class="input-section">
-        <h3>📝 Thông tin đầu vào</h3>
-        
-        <div class="note">
-          Dán link ảnh Google Photos dạng <code>https://lh3.googleusercontent.com/...</code>, mỗi ảnh 1 dòng. Hoặc chọn ảnh từ máy tính.
-        </div>
-        
-        <div class="form-group">
-          <label for="uploadInput">📁 Chọn ảnh từ máy:</label>
-          <div class="file-upload">
-            <input type="file" id="uploadInput" multiple accept="image/*" />
-            <label for="uploadInput" class="file-upload-btn">
-              🔍 Chọn ảnh (có thể chọn nhiều)
-            </label>
-          </div>
-        </div>
-        
-        <div class="form-group">
-          <label for="imageLinks">🔗 Hoặc dán link ảnh:</label>
-          <textarea id="imageLinks" rows="6" placeholder="Dán link ảnh tại đây, mỗi link một dòng..."></textarea>
-        </div>
-        
-        <div class="form-group">
-          <label>🎨 Chọn phong cách:</label>
-          <div class="custom-select">
-            <div class="select-selected">
-              <span>Hot girl</span>
-              <div class="arrow"></div>
-            </div>
-            
-<div class="select-items select-hide">
-  <div data-value="hot girl">🔥 Hot girl</div>
-  <div data-value="dễ thương">😊 Dễ thương</div>
-  <div data-value="áo dài">🇻🇳 Áo dài</div>
-  <div data-value="bikini">👙 Bikini</div>
-  <div data-value="gái gọi">📞 Gái gọi</div>
-  <div data-value="jav">🎥 JAV</div>
-  <div data-value="ảnh sex">🔞 Ảnh Sex</div>
-  <div data-value="khoe hàng">😏 Khoe hàng</div>
-</div>
-
-</div>
-          </div>
-        </div>
-        
-        <button class="generate-btn" onclick="generatePost()">
-          ✨ Tạo bài viết tự động
-        </button>
-        
-        <div id="status" class="status"></div>
-      </div>
-      
-      <div class="output-section">
-        <h3>👀 Xem trước kết quả</h3>
-        <div id="preview"></div>
-        
-        <h3 style="margin-top: 30px;">📋 HTML bài viết</h3>
-        <textarea id="outputHTML" rows="15" placeholder="HTML sẽ xuất hiện ở đây sau khi tạo..."></textarea>
-        <button class="copy-btn" onclick="copyToClipboard()">
-          📋 Sao chép HTML
-        </button>
-      </div>
-    </div>
+  <div class="dropzone">
+    <div class="infoimg"></div>
   </div>
+  <div class="status"></div>
+  <button id="copyAllLinksBtn">📋 Copy tất cả link ảnh</button>
 
-  <script>
-    let selectedStyle = 'hot girl';
-    
-    // Custom Select functionality
-    document.addEventListener('DOMContentLoaded', function() {
-      const selectSelected = document.querySelector('.select-selected');
-      const selectItems = document.querySelector('.select-items');
-      const selectOptions = selectItems.querySelectorAll('div');
-      
-      selectSelected.addEventListener('click', function() {
-        selectItems.classList.toggle('select-hide');
-        selectSelected.classList.toggle('select-arrow-active');
-      });
-      
-      selectOptions.forEach(option => {
-        option.addEventListener('click', function() {
-          const value = this.getAttribute('data-value');
-          const text = this.textContent;
-          
-          selectSelected.querySelector('span').textContent = text;
-          selectedStyle = value;
-          
-          selectOptions.forEach(opt => opt.classList.remove('same-as-selected'));
-          this.classList.add('same-as-selected');
-          
-          selectItems.classList.add('select-hide');
-          selectSelected.classList.remove('select-arrow-active');
-        });
-      });
-      
-      // Close dropdown when clicking outside
-      document.addEventListener('click', function(e) {
-        if (!e.target.closest('.custom-select')) {
-          selectItems.classList.add('select-hide');
-          selectSelected.classList.remove('select-arrow-active');
+  <script type="text/javascript">
+    (function (root, factory) {
+      if (typeof define === 'function' && define.amd) {
+        define([], factory);
+      } else if (typeof exports === 'object') {
+        module.exports = factory();
+      } else {
+        root.Imgur = factory();
+      }
+    }(this, function () {
+      var Imgur = function (options) {
+        if (!this || !(this instanceof Imgur)) return new Imgur(options);
+        if (!options) options = {};
+        if (!options.clientid) throw 'Provide a valid Client Id here: https://api.imgur.com/';
+        this.clientid = options.clientid;
+        this.endpoint = 'https://api.imgur.com/3/image';
+        this.callback = options.callback || undefined;
+        this.dropzone = document.querySelectorAll('.dropzone');
+        this.infoimg = document.querySelectorAll('.infoimg');
+        this.run();
+      };
+      Imgur.prototype = {
+        createEls: function (name, props, text) {
+          var el = document.createElement(name), p;
+          for (p in props) if (props.hasOwnProperty(p)) el[p] = props[p];
+          if (text) el.appendChild(document.createTextNode(text));
+          return el;
+        },
+        insertAfter: function (ref, node) {
+          ref.parentNode.insertBefore(node, ref.nextSibling);
+        },
+        post: function (path, data, callback) {
+          var xhttp = new XMLHttpRequest();
+          xhttp.open('POST', path, true);
+          xhttp.setRequestHeader('Authorization', 'Client-ID ' + this.clientid);
+          xhttp.onreadystatechange = function () {
+            if (this.readyState === 4) {
+              if (this.status >= 200 && this.status < 300) {
+                var response = '';
+                try { response = JSON.parse(this.responseText); } catch (err) { response = this.responseText; }
+                callback.call(window, response);
+              } else {
+                throw new Error(this.status + " - " + this.statusText);
+              }
+            }
+          };
+          xhttp.send(data);
+          xhttp = null;
+        },
+        createDragZone: function () {
+          var p1 = this.createEls('p', {}, 'Kéo file ảnh vào đây');
+          var p2 = this.createEls('p', {}, 'Hoặc click để chọn ảnh');
+          var input = this.createEls('input', { type: 'file', className: 'input', accept: 'image/*', multiple: true });
+          this.infoimg.forEach(zone => { zone.appendChild(p1); zone.appendChild(p2); });
+          this.dropzone.forEach(zone => { zone.appendChild(input); this.status(zone); this.upload(zone); });
+        },
+        loading: function () {
+          var div = this.createEls('div', { className: 'loading-modal' });
+          var table = this.createEls('table', { className: 'loading-table' });
+          var img = this.createEls('img', { className: 'loading-image', src: 'https://firebasestorage.googleapis.com/v0/b/huydc-090288.appspot.com/o/Images%20Upload%2Floading-spin.svg?alt=media&token=8a1fd8dc-30b2-4b74-acc6-9e4ce55a89b0' });
+          div.appendChild(table); table.appendChild(img); document.body.appendChild(div);
+        },
+        status: function (el) {
+          var div = this.createEls('div', { className: 'status' });
+          this.insertAfter(el, div);
+        },
+        matchFiles: function (file, zone) {
+          var status = zone.nextSibling;
+          if (file.type.match(/image/) && file.type !== 'image/svg+xml') {
+            document.body.classList.add('loading');
+            status.classList.remove('bg-success', 'bg-danger');
+            status.innerHTML = '';
+            var fd = new FormData();
+            fd.append('image', file);
+            this.post(this.endpoint, fd, function (data) {
+              document.body.classList.remove('loading');
+              if (typeof this.callback === 'function') this.callback.call(this, data);
+            }.bind(this));
+          } else {
+            status.classList.remove('bg-success');
+            status.classList.add('bg-danger');
+            status.innerHTML = 'Invalid file type';
+          }
+        },
+        upload: function (zone) {
+          var events = ['dragenter', 'dragleave', 'dragover', 'drop'];
+          zone.addEventListener('change', function (e) {
+            if (e.target && e.target.nodeName === 'INPUT' && e.target.type === 'file') {
+              Array.from(e.target.files).forEach(file => this.matchFiles(file, zone));
+            }
+          }.bind(this), false);
+          events.forEach(event => {
+            zone.addEventListener(event, function (e) {
+              if (e.target && e.target.nodeName === 'INPUT' && e.target.type === 'file') {
+                if (event === 'dragleave' || event === 'drop') {
+                  e.target.parentNode.classList.remove('dropzone-dragging');
+                } else {
+                  e.target.parentNode.classList.add('dropzone-dragging');
+                }
+              }
+            }, false);
+          });
+        },
+        run: function () {
+          if (!document.querySelector('.loading-modal')) this.loading();
+          this.createDragZone();
         }
-      });
+      };
+      return Imgur;
+    }));
+
+    const allLinks = [];
+    const copyBtn = document.getElementById('copyAllLinksBtn');
+
+    function updateCopyButton() {
+      if (allLinks.length > 0) copyBtn.style.display = 'block';
+    }
+
+    var feedback = function(res) {
+      if (res.success === true) {
+        const get_link = res.data.link.replace(/^http:\/\//i, 'https://');
+        allLinks.push(get_link);
+        document.querySelector('.status').classList.add('bg-success');
+        document.querySelector('.status').innerHTML +=
+          '<div class="linkimg"><input class="image-url" onclick="this.select()" value="' + get_link + '"/></div>' +
+          '<div class="showimg"><img class="img" style="max-width:100%;margin-bottom:10px;" src="' + get_link + '"/></div>';
+        updateCopyButton();
+      }
+    };
+
+    new Imgur({
+      clientid: '3a8be4390ef3eb8',
+      callback: feedback
     });
 
-    document.getElementById('uploadInput').addEventListener('change', handleUpload);
-
-    function showStatus(message, type = 'success') {
-      const status = document.getElementById('status');
-      status.textContent = message;
-      status.className = `status ${type}`;
-      status.style.display = 'block';
-      
-      setTimeout(() => {
-        status.style.display = 'none';
-      }, 3000);
-    }
-
-    function validateImage(file) {
-      const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-      const maxSize = 5 * 1024 * 1024; // 5MB
-      
-      if (!allowedTypes.includes(file.type)) {
-        throw new Error('Chỉ hỗ trợ file ảnh: JPG, PNG, GIF, WebP');
-      }
-      if (file.size > maxSize) {
-        throw new Error('File quá lớn (tối đa 5MB)');
-      }
-    }
-
-    async function handleUpload(event) {
-      const files = Array.from(event.target.files);
-      
-      try {
-        showStatus('Đang xử lý ảnh...', 'success');
-        
-        const dataURLs = await Promise.all(files.map(file => {
-          validateImage(file);
-          return new Promise(resolve => {
-            const reader = new FileReader();
-            reader.onload = e => resolve(e.target.result);
-            reader.readAsDataURL(file);
-          });
-        }));
-
-        const textarea = document.getElementById("imageLinks");
-        textarea.value += dataURLs.join("\n") + "\n";
-        
-        showStatus(`✅ Đã tải lên ${files.length} ảnh thành công!`, 'success');
-      } catch (error) {
-        showStatus('❌ ' + error.message, 'error');
-      }
-    }
-
-    function generateCaption(index, style) {
-      const ideas = [
-        `Vẻ đẹp ${style} cuốn hút ánh nhìn`,
-        `${style} ngọt ngào khiến ai cũng mê`,
-        `Góc nghiêng thần thánh của cô nàng ${style}`,
-        `Phong cách ${style} tự nhiên đầy cá tính`,
-        `Ánh mắt ${style} khiến bạn không thể rời mắt`,
-        `Nụ cười ${style} tỏa sáng rực rỡ`,
-        `Dáng vẻ ${style} thu hút mọi ánh nhìn`,
-        `Thần thái ${style} đầy quyến rũ`
-      ];
-      return ideas[index % ideas.length];
-    }
-
-    function generatePost() {
-      try {
-        const links = document.getElementById("imageLinks").value.trim().split(/\n+/).filter(link => link);
-        
-        if (links.length === 0) {
-          showStatus('❌ Vui lòng thêm ít nhất một ảnh!', 'error');
-          return;
-        }
-
-        const style = selectedStyle;
-        const year = new Date().getFullYear();
-        const randomAdjs = ["rực rỡ", "ấn tượng", "tinh khôi", "quyến rũ", "bùng nổ", "xuất sắc", "tuyệt đẹp"];
-        const adj = randomAdjs[Math.floor(Math.random() * randomAdjs.length)];
-
-        const titleIdeas = [
-          `Chiêm ngưỡng bộ ảnh gái xinh ${style} ${adj} khiến bạn không thể rời mắt`,
-          `BST gái xinh phong cách ${style} ${adj} nhất năm ${year}`,
-          `Ngắm nhìn gái xinh ${style} với thần thái ${adj} đốn tim cư dân mạng`,
-          `Top ảnh gái xinh ${style} cực ${adj} được yêu thích trong ${year}`,
-          `Ảnh gái xinh phong cách ${style} mang nét đẹp ${adj} khó cưỡng`
-        ];
-        const title = titleIdeas[Math.floor(Math.random() * titleIdeas.length)];
-
-        const descriptionPresets = {
-          "hot girl": [
-            `Khám phá bộ ảnh hot girl với vẻ đẹp bốc lửa, quyến rũ mọi ánh nhìn.`,
-            `Tuyển chọn ảnh hot girl mới nhất với phong cách sexy đầy mê hoặc.`,
-            `Gái xinh hot girl trong loạt ảnh cực chất, phong cách táo bạo và thần thái ngút trời.`
-          ],
-          "dễ thương": [
-            `Cùng ngắm những cô nàng dễ thương với nụ cười tỏa nắng và ánh mắt trong veo.`,
-            `Gái xinh dễ thương khiến bạn “tan chảy” bởi nét đẹp tự nhiên và ngây thơ.`,
-            `Ảnh gái dễ thương đáng yêu như thiên thần, nhẹ nhàng mà lôi cuốn.`
-          ],
-          "áo dài": [
-            `Vẻ đẹp Việt dịu dàng trong tà áo dài trắng tinh khôi.`,
-            `Ảnh nữ sinh áo dài thướt tha khiến bao trái tim rung động.`,
-            `Gái xinh mặc áo dài mang vẻ đẹp truyền thống nhưng đầy cuốn hút.`
-          ],
-          "bikini": [
-            `Ngắm nhìn gái xinh trong bộ bikini nóng bỏng, khoe body cực gắt.`,
-            `Tuyển tập ảnh bikini gợi cảm, đầy sức sống giữa mùa hè.`,
-            `Bikini sexy cùng thần thái hút hồn – gái xinh không thể rời mắt.`
-          ],
-          "gái gọi": [
-            `Ảnh gái gọi nghệ thuật đầy khiêu khích, đường cong nóng bỏng khó cưỡng.`,
-            `Chùm ảnh gái gọi táo bạo, gợi cảm nhưng vẫn giữ nét tinh tế.`,
-            `Vẻ đẹp mời gọi và thần thái tự tin tạo nên bộ ảnh khó quên.`
-          ],
-          "jav": [
-            `Bộ ảnh JAV cực nét với thần thái quyến rũ và vóc dáng chuẩn idol.`,
-            `Ảnh JAV chọn lọc – gợi cảm và nghệ thuật trong từng góc máy.`,
-            `Gái xinh phong cách JAV khiến người xem “đứng hình” vì quá cuốn hút.`
-          ],
-          "ảnh sex": [
-            `Bộ ảnh sex nghệ thuật với đường cong và góc nhìn đầy cảm xúc.`,
-            `Tuyển chọn ảnh sex đẹp, tinh tế và không phản cảm.`,
-            `Ảnh nude nghệ thuật, tôn vinh vẻ đẹp cơ thể đầy mê hoặc.`
-          ],
-          "khoe hàng": [
-            `Gái xinh khéo léo khoe da thịt trong những bức ảnh đầy gợi cảm.`,
-            `Ảnh khoe hàng nhưng vẫn giữ nét duyên dáng và thẩm mỹ.`,
-            `Show hàng tinh tế – nơi gợi cảm gặp nghệ thuật.`
-          ]
-        };
-
-        const descriptionList = descriptionPresets[style] || [
-          `Khám phá bộ ảnh gái xinh phong cách ${style} cực kỳ ${adj}, cuốn hút và đầy cảm hứng.`,
-          `Tuyển tập ảnh gái xinh ${style} ${adj} mới nhất năm ${year}.`
-        ];
-        const description = descriptionList[Math.floor(Math.random() * descriptionList.length)];
-        
-        const extraKeywords = {
-          "hot girl": ["gái xinh sexy", "ảnh hot girl", "body chuẩn", "trending girl"],
-          "dễ thương": ["gái xinh dễ thương", "gái cute", "nét ngây thơ", "teen girl"],
-          "áo dài": ["áo dài nữ sinh", "truyền thống việt", "nữ sinh xinh đẹp", "tà áo dài trắng"],
-          "bikini": ["gái xinh mặc bikini", "bikini sexy", "vòng một đầy đặn", "thân hình bốc lửa"],
-          "gái gọi": ["gái gọi vip", "ảnh gái gọi", "ảnh khiêu gợi", "ảnh gái show hàng"],
-          "jav": ["ảnh jav hd", "idol jav", "ảnh jav nghệ thuật", "hot girl jav"],
-          "ảnh sex": ["ảnh sex nghệ thuật", "ảnh sex hd", "ảnh 18+", "ảnh gái khỏa thân"],
-          "khoe hàng": ["ảnh gái khoe hàng", "ảnh gái khoe thân", "ảnh hở bạo", "show hàng sexy"]
-        };
-
-        const keywordList = extraKeywords[style] || [];
-
-        const tags = ["gái xinh", "hot girl", style, "ảnh đẹp", "gái đẹp", `photoshoot ${style}`, `trending ${year}`, "gallery", ...keywordList];
-
-
-        let html = `<h1>${title}</h1>\n<p>${description}</p>\n<div class="tags">`;
-        tags.forEach(tag => { html += `<span class="tag">#${tag}</span> `; });
-        html += `</div>\n<div class="gallery" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 20px 0;">`;
-
-        let preview = "";
-        let validLinks = [];
-        
-        links.forEach((link, index) => {
-          const trimmedLink = link.trim();
-          if (trimmedLink.includes("lh3.googleusercontent.com") || trimmedLink.startsWith("data:image") || trimmedLink.match(/\.(jpg|jpeg|png|gif|webp)$/i)) {
-            const caption = generateCaption(index, style);
-            html += `\n  <figure style="margin: 0;"><img src="${trimmedLink}" alt="${caption}" loading="lazy" style="width: 100%; height: 300px; object-fit: cover; border-radius: 8px;" /><figcaption style="text-align: center; margin-top: 8px; font-style: italic; color: #666;">${caption}</figcaption></figure>`;
-            preview += `<img src="${trimmedLink}" alt="${caption}" />\n`;
-            validLinks.push(trimmedLink);
-          }
-        });
-        
-        html += `\n</div>`;
-
-        let relatedHTML = `
-<h2>Bài viết liên quan</h2>
-<ul class="related-posts">
-  <li><a href="/2024/06/bo-anh-gai-xinh-${style.replace(/\s+/g, '-')}-dep-nhat.html">Bộ ảnh ${style} đẹp nhất 2024</a></li>
-  <li><a href="/2024/06/tuyen-chon-anh-${style.replace(/\s+/g, '-')}-chat-luong-cao.html">Tuyển chọn ảnh ${style} chất lượng cao</a></li>
-  <li><a href="/2024/06/girl-xinh-${style.replace(/\s+/g, '-')}-goc-nghieng-than-thanh.html">Góc nghiêng thần thánh của gái ${style}</a></li>
-</ul>
-`;
-html += relatedHTML;
-
-
-        const schema = {
-          "@context": "https://schema.org",
-          "@type": "BlogPosting",
-          "headline": title,
-          "image": validLinks,
-          "description": description,
-          "author": { "@type": "Person", "name": "girlsxinh.net" },
-          "publisher": {
-            "@type": "Organization",
-            "name": "girlsxinh.net",
-            "logo": {
-              "@type": "ImageObject",
-              "url": "https://girlsxinh.net/logo.png"
-            }
-          },
-          "datePublished": new Date().toISOString().split('T')[0],
-          "keywords": tags.join(', ')
-        };
-
-        html += `\n\n<script type="application/ld+json">\n${JSON.stringify(schema, null, 2)}\n<\/script>`;
-
-        document.getElementById("outputHTML").value = html;
-        document.getElementById("preview").innerHTML = preview;
-        
-        showStatus(`✅ Đã tạo bài viết với ${validLinks.length} ảnh!`, 'success');
-      } catch (error) {
-        showStatus('❌ Có lỗi xảy ra: ' + error.message, 'error');
-      }
-    }
-
-    async function copyToClipboard() {
-      const output = document.getElementById("outputHTML");
-      
-      if (!output.value.trim()) {
-        showStatus('❌ Chưa có nội dung để sao chép!', 'error');
-        return;
-      }
-      
-      try {
-        await navigator.clipboard.writeText(output.value);
-        showStatus('📋 HTML đã được sao chép!', 'success');
-      } catch (err) {
-        // Fallback for older browsers
-        output.select();
-        output.setSelectionRange(0, 99999);
-        document.execCommand("copy");
-        showStatus('📋 HTML đã được sao chép!', 'success');
-      }
-    }
+    copyBtn.addEventListener('click', () => {
+      const temp = document.createElement('textarea');
+      temp.value = allLinks.join('\n');
+      document.body.appendChild(temp);
+      temp.select();
+      document.execCommand('copy');
+      document.body.removeChild(temp);
+      alert("✅ Đã copy " + allLinks.length + " link ảnh!");
+    });
   </script>
 </body>
 </html>
