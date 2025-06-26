@@ -1,57 +1,261 @@
-
 <!DOCTYPE html>
+
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <title>Upload ảnh lên Imgur</title>
-  <style>
-    body.loading .loading-modal { display: block; }
-    .dropzone {
-      border: 2px dashed #999;
-      border-radius: 10px;
-      position: relative;
-      margin: 0 auto;
-      clear: both;
-    }
-    .infoimg {
-      margin: 0 auto;
-      margin-top: 20px;
-      margin-bottom: 20px;
-    }
-    .dropzone p {
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>
+   Tool Tạo Bài Viết SEO Tự Động
+  </title>
+<style>
+   * {
       margin: 0;
-      text-align: center;
-      width: 100%;
-      font-weight: bold;
-      color: #999;
+      padding: 0;
+      box-sizing: border-box;
     }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+      color: white;
+      padding: 30px;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .header p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    .main-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      padding: 30px;
+    }
+
+    .upload-section {
+      background: #f8f9fa;
+      border-radius: 15px;
+      padding: 30px;
+    }
+
+    .dropzone {
+      border: 3px dashed #007bff;
+      border-radius: 15px;
+      padding: 40px;
+      text-align: center;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      background: white;
+      position: relative;
+    }
+
+    .dropzone:hover {
+      border-color: #0056b3;
+      background: #f0f8ff;
+      transform: translateY(-2px);
+    }
+
+    .dropzone.dropzone-dragging {
+      border-color: #28a745;
+      background: #f0fff0;
+      transform: scale(1.02);
+    }
+
+    .dropzone p {
+      margin: 10px 0;
+      font-size: 1.1rem;
+      color: #666;
+    }
+
+    .dropzone .upload-icon {
+      font-size: 3rem;
+      color: #007bff;
+      margin-bottom: 15px;
+    }
+
     .input {
-      height: 100%;
-      left: 0;
-      outline: 0;
-      opacity: 0;
       position: absolute;
       top: 0;
+      left: 0;
       width: 100%;
+      height: 100%;
+      opacity: 0;
       cursor: pointer;
     }
-    .status {
-      border-radius: 5px;
-      text-align: center;
-      margin-left: auto;
-      margin-right: auto;
+
+    .settings-section {
+      background: #f8f9fa;
+      border-radius: 15px;
+      padding: 30px;
     }
-    .image-url {
-      width: calc(100% - 10px);
-      padding: 5px;
-      border: 1px solid #999;
-      border-radius: 5px;
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
       color: #333;
     }
-    .linkimg { margin: 20px 0; }
-    .dropzone.dropzone-dragging { border-color: #000; }
+
+    .form-control {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: #007bff;
+      box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+    }
+
+    .btn {
+      background: linear-gradient(45deg, #007bff, #0056b3);
+      color: white;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      margin: 5px;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,123,255,0.3);
+    }
+
+    .btn-success {
+      background: linear-gradient(45deg, #28a745, #20c997);
+    }
+
+    .btn-warning {
+      background: linear-gradient(45deg, #ffc107, #fd7e14);
+    }
+
+    .uploaded-images {
+      margin-top: 20px;
+    }
+
+    .image-item {
+      background: white;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .image-preview {
+      max-width: 100%;
+      max-height: 200px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+
+    .image-url {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 0.9rem;
+      background: #f8f9fa;
+    }
+
+    .output-section {
+      grid-column: span 2;
+      margin-top: 20px;
+    }
+
+    .output-tabs {
+      display: flex;
+      background: #f8f9fa;
+      border-radius: 10px 10px 0 0;
+      overflow: hidden;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 15px;
+      background: #e9ecef;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.3s ease;
+    }
+
+    .tab-btn.active {
+      background: #007bff;
+      color: white;
+    }
+
+    .tab-content {
+      background: white;
+      padding: 20px;
+      border-radius: 0 0 10px 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .tab-pane {
+      display: none;
+    }
+
+    .tab-pane.active {
+      display: block;
+    }
+
+    .code-output {
+      background: #f4f4f4;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 15px;
+      min-height: 400px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      white-space: pre-wrap;
+      overflow-x: auto;
+    }
+
+    .preview-output {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 20px;
+      min-height: 400px;
+      background: white;
+    }
+
     .loading-modal {
-      background-color: rgba(255,255,255,.8);
+      background-color: rgba(0,0,0,0.8);
       display: none;
       position: fixed;
       z-index: 1000;
@@ -60,33 +264,232 @@
       height: 100%;
       width: 100%;
     }
-    .loading-table {
-      margin-left: auto;
-      margin-right: auto;
-      margin-top: 15%;
-      margin-bottom: 15%;
-    }
-    #copyAllLinksBtn {
-      margin: 20px auto;
-      display: none;
-      padding: 10px 20px;
-      background: #007bff;
+
+    .loading-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
       color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 16px;
+    }
+
+    .spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #007bff;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .status {
+      margin-top: 15px;
+      padding: 10px;
+      border-radius: 5px;
+      text-align: center;
+    }
+
+    .bg-success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .bg-danger {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    @media (max-width: 768px) {
+      .main-content {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 20px;
+      }
+      
+      .header h1 {
+        font-size: 2rem;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="dropzone">
-    <div class="infoimg"></div>
-  </div>
-  <div class="status"></div>
-  <button id="copyAllLinksBtn">📋 Copy tất cả link ảnh</button>
+<div class="container">
+<div class="header">
+<h1>
+     🚀 Tool Tạo Bài Viết SEO Tự Động
+    </h1>
+<p>
+     Upload ảnh và tạo bài viết chuyên nghiệp cho Blogger
+    </p>
+</div>
+<div class="main-content">
+<div class="upload-section">
+<h3>
+      📸 Upload Ảnh
+     </h3>
+<div class="dropzone">
+<div class="upload-icon">
+       ☁️
+      </div>
+<p>
+<strong>
+        Kéo thả ảnh vào đây
+       </strong>
+</p>
+<p>
+       hoặc click để chọn file
+      </p>
+<input accept="image/*" class="input" multiple="" type="file"/>
+</div>
+<div class="status">
+</div>
+<div class="uploaded-images">
+</div>
+</div>
+<div class="settings-section">
+<h3>
+      ⚙️ Cài Đặt Bài Viết
+     </h3>
+<div class="form-group">
+<label>
+       Chủ đề chính:
+      </label>
+<select class="form-control" id="mainTopic">
+<option value="hotgirl">
+        Hot Girl Việt Nam
+       </option>
+<option value="facebook">
+        Gái Xinh Facebook
+       </option>
+<option value="tiktok">
+        TikTok Girl
+       </option>
+<option value="instagram">
+        Instagram Model
+       </option>
+<option value="actress">
+        Diễn Viên Trẻ
+       </option>
+<option value="tiktoker">
+        TikToker Nổi Tiếng
+       </option>
+<option value="beauty">
+        Beauty Blogger
+       </option>
+<option value="vn">Ảnh Gái Xinh Việt Nam</option><option value="chauau">Gái Xinh Châu Âu / Mỹ</option><option value="cosplay">Gái Xinh Cosplay</option><option value="bikini">Gái Xinh Mặc Bikini</option><option value="aodai">Gái Xinh Mặc Áo Dài</option><option value="cap3">Gái Xinh Cấp 3</option><option value="tocbeo">Gái Xinh Tóc Béo</option><option value="nhatban">Gái Nhật Xinh Đẹp</option><option value="hinhnen">Hình Nền Gái Xinh</option></select>
+</div>
+<div class="form-group">
+<label>
+       Tiêu đề tùy chỉnh (tùy chọn):
+      </label>
+<input class="form-control" id="customTitle" placeholder="Để trống để tự động tạo" type="text"/>
+</div>
+<div class="form-group">
+<label>
+       Từ khóa chính:
+      </label>
+<input class="form-control" id="mainKeyword" placeholder="VD: gái xinh, hot girl, beauty" type="text"/>
+</div>
+<div class="form-group">
+<label>
+       Tags (cách nhau bằng dấu phẩy):
+      </label>
+<input class="form-control" id="tags" placeholder="hotgirl, xinh đẹp, fashion, beauty" type="text"/>
+</div>
+<div class="form-group">
+<label>Phong cách viết bài (AI):</label>
+<select class="form-control" id="writingStyle">
+<option value="ngẫu nhiên">Ngẫu nhiên</option>
+<option value="mô tả chi tiết">Mô tả chi tiết</option>
+<option value="giải trí">Giải trí</option>
+<option value="ngắn gọn">Ngắn gọn</option>
+<option value="tự sự">Tự sự</option>
+<option value="truyền cảm">Truyền cảm</option>
+</select>
+</div>
 
-  <script type="text/javascript">
+    
+      
+<textarea class="form-control" id="description" placeholder="Mô tả ngắn về nội dung bài viết..." rows="3"></textarea>
+</div>
+<button class="btn btn-success" onclick="generatePost()">
+      🎯 Tạo Bài Viết SEO
+     </button>
+<div style="margin-top: 15px;">
+<button class="btn btn-success" onclick="generateIntroFromAI()">
+       ✍️ AI Viết Mở Bài
+      </button>
+<button class="btn btn-warning" onclick="suggestHashtagsFromAI()">
+       🎯 AI Gợi Ý Hashtag
+      </button>
+</div>
+</div>
+</div>
+<div class="output-section">
+<div class="output-tabs">
+<button class="tab-btn active" onclick="switchTab('preview')">
+      👁️ Xem Trước
+     </button>
+<button class="tab-btn" onclick="switchTab('html')">
+      📝 Mã HTML
+     </button>
+<button class="tab-btn" onclick="switchTab('blogger')">
+      📰 Code Blogger
+     </button>
+</div>
+<div class="tab-content">
+<div class="tab-pane active" id="preview-tab">
+<div class="preview-output" id="preview-content">
+<p style="text-align: center; color: #666; font-style: italic;">
+        Upload ảnh và nhấn "Tạo Bài Viết SEO" để xem kết quả
+       </p>
+</div>
+<button class="btn btn-warning" onclick="copyToClipboard('preview-content')">
+       📋 Copy Preview
+      </button>
+</div>
+<div class="tab-pane" id="html-tab">
+<textarea class="code-output" id="html-content" readonly="">
+Chưa có nội dung. Vui lòng tạo bài viết trước.
+          </textarea>
+<button class="btn btn-warning" onclick="copyToClipboard('html-content')">
+       📋 Copy HTML
+      </button>
+</div>
+<div class="tab-pane" id="blogger-tab">
+<textarea class="code-output" id="blogger-content" readonly="">
+Chưa có nội dung. Vui lòng tạo bài viết trước.
+          </textarea>
+<button class="btn btn-warning" onclick="copyToClipboard('blogger-content')">
+       📋 Copy Code Blogger
+      </button>
+</div>
+</div>
+</div>
+
+<div class="loading-modal">
+<div class="loading-content">
+<div class="spinner">
+</div>
+<h3>
+     Đang xử lý...
+    </h3>
+<p>
+     Vui lòng đợi trong giây lát
+    </p>
+</div>
+</div>
+<script>
+   // Imgur API Integration
     (function (root, factory) {
       if (typeof define === 'function' && define.amd) {
         define([], factory);
@@ -104,132 +507,711 @@
         this.endpoint = 'https://api.imgur.com/3/image';
         this.callback = options.callback || undefined;
         this.dropzone = document.querySelectorAll('.dropzone');
-        this.infoimg = document.querySelectorAll('.infoimg');
         this.run();
       };
+      
       Imgur.prototype = {
-        createEls: function (name, props, text) {
-          var el = document.createElement(name), p;
-          for (p in props) if (props.hasOwnProperty(p)) el[p] = props[p];
-          if (text) el.appendChild(document.createTextNode(text));
-          return el;
-        },
-        insertAfter: function (ref, node) {
-          ref.parentNode.insertBefore(node, ref.nextSibling);
-        },
         post: function (path, data, callback) {
           var xhttp = new XMLHttpRequest();
           xhttp.open('POST', path, true);
           xhttp.setRequestHeader('Authorization', 'Client-ID ' + this.clientid);
           xhttp.onreadystatechange = function () {
             if (this.readyState === 4) {
+              document.body.classList.remove('loading');
               if (this.status >= 200 && this.status < 300) {
                 var response = '';
                 try { response = JSON.parse(this.responseText); } catch (err) { response = this.responseText; }
                 callback.call(window, response);
               } else {
-                throw new Error(this.status + " - " + this.statusText);
+                showStatus('error', 'Lỗi upload: ' + this.status + " - " + this.statusText);
               }
             }
           };
           xhttp.send(data);
-          xhttp = null;
         },
-        createDragZone: function () {
-          var p1 = this.createEls('p', {}, 'Kéo file ảnh vào đây');
-          var p2 = this.createEls('p', {}, 'Hoặc click để chọn ảnh');
-          var input = this.createEls('input', { type: 'file', className: 'input', accept: 'image/*', multiple: true });
-          this.infoimg.forEach(zone => { zone.appendChild(p1); zone.appendChild(p2); });
-          this.dropzone.forEach(zone => { zone.appendChild(input); this.status(zone); this.upload(zone); });
-        },
-        loading: function () {
-          var div = this.createEls('div', { className: 'loading-modal' });
-          var table = this.createEls('table', { className: 'loading-table' });
-          var img = this.createEls('img', { className: 'loading-image', src: 'https://firebasestorage.googleapis.com/v0/b/huydc-090288.appspot.com/o/Images%20Upload%2Floading-spin.svg?alt=media&token=8a1fd8dc-30b2-4b74-acc6-9e4ce55a89b0' });
-          div.appendChild(table); table.appendChild(img); document.body.appendChild(div);
-        },
-        status: function (el) {
-          var div = this.createEls('div', { className: 'status' });
-          this.insertAfter(el, div);
-        },
-        matchFiles: function (file, zone) {
-          var status = zone.nextSibling;
+        
+        matchFiles: function (file) {
           if (file.type.match(/image/) && file.type !== 'image/svg+xml') {
             document.body.classList.add('loading');
-            status.classList.remove('bg-success', 'bg-danger');
-            status.innerHTML = '';
+            showStatus('info', 'Đang upload ảnh...');
             var fd = new FormData();
             fd.append('image', file);
             this.post(this.endpoint, fd, function (data) {
-              document.body.classList.remove('loading');
               if (typeof this.callback === 'function') this.callback.call(this, data);
             }.bind(this));
           } else {
-            status.classList.remove('bg-success');
-            status.classList.add('bg-danger');
-            status.innerHTML = 'Invalid file type';
+            showStatus('error', 'File không hợp lệ. Chỉ chấp nhận file ảnh.');
           }
         },
-        upload: function (zone) {
-          var events = ['dragenter', 'dragleave', 'dragover', 'drop'];
-          zone.addEventListener('change', function (e) {
-            if (e.target && e.target.nodeName === 'INPUT' && e.target.type === 'file') {
-              Array.from(e.target.files).forEach(file => this.matchFiles(file, zone));
-            }
-          }.bind(this), false);
-          events.forEach(event => {
-            zone.addEventListener(event, function (e) {
-              if (e.target && e.target.nodeName === 'INPUT' && e.target.type === 'file') {
-                if (event === 'dragleave' || event === 'drop') {
-                  e.target.parentNode.classList.remove('dropzone-dragging');
-                } else {
-                  e.target.parentNode.classList.add('dropzone-dragging');
-                }
-              }
-            }, false);
-          });
-        },
+        
         run: function () {
-          if (!document.querySelector('.loading-modal')) this.loading();
-          this.createDragZone();
+          var self = this;
+          this.dropzone.forEach(function(zone) {
+            zone.addEventListener('change', function (e) {
+              if (e.target && e.target.nodeName === 'INPUT' && e.target.type === 'file') {
+                Array.from(e.target.files).forEach(function(file) {
+                  self.matchFiles(file);
+                });
+              }
+            });
+            
+            ['dragenter', 'dragleave', 'dragover', 'drop'].forEach(function(event) {
+              zone.addEventListener(event, function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                if (event === 'dragenter' || event === 'dragover') {
+                  zone.classList.add('dropzone-dragging');
+                } else {
+                  zone.classList.remove('dropzone-dragging');
+                }
+                
+                if (event === 'drop') {
+                  Array.from(e.dataTransfer.files).forEach(function(file) {
+                    self.matchFiles(file);
+                  });
+                }
+              });
+            });
+          });
         }
       };
       return Imgur;
     }));
 
-    const allLinks = [];
-    const copyBtn = document.getElementById('copyAllLinksBtn');
+    // Global variables
+    const uploadedImages = [];
+    
+    // Initialize Imgur
+    const imgurClient = new Imgur({
+      clientid: '3a8be4390ef3eb8',
+      callback: handleUploadSuccess
+    });
 
-    function updateCopyButton() {
-      if (allLinks.length > 0) copyBtn.style.display = 'block';
+    // Handle successful upload
+    function handleUploadSuccess(response) {
+      if (response.success === true) {
+        const imageUrl = response.data.link.replace(/^http:\/\//i, 'https://');
+        uploadedImages.push({
+          url: imageUrl,
+          deleteHash: response.data.deletehash
+        });
+        
+        displayUploadedImage(imageUrl);
+        showStatus('success', `Upload thành công! Tổng cộng: ${uploadedImages.length} ảnh`);
+      } else {
+        showStatus('error', 'Upload thất bại. Vui lòng thử lại.');
+      }
     }
 
-    var feedback = function(res) {
-      if (res.success === true) {
-        const get_link = res.data.link.replace(/^http:\/\//i, 'https://');
-        allLinks.push(get_link);
-        document.querySelector('.status').classList.add('bg-success');
-        document.querySelector('.status').innerHTML +=
-          '<div class="linkimg"><input class="image-url" onclick="this.select()" value="' + get_link + '"/></div>' +
-          '<div class="showimg"><img class="img" style="max-width:100%;margin-bottom:10px;" src="' + get_link + '"/></div>';
-        updateCopyButton();
+    // Display uploaded image
+    function displayUploadedImage(url) {
+      const container = document.querySelector('.uploaded-images');
+      const imageItem = document.createElement('div');
+      imageItem.className = 'image-item';
+      imageItem.innerHTML = `
+        <img src="${url}" alt="Uploaded Image" class="image-preview">
+        <input type="text" class="image-url" value="${url}" readonly onclick="this.select()">
+        <button class="btn" style="background: #dc3545; margin-top: 10px;" onclick="removeImage('${url}')">
+          🗑️ Xóa
+        </button>
+      `;
+      container.appendChild(imageItem);
+    }
+
+    // Remove image
+    function removeImage(url) {
+      const index = uploadedImages.findIndex(img => img.url === url);
+      if (index > -1) {
+        uploadedImages.splice(index, 1);
+        
+        // Remove from display
+        const container = document.querySelector('.uploaded-images');
+        const imageItems = container.querySelectorAll('.image-item');
+        imageItems.forEach(item => {
+          if (item.querySelector('.image-url').value === url) {
+            item.remove();
+          }
+        });
+        
+        showStatus('info', `Đã xóa ảnh. Còn lại: ${uploadedImages.length} ảnh`);
+      }
+    }
+
+    // Show status message
+    function showStatus(type, message) {
+      const status = document.querySelector('.status');
+      status.className = 'status';
+      
+      if (type === 'success') {
+        status.classList.add('bg-success');
+      } else if (type === 'error') {
+        status.classList.add('bg-danger');
+      }
+      
+      status.innerHTML = message;
+      
+      setTimeout(() => {
+        status.innerHTML = '';
+        status.className = 'status';
+      }, 5000);
+    }
+
+    // Switch tabs
+    function switchTab(tabName) {
+      // Remove active class from all tabs and buttons
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+      
+      // Add active class to selected tab
+      document.querySelector(`button[onclick="switchTab('${tabName}')"]`).classList.add('active');
+      document.getElementById(`${tabName}-tab`).classList.add('active');
+    }
+
+    // SEO content templates
+    const contentTemplates = {
+      hotgirl: {
+        titles: [
+          "Tổng Hợp Những Hot Girl Việt Nam Xinh Đẹp Nhất {year}",
+          "Bộ Sưu Tập Ảnh Hot Girl Việt Cực Phẩm Không Thể Bỏ Lỡ",
+          "Top Hot Girl Việt Nam Đang Được Yêu Thích Nhất Hiện Nay",
+          "Những Cô Gái Việt Xinh Đẹp Gây Sốt Mạng Xã Hội"
+        ],
+        content: `
+          <p>Việt Nam luôn nổi tiếng với những cô gái xinh đẹp, duyên dáng. Trong bộ sưu tập này, chúng tôi đã tổng hợp những hình ảnh đẹp nhất của các hot girl Việt Nam đang được cộng đồng mạng yêu thích.</p>
+          
+          <p>Với vẻ đẹp tự nhiên và phong cách thời trang hiện đại, những cô gái này đã trở thành biểu tượng của vẻ đẹp Á Đông. Mỗi bức ảnh đều thể hiện sự tự tin và quyến rũ riêng biệt.</p>
+        `
+      },
+      facebook: {
+        titles: [
+          "Gái Xinh Facebook Hot Nhất Việt Nam {year}",
+          "Tổng Hợp Profile Facebook Của Những Cô Gái Xinh Đẹp",
+          "Bộ Sưu Tập Ảnh Gái Xinh Facebook Được Chia Sẻ Nhiều Nhất",
+          "Những Hot Girl Facebook Việt Nam Có Lượng Follow Khủng"
+        ],
+        content: `
+          <p>Facebook đã trở thành nơi quy tụ những cô gái xinh đẹp nhất Việt Nam. Với hàng nghìn lượt like và share, những hình ảnh này đã làm "đốn tim" biết bao chàng trai.</p>
+          
+          <p>Từ phong cách dễ thương, trong sáng đến sexy, quyến rũ, mỗi cô gái đều có nét đẹp riêng biệt. Cùng khám phá bộ sưu tập những gái xinh Facebook hot nhất hiện nay.</p>
+        `
+      },
+      tiktok: {
+        titles: [
+          "Hot TikTok Girl Việt Nam Triệu View {year}",
+          "Những Cô Gái TikTok Xinh Đẹp Nhất Việt Nam",
+          "Bộ Sưu Tập TikTok Girl Hot Trend Hiện Nay",
+          "Top TikTok Beauty Việt Nam Được Yêu Thích Nhất"
+        ],
+        content: `
+          <p>TikTok đã tạo ra một làn sóng mới cho các cô gái trẻ thể hiện tài năng và vẻ đẹp của mình. Những TikTok girl này không chỉ xinh đẹp mà còn rất tài năng trong việc tạo ra những video độc đáo.</p>
+          
+          <p>Với những điệu nhảy sôi động, phong cách thời trang trendy, họ đã thu hút hàng triệu lượt xem và trở thành biểu tượng của thế hệ Z.</p>
+        `
+      },
+      instagram: {
+        titles: [
+          "Top Instagram Model Việt Nam Đẹp Nhất {year}",
+          "Bộ Sưu Tập Ảnh Instagram Girl Việt Cực Phẩm",
+          "Những Influencer Việt Nam Xinh Đẹp Trên Instagram",
+          "Instagram Beauty Việt Nam Với Hàng Triệu Follower"
+        ],
+        content: `
+          <p>Instagram đã trở thành sân chơi của những cô gái xinh đẹp, với những bức ảnh chất lượng cao và phong cách chuyên nghiệp. Những Instagram model Việt Nam này đã chinh phục không chỉ người Việt mà còn cả cộng đồng quốc tế.</p>
+          
+          <p>Từ phong cách minimalist đến maximalist, từ sweet đến edgy, mỗi cô gái đều có cách riêng để thể hiện cá tính và vẻ đẹp của mình qua từng bức ảnh.</p>
+        `
+      },
+      actress: {
+        titles: [
+          "Những Diễn Viên Trẻ Xinh Đẹp Nhất Việt Nam {year}",
+          "Bộ Sưu Tập Ảnh Diễn Viên Nữ Việt Nam Tài Sắc Vẹn Toàn",
+          "Top Nữ Diễn Viên Việt Nam Được Yêu Thích Nhất",
+          "Những Gương Mặt Diễn Viên Trẻ Triển Vọng Của Điện Ảnh Việt"
+        ],
+        content: `
+          <p>Điện ảnh Việt Nam đang có một thế hệ diễn viên trẻ tài năng và xinh đẹp. Họ không chỉ sở hữu nhan sắc thu hút mà còn có khả năng diễn xuất ấn tượng.</p>
+          
+          <p>Từ những vai diễn đầu tay đến những dự án lớn, các nữ diễn viên này đã chứng minh được tài năng và sự chuyên nghiệp của mình trong nghề.</p>
+        `
+      },
+      tiktoker: {
+        titles: [
+          "Top TikToker Nữ Việt Nam Nổi Tiếng Nhất {year}",
+          "Những TikToker Xinh Đẹp Và Tài Năng Của Việt Nam",
+          "Bộ Sưu Tập Ảnh TikToker Việt Nam Hot Trend",
+          "TikToker Việt Nam Với Triệu Follower Và Video Viral"
+        ],
+        content: `
+          <p>Những TikToker này đã trở thành hiện tượng trên mạng xã hội với khả năng sáng tạo nội dung độc đáo. Họ không chỉ xinh đẹp mà còn rất hài hước và gần gũi với khán giả.</p>
+          
+          <p>Từ những video dance cover đến những clip hài hước, họ luôn biết cách tạo ra những nội dung thu hút và lan truyền mạnh mẽ trên mạng xã hội.</p>
+        `
+      },
+      beauty: {
+        titles: [
+          "Top Beauty Blogger Việt Nam Xinh Đẹp Và Tài Năng {year}",
+          "Những Beauty Influencer Việt Nam Được Yêu Thích Nhất",
+          "Bộ Sưu Tập Ảnh Beauty Blogger Việt Nam Chất Lượng Cao",
+          "Beauty Guru Việt Nam Với Makeup Skill Đỉnh Cao"
+        ],
+        content: `
+          <p>Những beauty blogger này không chỉ xinh đẹp mà còn có kiến thức sâu rộng về làm đẹp. Họ đã chia sẻ những bí quyết làm đẹp và review các sản phẩm một cách chân thực và hữu ích.</p>
+          
+          <p>Với kỹ năng makeup chuyên nghiệp và gu thẩm mỹ tinh tế, họ đã trở thành nguồn cảm hứng cho hàng triệu cô gái Việt Nam trong việc chăm sóc và làm đẹp bản thân.</p>
+        `
       }
     };
 
-    new Imgur({
-      clientid: '3a8be4390ef3eb8',
-      callback: feedback
-    });
+    // Generate SEO post
+    function generatePost() {
+      if (uploadedImages.length === 0) {
+        alert('Vui lòng upload ít nhất 1 ảnh trước khi tạo bài viết!');
+        return;
+      }
 
-    copyBtn.addEventListener('click', () => {
+      document.body.classList.add('loading');
+      
+      setTimeout(() => {
+        const topic = document.getElementById('mainTopic').value;
+        const customTitle = document.getElementById('customTitle').value;
+        const mainKeyword = document.getElementById('mainKeyword').value;
+        const tags = document.getElementById('tags').value;
+        const description = document.getElementById('description').value;
+        
+        const template = contentTemplates[topic];
+        const currentYear = new Date().getFullYear();
+        
+        // Generate title
+        const title = customTitle || template.titles[Math.floor(Math.random() * template.titles.length)].replace('{year}', currentYear);
+        
+        // Generate content
+        const seoContent = generateSEOContent(title, template.content, mainKeyword, description, uploadedImages, tags);
+        
+        // Update outputs
+        document.getElementById('preview-content').innerHTML = seoContent.preview;
+        document.getElementById('html-content').value = seoContent.html;
+        document.getElementById('blogger-content').value = seoContent.blogger;
+        
+        document.body.classList.remove('loading');
+        showStatus('success', 'Đã tạo bài viết SEO thành công!');
+        
+        // Switch to preview tab
+        switchTab('preview');
+      }, 2000);
+    }
+
+    // Generate SEO content
+    function generateSEOContent(title, baseContent, mainKeyword, description, images, tags) {
+      const currentDate = new Date().toLocaleDateString('vi-VN');
+      const tagsArray = tags.split(',').map(tag => tag.trim()).filter(tag => tag);
+      
+      // Create image gallery HTML
+      let imageGallery = '';
+      images.forEach((img, index) => {
+        imageGallery += `
+          <div class="image-container" style="margin: 20px 0; text-align: center;">
+            <img src="${img.url}" alt="${mainKeyword || 'Hình ảnh xinh đẹp'} ${index + 1}" 
+                 style="max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+            <p style="font-style: italic; color: #666; margin-top: 10px;">
+              ${generateImageCaption(mainKeyword, index + 1)}
+            </p>
+          </div>
+        `;
+      });
+
+      // Generate hashtags
+      const hashtags = tagsArray.map(tag => `#${tag.replace(/\s+/g, '')}`).join(' ');
+
+      // Preview content
+      const previewContent = `
+        <article style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+          <header style="text-align: center; margin-bottom: 30px;">
+            <h1 style="color: #2c3e50; font-size: 2.2em; margin-bottom: 10px;">${title}</h1>
+            <p style="color: #666; font-size: 1.1em;">${description || 'Bộ sưu tập hình ảnh chất lượng cao được tuyển chọn kỹ lưỡng'}</p>
+            <div style="color: #999; font-size: 0.9em; margin-top: 15px;">
+              📅 Ngày đăng: ${currentDate} | 👁️ Đã xem: ${Math.floor(Math.random() * 10000) + 1000} lượt
+            </div>
+          </header>
+
+          <section style="margin-bottom: 30px;">
+            ${baseContent}
+            
+            <p style="margin: 20px 0;">
+              <strong>Đặc điểm nổi bật:</strong>
+            </p>
+            <ul style="margin-left: 20px;">
+              <li>✨ Chất lượng hình ảnh HD cao cấp</li>
+              <li>🎯 Được tuyển chọn kỹ lưỡng từ các nguồn uy tín</li>
+              <li>💖 Phong cách đa dạng, phù hợp mọi sở thích</li>
+              <li>🔥 Cập nhật thường xuyên với nội dung mới</li>
+            </ul>
+          </section>
+
+          <section class="image-gallery" style="margin: 30px 0;">
+            <h2 style="color: #2c3e50; text-align: center; margin-bottom: 25px;">
+              📸 Bộ Sưu Tập Hình Ảnh (${images.length} ảnh)
+            </h2>
+            ${imageGallery}
+          </section>
+
+          <section style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 30px 0;">
+            <h3 style="color: #2c3e50; margin-bottom: 15px;">💡 Lời Kết</h3>
+            <p>
+              Hy vọng bộ sưu tập này đã mang đến cho bạn những hình ảnh đẹp và ấn tượng. 
+              Chúng tôi luôn cố gắng cập nhật những nội dung chất lượng nhất để phục vụ độc giả.
+            </p>
+            <p style="margin-top: 15px;">
+              <strong>Tags:</strong> ${hashtags}
+            </p>
+          </section>
+
+          <footer style="text-align: center; margin-top: 40px; padding: 20px; background: #2c3e50; color: white; border-radius: 10px;">
+            <p style="margin: 0;">❤️ Cảm ơn bạn đã theo dõi</p>
+            <p style="margin: 10px 0 0 0; font-size: 0.9em; opacity: 0.8;">
+              Đừng quên like và share nếu bạn thích nội dung này!
+            </p>
+          </footer>
+        </article>
+      `;
+
+      // HTML content
+      const htmlContent = `<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${title}</title>
+    <meta name="description" content="${description || title}">
+    <meta name="keywords" content="${tagsArray.join(', ')}">
+    <meta property="og:title" content="${title}">
+    <meta property="og:description" content="${description || title}">
+    <meta property="og:image" content="${images[0] ? images[0].url : ''}">
+    <meta property="og:type" content="article">
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .image-container { margin: 20px 0; text-align: center; }
+        .image-container img { max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h1 { color: #2c3e50; text-align: center; }
+        .tags { background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 20px 0; }
+    </style>
+</head>
+<body>
+${previewContent}
+</body>
+</html>`;
+
+      // Blogger content
+      const bloggerContent = `<div class="post-content">
+  <style>
+    .post-content { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+    .image-container { margin: 20px 0; text-align: center; }
+    .image-container img { max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+    .post-header { text-align: center; margin-bottom: 30px; }
+    .post-title { color: #2c3e50; font-size: 2.2em; margin-bottom: 10px; }
+    .post-meta { color: #999; font-size: 0.9em; margin-top: 15px; }
+    .highlight-box { background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 30px 0; }
+    .post-footer { text-align: center; margin-top: 40px; padding: 20px; background: #2c3e50; color: white; border-radius: 10px; }
+  </style>
+
+  <div class="post-header">
+    <h1 class="post-title">${title}</h1>
+    <p style="color: #666; font-size: 1.1em;">${description || 'Bộ sưu tập hình ảnh chất lượng cao được tuyển chọn kỹ lưỡng'}</p>
+    <div class="post-meta">
+      📅 Ngày đăng: ${currentDate} | 👁️ Đã xem: ${Math.floor(Math.random() * 10000) + 1000} lượt
+    </div>
+  </div>
+
+  ${baseContent}
+  
+  <p><strong>Đặc điểm nổi bật:</strong></p>
+  <ul>
+    <li>✨ Chất lượng hình ảnh HD cao cấp</li>
+    <li>🎯 Được tuyển chọn kỹ lưỡng từ các nguồn uy tín</li>
+    <li>💖 Phong cách đa dạng, phù hợp mọi sở thích</li>
+    <li>🔥 Cập nhật thường xuyên với nội dung mới</li>
+  </ul>
+
+  <h2 style="color: #2c3e50; text-align: center; margin: 30px 0 25px 0;">
+    📸 Bộ Sưu Tập Hình Ảnh (${images.length} ảnh)
+  </h2>
+  
+  ${imageGallery}
+
+  <div class="highlight-box">
+    <h3 style="color: #2c3e50; margin-bottom: 15px;">💡 Lời Kết</h3>
+    <p>
+      Hy vọng bộ sưu tập này đã mang đến cho bạn những hình ảnh đẹp và ấn tượng. 
+      Chúng tôi luôn cố gắng cập nhật những nội dung chất lượng nhất để phục vụ độc giả.
+    </p>
+    <p style="margin-top: 15px;">
+      <strong>Tags:</strong> ${hashtags}
+    </p>
+  </div>
+
+  <div class="post-footer">
+    <p style="margin: 0;">❤️ Cảm ơn bạn đã theo dõi</p>
+    <p style="margin: 10px 0 0 0; font-size: 0.9em; opacity: 0.8;">
+      Đừng quên like và share nếu bạn thích nội dung này!
+    </p>
+  </div>
+</div>`;
+
+      return {
+        preview: previewContent,
+        html: htmlContent,
+        blogger: bloggerContent
+      };
+    }
+
+    // Generate image caption
+    function generateImageCaption(keyword, index) {
+      const captions = [
+        `${keyword || 'Hình ảnh xinh đẹp'} số ${index} - Vẻ đẹp tự nhiên và quyến rũ`,
+        `Ảnh ${index}: Phong cách thời trang hiện đại và thu hút`,
+        `Hình ${index} - Nét đẹp Á Đông đầy cuốn hút`,
+        `Ảnh số ${index}: Vẻ đẹp trong sáng và duyên dáng`,
+        `Hình ảnh ${index} - Phong cách cá tính và ấn tượng`,
+        `Ảnh thứ ${index}: Vẻ đẹp ngọt ngào và đáng yêu`
+      ];
+      return captions[Math.floor(Math.random() * captions.length)];
+    }
+
+    // Copy to clipboard function
+    function copyToClipboard(elementId) {
+      const element = document.getElementById(elementId);
+      let content = '';
+      
+      if (element.tagName === 'TEXTAREA') {
+        content = element.value;
+      } else {
+        content = element.innerHTML;
+      }
+      
       const temp = document.createElement('textarea');
-      temp.value = allLinks.join('\n');
+      temp.value = content;
       document.body.appendChild(temp);
       temp.select();
       document.execCommand('copy');
       document.body.removeChild(temp);
-      alert("✅ Đã copy " + allLinks.length + " link ảnh!");
+      
+      // Show notification
+      showStatus('success', '✅ Đã copy vào clipboard!');
+    }
+
+    // Initialize default values
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('mainKeyword').value = 'gái xinh, hot girl, beauty';
+      document.getElementById('tags').value = 'hotgirl, xinh đẹp, beauty, fashion, cute';
+      document.getElementById('description').value = 'Bộ sưu tập hình ảnh các cô gái xinh đẹp, được tuyển chọn kỹ lưỡng với chất lượng HD cao cấp.';
     });
   </script>
+<!DOCTYPE html>
+
+<html lang="vi">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>
+     Tool Tạo Bài Viết SEO Tự Động
+    </title>
+</head>
+<body>
+<div style="margin-top: 20px;">
+<button class="btn btn-success" onclick="generateIntroFromAI()">
+      ✍️ AI Viết Mở Bài
+     </button>
+<button class="btn btn-warning" onclick="suggestHashtagsFromAI()">
+      🎯 AI Gợi Ý Hashtag
+     </button>
+</div>
+<script>
+     const OPENAI_PROXY_URL = "http://localhost:3001/openai";
+
+  async function callOpenAI(messages) {
+    const res = await fetch(OPENAI_PROXY_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ messages })
+    });
+    const data = await res.json();
+    return data.choices?.[0]?.message?.content.trim() || "Không có phản hồi từ AI.";
+  }
+
+  async async function generateImageCaptionAI(imageUrl, keyword) {
+  let style = document.getElementById('writingStyle')?.value || 'mô tả chi tiết';
+  if (style === 'ngẫu nhiên') {
+    const styles = ['mô tả chi tiết', 'giải trí', 'ngắn gọn', 'tự sự', 'truyền cảm'];
+    style = styles[Math.floor(Math.random() * styles.length)];
+  }
+  const moods = ["tự nhiên", "trẻ trung", "năng động", "bí ẩn", "cuốn hút"];
+  const angles = ["góc nhìn của độc giả", "như một chuyên gia", "theo phong cách kể chuyện"];
+  const mood = moods[Math.floor(Math.random() * moods.length)];
+  const angle = angles[Math.floor(Math.random() * angles.length)];
+
+  return await callOpenAI([
+    { role: "system", content: "Bạn là chuyên gia viết caption ảnh cho bài viết SEO" },
+    { role: "user", content: `Viết caption ảnh ngắn (dưới 20 từ), hấp dẫn cho ảnh: ${imageUrl}, theo chủ đề \"${keyword}\" với phong cách \"${style}\", tông \"${mood}\", viết ${angle}.` }
+  ]);
+}
+  return await callOpenAI([
+    { role: "system", content: "Bạn là chuyên gia viết caption ảnh cho bài viết SEO" },
+    { role: "user", content: `Viết caption ảnh ngắn (dưới 20 từ), hấp dẫn cho ảnh: ${imageUrl}, theo chủ đề \"${keyword}\" và phong cách \"${style}\".` }
+  ]);
+},
+      { role: "user", content: `Viết caption ảnh ngắn (dưới 20 từ), hấp dẫn cho ảnh sau: ${imageUrl}, theo chủ đề "${keyword}".` }
+    ]);
+  }
+
+  async async function generateSEOBodyAI(topic, keyword, description) {
+  let style = document.getElementById('writingStyle')?.value || 'mô tả chi tiết';
+  if (style === 'ngẫu nhiên') {
+    const styles = ['mô tả chi tiết', 'giải trí', 'ngắn gọn', 'tự sự', 'truyền cảm'];
+    style = styles[Math.floor(Math.random() * styles.length)];
+  }
+  const moods = ["tự nhiên", "trẻ trung", "năng động", "bí ẩn", "cuốn hút"];
+  const angles = ["góc nhìn của độc giả", "như một chuyên gia", "theo phong cách kể chuyện"];
+  const mood = moods[Math.floor(Math.random() * moods.length)];
+  const angle = angles[Math.floor(Math.random() * angles.length)];
+
+  return await callOpenAI([
+    { role: "system", content: "Bạn là chuyên gia viết bài SEO tiếng Việt." },
+    { role: "user", content: `Viết đoạn mở đầu hấp dẫn cho bài viết về \"${topic}\" (từ khóa: ${keyword}), theo phong cách: ${style}, tông \"${mood}\", viết ${angle}. ${description ? "Gợi ý nội dung: " + description : ""}` }
+  ]);
+}
+  return await callOpenAI([
+    { role: "system", content: "Bạn là chuyên gia viết bài SEO tiếng Việt." },
+    { role: "user", content: `Viết đoạn mở đầu hấp dẫn cho bài viết về \"${topic}\" (từ khóa: ${keyword}), theo phong cách: ${style}. ${description ? "Gợi ý nội dung: " + description : ""}` }
+  ]);
+},
+      { role: "user", content: `Viết đoạn mở đầu hấp dẫn cho bài viết về "${topic}" (từ khóa: ${keyword}). ${description ? "Gợi ý nội dung: " + description : ""}` }
+    ]);
+  }
+
+  async function generateHashtagsAI(keyword) {
+    return await callOpenAI([
+      { role: "system", content: "Bạn là chuyên gia mạng xã hội." },
+      { role: "user", content: `Tạo 10 hashtag không dấu, dạng #tag, cho từ khóa "${keyword}".` }
+    ]);
+  }
+
+  async function generateIntroFromAI() {
+    const topic = document.getElementById('mainTopic').value;
+    const keyword = document.getElementById('mainKeyword').value;
+    const desc = document.getElementById('description').value;
+
+    showStatus('info', '✍️ Đang tạo mở bài bằng AI...');
+    const intro = await generateSEOBodyAI(topic, keyword, desc);
+    document.getElementById('description').value = intro;
+    showStatus('success', '✅ Đã tạo đoạn mở bài từ AI!');
+  }
+
+  async function suggestHashtagsFromAI() {
+    const keyword = document.getElementById('mainKeyword').value;
+    showStatus('info', '🔍 Đang gợi ý hashtag từ AI...');
+    const hashtags = await generateHashtagsAI(keyword);
+    document.getElementById('tags').value = hashtags.replace(/#/g, '').replace(/\s+/g, ', ');
+    showStatus('success', '✅ Hashtag đã được cập nhật!');
+  }
+
+  async function displayUploadedImage(url) {
+    const container = document.querySelector('.uploaded-images');
+    const keyword = document.getElementById('mainKeyword').value || 'gái xinh';
+
+    const captionText = await generateImageCaptionAI(url, keyword);
+
+    const imageItem = document.createElement('div');
+    imageItem.className = 'image-item';
+    imageItem.innerHTML = `
+      <img src="${url}" alt="Ảnh" class="image-preview">
+      <input type="text" class="image-url" value="${url}" readonly onclick="this.select()">
+      <p style="margin-top: 10px; font-style: italic; color: #666;">${captionText}</p>
+      <button class="btn" style="background: #dc3545; margin-top: 10px;" onclick="removeImage('${url}')">
+        🗑️ Xóa
+      </button>
+    `;
+    container.appendChild(imageItem);
+  }
+    
+
+const contentTemplates = {
+  ...contentTemplates,
+
+  vn: {
+    titles: [
+      "Tuyển Tập Ảnh Gái Xinh Việt Nam Dễ Thương Nhất {year}",
+      "Top Hình Ảnh Gái Xinh VN Khiến Cộng Đồng Mê Mẩn",
+      "Gái Xinh Việt Nam Đẹp Tự Nhiên & Đầy Cá Tính"
+    ],
+    content: `<p>Việt Nam nổi tiếng với vẻ đẹp dịu dàng, tự nhiên và tinh tế của các cô gái. Bộ sưu tập dưới đây là những hình ảnh gái xinh VN được chọn lọc kỹ lưỡng, phù hợp cho cả làm hình nền và chia sẻ mạng xã hội.</p>`
+  },
+  chauau: {
+    titles: [
+      "Gái Xinh Châu Âu Mỹ - Vẻ Đẹp Hiện Đại Và Cá Tính",
+      "Tuyển Tập Ảnh Gái Tây Gợi Cảm Nhất {year}",
+      "Top Girl Europe & USA Đốn Tim Mạng Xã Hội"
+    ],
+    content: `<p>Gái xinh châu Âu và Mỹ luôn thu hút với vẻ đẹp khỏe khoắn, cá tính và tự tin. Bộ sưu tập này là sự tổng hợp những bức ảnh chất lượng cao thể hiện rõ phong cách phương Tây hiện đại.</p>`
+  },
+  cosplay: {
+    titles: [
+      "Top Gái Xinh Cosplay Khiến Bạn Không Thể Rời Mắt",
+      "Bộ Ảnh Cosplay Gái Xinh Chất Lừ {year}",
+      "Ảnh Gái Cosplay Đẹp Như Nhân Vật Thật"
+    ],
+    content: `<p>Cosplay là sự kết hợp giữa sáng tạo, cá tính và thần thái. Bộ ảnh này giới thiệu những cô gái xinh đẹp với các bộ trang phục cosplay đậm chất nghệ thuật, tái hiện hình ảnh từ anime, game và điện ảnh.</p>`
+  },
+  bikini: {
+    titles: [
+      "Gái Xinh Mặc Bikini Đốt Mắt Người Xem",
+      "Tuyển Tập Ảnh Bikini Cực Nóng Bỏng {year}",
+      "Top Gái Xinh Bikini Gợi Cảm Và Cuốn Hút"
+    ],
+    content: `<p>Vẻ đẹp khỏe khoắn và tự tin được thể hiện rõ qua các bộ bikini. Trong bộ sưu tập này, bạn sẽ được chiêm ngưỡng những cô gái với body cực chuẩn và thần thái quyến rũ dưới ánh nắng biển.</p>`
+  },
+  aodai: {
+    titles: [
+      "Gái Xinh Mặc Áo Dài - Vẻ Đẹp Thuần Khiết Việt",
+      "Ảnh Áo Dài Truyền Thống Nhưng Không Kém Phần Gợi Cảm",
+      "Vẻ Đẹp Á Đông Qua Tà Áo Dài Việt Nam"
+    ],
+    content: `<p>Tà áo dài luôn là biểu tượng của vẻ đẹp Việt. Bộ ảnh tập trung khắc họa nét duyên dáng, nhẹ nhàng và đầy quyến rũ của các cô gái trong trang phục áo dài truyền thống.</p>`
+  },
+  cap3: {
+    titles: [
+      "Ảnh Gái Xinh Cấp 3 Trong Sáng Và Dễ Thương",
+      "Tuyển Tập Gái Xinh Cấp 3 Mặc Đồng Phục",
+      "Học Sinh Cấp 3 Xinh Xắn Như Idol"
+    ],
+    content: `<p>Tuổi học trò luôn gắn liền với những kỷ niệm trong sáng. Bộ ảnh dưới đây là tuyển tập các cô gái cấp 3 dễ thương, mặc đồng phục học sinh và mang nét đẹp tự nhiên đầy cuốn hút.</p>`
+  },
+  tocbeo: {
+    titles: [
+      "Gái Xinh Tóc Béo - Phong Cách Retro Dễ Thương",
+      "Những Mẫu Ảnh Gái Xinh Búi Tóc Béo Đáng Yêu",
+      "Tóc Béo Và Nụ Cười Ngọt Ngào Đốn Tim Người Nhìn"
+    ],
+    content: `<p>Tóc béo - kiểu tóc truyền thống nhưng không bao giờ lỗi thời. Bộ ảnh dưới đây tổng hợp những khoảnh khắc đáng yêu và nhẹ nhàng của các cô gái với mái tóc búi cao.</p>`
+  },
+  nhatban: {
+    titles: [
+      "Ảnh Gái Nhật Xinh Đẹp Như Trong Anime",
+      "Tuyển Tập Girl Nhật Bản Thanh Thuần Và Cuốn Hút",
+      "Gái Nhật Với Phong Cách Dễ Thương Và Thần Thái"
+    ],
+    content: `<p>Gái Nhật luôn nổi bật với làn da trắng, gương mặt thon gọn và thần thái nhẹ nhàng. Bộ sưu tập này là tổng hợp những hình ảnh đẹp nhất của các cô gái Nhật Bản đầy thu hút.</p>`
+  },
+  hinhnen: {
+    titles: [
+      "Bộ Sưu Tập Hình Nền Gái Xinh Full HD Tuyệt Đẹp",
+      "Tải Về Hình Nền Gái Xinh Cực Chất {year}",
+      "Top Wallpaper Gái Xinh Cho Điện Thoại Và Máy Tính"
+    ],
+    content: `<p>Bạn đang tìm kiếm hình nền gái xinh đẹp để làm mới thiết bị? Đây là bộ sưu tập chất lượng cao, thích hợp cho cả điện thoại và máy tính với độ phân giải sắc nét và màu sắc nổi bật.</p>`
+  }
+};
+</script>
+</body>
+</html>
 </body>
 </html>
