@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Upload ảnh lên Imgur (nén .webp)</title>
+  <title>Upload ảnh Imgur – Tự nén WebP</title>
   <style>
     body.loading .loading-modal { display: block; }
     .dropzone {
@@ -39,6 +39,9 @@
       text-align: center;
       margin-left: auto;
       margin-right: auto;
+      max-width: 500px;
+      font-family: system-ui, sans-serif;
+      font-size: 14px;
     }
     .image-url {
       width: calc(100% - 10px);
@@ -85,27 +88,26 @@
   <div class="status"></div>
   <button id="copyAllLinksBtn">📋 Copy tất cả link ảnh</button>
 
-  <script type="text/javascript">
-    // ==================== Helper: Chuyển File sang blob WebP ====================
-    async function fileToWebPBlob(file, quality = 0.8) {
+  <script>
+    // ==================== Helper: Chuyển File => WebP ====================
+    async function compressToWebP(file, quality = 0.8) {
       return new Promise((resolve, reject) => {
-        const img = new Image();
+        if (!file.type.startsWith('image/')) reject(new Error('File không phải ảnh'));
         const reader = new FileReader();
-        reader.onload = (e) => {
+        const img = new Image();
+        reader.onload = e => {
           img.onload = () => {
-            try {
-              const canvas = document.createElement('canvas');
-              canvas.width = img.naturalWidth;
-              canvas.height = img.naturalHeight;
-              const ctx = canvas.getContext('2d');
-              ctx.drawImage(img, 0, 0);
-              canvas.toBlob((blob) => {
-                if (blob) resolve(blob);
-                else reject(new Error('Chuyển sang WebP thất bại'));
-              }, 'image/webp', quality);
-            } catch (err) {
-              reject(err);
-            }
+            const canvas = document.createElement('canvas');
+            canvas.width = img.naturalWidth;
+            canvas.height = img.naturalHeight;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+            canvas.toBlob(blob => {
+              if (!blob) return reject(new Error('Không thể chuyển WebP'));
+              // Đóng gói thành File để giữ name & type
+              const webpFile = new File([blob], 'upload.webp', { type: 'image/webp' });
+              resolve({ webpFile, newSize: blob.size });
+            }, 'image/webp', quality);
           };
           img.onerror = reject;
           img.src = e.target.result;
@@ -115,7 +117,7 @@
       });
     }
 
-    // ==================== Module Imgur ====================
+    // ==================== Imgur Module (giữ nguyên core) ====================
     (function (root, factory) {
       if (typeof define === 'function' && define.amd) {
         define([], factory);
@@ -143,9 +145,7 @@
           if (text) el.appendChild(document.createTextNode(text));
           return el;
         },
-        insertAfter: function (ref, node) {
-          ref.parentNode.insertBefore(node, ref.nextSibling);
-        },
+        insertAfter: function (ref, node) { ref.parentNode.insertBefore(node, ref.nextSibling); },
         post: function (path, data, callback) {
           var xhttp = new XMLHttpRequest();
           xhttp.open('POST', path, true);
@@ -157,7 +157,7 @@
                 try { response = JSON.parse(this.responseText); } catch (err) { response = this.responseText; }
                 callback.call(window, response);
               } else {
-                throw new Error(this.status + " - " + this.statusText);
+                callback.call(window, { success: false, status: this.status, message: this.statusText });
               }
             }
           };
@@ -165,73 +165,71 @@
           xhttp = null;
         },
         createDragZone: function () {
-          var p1 = this.createEls('p', {}, 'Kéo file ảnh vào đây');
-          var p2 = this.createEls('p', {}, 'Hoặc click để chọn ảnh');
-          var input = this.createEls('input', { type: 'file', className: 'input', accept: 'image/*', multiple: true });
+          const p1 = this.createEls('p', {}, 'Kéo ảnh vào đây');
+          const p2 = this.createEls('p', {}, 'Hoặc click để chọn ảnh');
+          const input = this.createEls('input', { type: 'file', className: 'input', accept: 'image/*', multiple: true });
           this.infoimg.forEach(zone => { zone.appendChild(p1.cloneNode(true)); zone.appendChild(p2.cloneNode(true)); });
           this.dropzone.forEach(zone => { zone.appendChild(input.cloneNode(true)); this.status(zone); this.upload(zone); });
         },
         loading: function () {
           if (document.querySelector('.loading-modal')) return;
-          var div = this.createEls('div', { className: 'loading-modal' });
-          var table = this.createEls('table', { className: 'loading-table' });
-          var img = this.createEls('img', { className: 'loading-image', src: 'https://firebasestorage.googleapis.com/v0/b/huydc-090288.appspot.com/o/Images%20Upload%2Floading-spin.svg?alt=media&token=8a1fd8dc-30b2-4b74-acc6-9e4ce55a89b0' });
-          table.appendChild(img); div.appendChild(table); document.body.appendChild(div);
+          const modal = this.createEls('div', { className: 'loading-modal' });
+          const table = this.createEls('table', { className: 'loading-table' });
+          const img = this.createEls('img', { src: 'https://firebasestorage.googleapis.com/v0/b/huydc-090288.appspot.com/o/Images%20Upload%2Floading-spin.svg?alt=media&token=8a1fd8dc-30b2-4b74-acc6-9e4ce55a89b0' });
+          table.appendChild(img); modal.appendChild(table); document.body.appendChild(modal);
         },
-        status: function (el) {
-          var div = this.createEls('div', { className: 'status' });
-          this.insertAfter(el, div);
-        },
+        status: function (el) { this.insertAfter(el, this.createEls('div', { className: 'status' })); },
         // ------------------- Upload & nén WebP -------------------
         matchFiles: async function (file, zone) {
-          var status = zone.nextSibling;
-          if (file.type.match(/image/) && file.type !== 'image/svg+xml') {
-            document.body.classList.add('loading');
-            status.classList.remove('bg-success', 'bg-danger');
-            status.innerHTML = '';
-            try {
-              // Nén và chuyển sang WebP
-              const webpBlob = await fileToWebPBlob(file, 0.8); // chất lượng 80%
-              const fd = new FormData();
-              fd.append('image', webpBlob, 'image.webp');
-              this.post(this.endpoint, fd, function (data) {
-                document.body.classList.remove('loading');
-                if (typeof this.callback === 'function') this.callback.call(this, data);
-              }.bind(this));
-            } catch (err) {
+          const status = zone.nextSibling;
+          if (!file.type.startsWith('image/')) {
+            status.className = 'status bg-danger';
+            status.innerText = 'File không phải ảnh!';
+            return;
+          }
+          document.body.classList.add('loading');
+          status.className = 'status';
+          status.innerText = 'Đang nén...';
+          try {
+            const originalSize = file.size;
+            const { webpFile, newSize } = await compressToWebP(file, 0.8);
+            status.innerText = 'Đang upload...';
+            const fd = new FormData();
+            fd.append('image', webpFile);
+            fd.append('type', 'file'); // thông báo đây là file binary
+            this.post(this.endpoint, fd, (data) => {
               document.body.classList.remove('loading');
-              status.classList.add('bg-danger');
-              status.innerHTML = 'Lỗi nén / upload ảnh: ' + err.message;
-            }
-          } else {
-            status.classList.remove('bg-success');
-            status.classList.add('bg-danger');
-            status.innerHTML = 'Invalid file type';
+              if (typeof this.callback === 'function') this.callback.call(this, data);
+              if (data.success) {
+                status.className = 'status bg-success';
+                status.innerHTML += `<br>Giảm từ ${(originalSize/1024).toFixed(1)} KB xuống ${(newSize/1024).toFixed(1)} KB`;
+              } else {
+                status.className = 'status bg-danger';
+                status.innerText = 'Lỗi upload: ' + (data.message || 'Không rõ');
+              }
+            });
+          } catch (err) {
+            document.body.classList.remove('loading');
+            status.className = 'status bg-danger';
+            status.innerText = err.message;
           }
         },
         upload: function (zone) {
-          var events = ['dragenter', 'dragleave', 'dragover', 'drop'];
-          zone.addEventListener('change', function (e) {
-            if (e.target && e.target.nodeName === 'INPUT' && e.target.type === 'file') {
+          const events = ['dragenter', 'dragleave', 'dragover', 'drop'];
+          zone.addEventListener('change', (e) => {
+            if (e.target && e.target.type === 'file') {
               Array.from(e.target.files).forEach(file => this.matchFiles(file, zone));
             }
-          }.bind(this), false);
-          events.forEach(event => {
-            zone.addEventListener(event, function (e) {
-              if (e.target && e.target.nodeName === 'INPUT' && e.target.type === 'file') {
-                if (event === 'dragleave' || event === 'drop') {
-                  e.target.parentNode.classList.remove('dropzone-dragging');
-                } else {
-                  e.target.parentNode.classList.add('dropzone-dragging');
-                }
+          });
+          events.forEach(evt => {
+            zone.addEventListener(evt, (e) => {
+              if (e.target && e.target.type === 'file') {
+                e.target.parentNode.classList.toggle('dropzone-dragging', evt !== 'dragleave' && evt !== 'drop');
               }
-            }, false);
+            });
           });
         },
-        run: function () {
-          this.loading();
-          this.createDragZone();
-        }
+        run: function () { this.loading(); this.createDragZone(); }
       };
       return Imgur;
     }));
@@ -239,36 +237,26 @@
     // ==================== Khởi tạo ====================
     const allLinks = [];
     const copyBtn = document.getElementById('copyAllLinksBtn');
+    function updateCopyButton() { copyBtn.style.display = allLinks.length ? 'block' : 'none'; }
 
-    function updateCopyButton() {
-      copyBtn.style.display = allLinks.length > 0 ? 'block' : 'none';
-    }
-
-    var feedback = function(res) {
-      if (res.success === true) {
-        const get_link = res.data.link.replace(/^http:\/\//i, 'https://');
-        allLinks.push(get_link);
-        document.querySelector('.status').classList.add('bg-success');
-        document.querySelector('.status').innerHTML +=
-          '<div class="linkimg"><input class="image-url" onclick="this.select()" value="' + get_link + '"/></div>' +
-          '<div class="showimg"><img class="img" style="max-width:100%;margin-bottom:10px;" src="' + get_link + '"/></div>';
+    const feedback = (res) => {
+      const statusDiv = document.querySelector('.status');
+      if (res.success) {
+        const link = res.data.link.replace(/^http:/, 'https:');
+        allLinks.push(link);
+        statusDiv.className = 'status bg-success';
+        statusDiv.innerHTML += `\n<div class="linkimg"><input class="image-url" onclick="this.select()" value="${link}" /></div>` +
+                               `<div class="showimg"><img style="max-width:100%;margin-bottom:10px;" src="${link}" /></div>`;
         updateCopyButton();
+      } else {
+        statusDiv.className = 'status bg-danger';
+        statusDiv.innerText = 'Upload thất bại: ' + (res.message || 'Không rõ lý do');
       }
     };
 
-    new Imgur({
-      clientid: '3a8be4390ef3eb8',
-      callback: feedback
-    });
-
+    new Imgur({ clientid: '3a8be4390ef3eb8', callback: feedback });
     copyBtn.addEventListener('click', () => {
-      const temp = document.createElement('textarea');
-      temp.value = allLinks.join('\n');
-      document.body.appendChild(temp);
-      temp.select();
-      document.execCommand('copy');
-      document.body.removeChild(temp);
-      alert("✅ Đã copy " + allLinks.length + " link ảnh!");
+      navigator.clipboard.writeText(allLinks.join('\n')).then(() => alert(`✅ Đã copy ${allLinks.length} link!`));
     });
   </script>
 </body>
