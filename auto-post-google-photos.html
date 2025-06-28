@@ -207,7 +207,8 @@
         showStatus('success', `Upload ảnh "${file.name}" thành công`);
         return data.data.link;
       } else {
-        showStatus('error', `Upload ảnh thất bại: ${data.data.error || 'Lỗi không rõ'}`);
+        const errMsg = data?.data?.error || 'Lỗi không rõ từ Imgur';
+      showStatus('error', `Upload ảnh "${file.name}" thất bại: ${errMsg}`);
         throw new Error('Upload thất bại');
       }
     }
