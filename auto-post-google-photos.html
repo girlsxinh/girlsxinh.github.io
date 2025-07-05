@@ -11,6 +11,10 @@
     textarea { height: 150px; margin-top: 10px; }
     button { margin-top: 10px; margin-right: 10px; padding: 8px 15px; }
     #aiOutput { height: 300px; }
+    .copy-button { background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    .copy-button:hover { background-color: #45a049; }
+    .copy-success { color: green; font-weight: bold; margin-left: 10px; }
+    .output-section { position: relative; }
   </style>
 </head>
 <body>
@@ -38,8 +42,12 @@
 
     <div class="preview-wrapper" id="preview"></div>
 
-    <h3>📄 Mã HTML để dán vào bài Blogger:</h3>
-    <textarea id="htmlOutput" readonly></textarea>
+    <div class="output-section">
+      <h3>📄 Mã HTML để dán vào bài Blogger:</h3>
+      <button class="copy-button" onclick="copyHtml()">📋 Copy HTML</button>
+      <span id="htmlCopyStatus" class="copy-success"></span>
+      <textarea id="htmlOutput" readonly></textarea>
+    </div>
   </section>
 
   <hr />
@@ -50,7 +58,12 @@
     <input type="text" id="aiTopicInput" placeholder="Ví dụ: Du lịch Đà Nẵng nên đi đâu?" /><br />
     <button onclick="generateAIArticle()">🤖 Tạo bài viết tự động</button><br />
     <p id="aiStatus" style="color: green; font-weight: bold;"></p>
-    <textarea id="aiOutput" placeholder="Nội dung bài viết tự động sẽ hiện ở đây..."></textarea>
+    
+    <div class="output-section">
+      <button class="copy-button" onclick="copyAIContent()">📋 Copy bài viết</button>
+      <span id="aiCopyStatus" class="copy-success"></span>
+      <textarea id="aiOutput" placeholder="Nội dung bài viết tự động sẽ hiện ở đây..."></textarea>
+    </div>
   </section>
 
   <script>
@@ -153,6 +166,70 @@
         html += `<img src="${img.src}" alt="${img.alt}" title="${img.title}" style="max-width:100%;" /><br>\n`;
       });
       document.getElementById("htmlOutput").value = html;
+    }
+
+    // Hàm copy HTML
+    function copyHtml() {
+      const htmlOutput = document.getElementById("htmlOutput");
+      const htmlCopyStatus = document.getElementById("htmlCopyStatus");
+      
+      if (htmlOutput.value.trim() === "") {
+        alert("Chưa có mã HTML để copy. Vui lòng xử lý ảnh trước.");
+        return;
+      }
+      
+      htmlOutput.select();
+      htmlOutput.setSelectionRange(0, 99999); // Cho mobile
+      
+      try {
+        document.execCommand('copy');
+        htmlCopyStatus.textContent = "✅ Đã copy!";
+        setTimeout(() => {
+          htmlCopyStatus.textContent = "";
+        }, 2000);
+      } catch (err) {
+        // Fallback cho trình duyệt hiện đại
+        navigator.clipboard.writeText(htmlOutput.value).then(() => {
+          htmlCopyStatus.textContent = "✅ Đã copy!";
+          setTimeout(() => {
+            htmlCopyStatus.textContent = "";
+          }, 2000);
+        }).catch(() => {
+          alert("Không thể copy. Vui lòng copy thủ công.");
+        });
+      }
+    }
+
+    // Hàm copy nội dung AI
+    function copyAIContent() {
+      const aiOutput = document.getElementById("aiOutput");
+      const aiCopyStatus = document.getElementById("aiCopyStatus");
+      
+      if (aiOutput.value.trim() === "") {
+        alert("Chưa có nội dung bài viết để copy. Vui lòng tạo bài viết trước.");
+        return;
+      }
+      
+      aiOutput.select();
+      aiOutput.setSelectionRange(0, 99999); // Cho mobile
+      
+      try {
+        document.execCommand('copy');
+        aiCopyStatus.textContent = "✅ Đã copy!";
+        setTimeout(() => {
+          aiCopyStatus.textContent = "";
+        }, 2000);
+      } catch (err) {
+        // Fallback cho trình duyệt hiện đại
+        navigator.clipboard.writeText(aiOutput.value).then(() => {
+          aiCopyStatus.textContent = "✅ Đã copy!";
+          setTimeout(() => {
+            aiCopyStatus.textContent = "";
+          }, 2000);
+        }).catch(() => {
+          alert("Không thể copy. Vui lòng copy thủ công.");
+        });
+      }
     }
 
     // --- Phần AI viết bài tự động ---
