@@ -2,58 +2,72 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <title>Tool xử lý ảnh SEO + Viết bài AI cho Blogger - Nâng cao</title>
+  <title>Tool xử lý ảnh SEO + Viết bài AI cho Blogger - Chuyên đề Gái Xinh & Hot Girl</title>
   <style>
     body { 
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
       padding: 20px; 
       max-width: 1200px; 
       margin: auto; 
-      background: #f5f5f5;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
     }
     .container { 
       background: white; 
       padding: 30px; 
-      border-radius: 10px; 
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      border-radius: 15px; 
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
       margin-bottom: 20px;
     }
     h2 { 
-      color: #2c3e50; 
+      color: #e91e63; 
       text-align: center; 
       margin-bottom: 30px;
-      font-size: 28px;
+      font-size: 32px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
     }
     h3 { 
-      color: #34495e; 
-      border-bottom: 2px solid #3498db; 
+      color: #ad1457; 
+      border-bottom: 3px solid #e91e63; 
       padding-bottom: 10px;
       margin-top: 30px;
+      font-size: 22px;
     }
     img { 
       max-width: 150px; 
-      border: 2px solid #ddd; 
+      border: 3px solid #e91e63; 
       margin: 5px; 
-      border-radius: 5px;
-      transition: transform 0.3s ease;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     }
-    img:hover { transform: scale(1.05); }
+    img:hover { 
+      transform: scale(1.1) rotate(2deg); 
+      box-shadow: 0 8px 25px rgba(233,30,99,0.4);
+    }
     .preview-wrapper { 
       display: flex; 
       flex-wrap: wrap; 
-      gap: 10px; 
+      gap: 15px; 
       margin: 20px 0;
-      padding: 20px;
-      background: #f8f9fa;
-      border-radius: 8px;
+      padding: 25px;
+      background: linear-gradient(45deg, #fce4ec, #f8bbd9);
+      border-radius: 15px;
+      border: 2px dashed #e91e63;
     }
     textarea, input[type=text], select { 
       width: 100%; 
       box-sizing: border-box; 
-      padding: 12px;
-      border: 2px solid #ddd;
-      border-radius: 5px;
+      padding: 15px;
+      border: 2px solid #e91e63;
+      border-radius: 8px;
       font-size: 14px;
+      transition: all 0.3s ease;
+    }
+    textarea:focus, input[type=text]:focus, select:focus {
+      border-color: #ad1457;
+      box-shadow: 0 0 10px rgba(233,30,99,0.3);
+      outline: none;
     }
     textarea { 
       height: 200px; 
@@ -64,83 +78,100 @@
     button { 
       margin-top: 10px; 
       margin-right: 10px; 
-      padding: 12px 20px; 
-      background: linear-gradient(45deg, #3498db, #2980b9);
+      padding: 15px 25px; 
+      background: linear-gradient(45deg, #e91e63, #ad1457);
       color: white;
       border: none;
-      border-radius: 5px;
+      border-radius: 8px;
       cursor: pointer;
       font-weight: bold;
       transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(233,30,99,0.3);
     }
     button:hover { 
-      background: linear-gradient(45deg, #2980b9, #3498db);
-      transform: translateY(-2px);
+      background: linear-gradient(45deg, #ad1457, #e91e63);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(233,30,99,0.5);
     }
     button.copy-btn {
-      background: linear-gradient(45deg, #27ae60, #2ecc71);
-      padding: 8px 15px;
+      background: linear-gradient(45deg, #4caf50, #2e7d32);
+      padding: 10px 18px;
       font-size: 12px;
     }
     button.copy-btn:hover {
-      background: linear-gradient(45deg, #2ecc71, #27ae60);
+      background: linear-gradient(45deg, #2e7d32, #4caf50);
     }
-    #aiOutput { height: 300px; }
-    #htmlBloggerOutput { height: 400px; }
+    #aiOutput { height: 350px; }
+    #htmlBloggerOutput { height: 450px; }
     .status { 
-      color: #27ae60; 
+      color: #2e7d32; 
       font-weight: bold; 
       margin: 10px 0;
+      padding: 10px;
+      border-radius: 5px;
+      background: #e8f5e8;
     }
-    .error { color: #e74c3c; }
-    .success { color: #27ae60; }
+    .error { 
+      color: #d32f2f; 
+      background: #ffebee;
+    }
+    .success { 
+      color: #2e7d32; 
+      background: #e8f5e8;
+    }
     .input-group {
-      margin-bottom: 20px;
+      margin-bottom: 25px;
     }
     .input-group label {
       display: block;
-      margin-bottom: 5px;
+      margin-bottom: 8px;
       font-weight: bold;
-      color: #2c3e50;
+      color: #ad1457;
+      font-size: 16px;
     }
     .preview-container {
       background: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
       margin-top: 20px;
+      border: 2px solid #e91e63;
     }
     .preview-content {
-      line-height: 1.6;
+      line-height: 1.8;
       color: #333;
     }
     .preview-content h1, .preview-content h2, .preview-content h3 {
-      color: #2c3e50;
+      color: #ad1457;
     }
     .preview-content img {
       max-width: 100%;
       height: auto;
-      margin: 10px 0;
-      border-radius: 5px;
+      margin: 15px 0;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     }
     .tabs {
       display: flex;
       margin-bottom: 20px;
-      border-bottom: 2px solid #ddd;
+      border-bottom: 3px solid #e91e63;
     }
     .tab {
-      padding: 10px 20px;
+      padding: 15px 25px;
       cursor: pointer;
-      background: #f8f9fa;
+      background: linear-gradient(45deg, #fce4ec, #f8bbd9);
       border: none;
-      border-bottom: 2px solid transparent;
-      margin-right: 5px;
-      border-radius: 5px 5px 0 0;
+      border-bottom: 3px solid transparent;
+      margin-right: 8px;
+      border-radius: 8px 8px 0 0;
+      font-weight: bold;
+      transition: all 0.3s ease;
     }
     .tab.active {
-      background: #3498db;
+      background: linear-gradient(45deg, #e91e63, #ad1457);
       color: white;
-      border-bottom-color: #3498db;
+      border-bottom-color: #e91e63;
+      transform: translateY(-2px);
     }
     .tab-content {
       display: none;
@@ -149,10 +180,10 @@
       display: block;
     }
     .copy-success {
-      background: #2ecc71;
+      background: #4caf50;
       color: white;
-      padding: 5px 10px;
-      border-radius: 3px;
+      padding: 8px 15px;
+      border-radius: 5px;
       font-size: 12px;
       margin-left: 10px;
       opacity: 0;
@@ -161,30 +192,89 @@
     .copy-success.show {
       opacity: 1;
     }
+    .content-category {
+      background: linear-gradient(45deg, #fce4ec, #f8bbd9);
+      padding: 15px;
+      border-radius: 10px;
+      margin: 15px 0;
+      border-left: 5px solid #e91e63;
+    }
+    .content-category h4 {
+      color: #ad1457;
+      margin-top: 0;
+      font-size: 18px;
+    }
+    .template-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+    .template-card {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      border: 2px solid #e91e63;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+    .template-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(233,30,99,0.3);
+    }
+    .template-card.selected {
+      background: linear-gradient(45deg, #e91e63, #ad1457);
+      color: white;
+    }
+    .advanced-options {
+      background: #f5f5f5;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 20px 0;
+    }
+    .emoji-header {
+      font-size: 24px;
+      margin-right: 10px;
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <h2>🛠️ Tool Xử Lý Ảnh SEO + Viết Bài AI cho Blogger - Nâng Cao</h2>
+    <h2><span class="emoji-header">💖</span>Tool Xử Lý Ảnh SEO + Viết Bài AI - Chuyên Đề Gái Xinh & Hot Girl<span class="emoji-header">💖</span></h2>
 
     <section>
-      <h3>1. Xử lý ảnh</h3>
+      <h3>🖼️ 1. Xử lý ảnh chuyên nghiệp</h3>
       
       <div class="input-group">
-        <label>📤 Chọn ảnh:</label>
+        <label>📤 Chọn ảnh gái xinh/hot girl:</label>
         <input type="file" id="imageInput" accept="image/*" multiple />
       </div>
 
       <div class="input-group">
-        <label>🔑 Từ khóa SEO:</label>
-        <input type="text" id="keywordInput" placeholder="Ví dụ: Quỳnh Alee bikini" />
+        <label>🔑 Từ khóa SEO chính:</label>
+        <input type="text" id="keywordInput" placeholder="Ví dụ: Gái xinh bikini, Hot girl TikTok, Diễn viên xinh đẹp" />
+      </div>
+
+      <div class="input-group">
+        <label>🎯 Loại nội dung:</label>
+        <select id="contentTypeSelect">
+          <option value="hotgirl">Hot Girl Facebook/Instagram</option>
+          <option value="tiktoker">TikToker nổi tiếng</option>
+          <option value="actress">Diễn viên xinh đẹp</option>
+          <option value="singer">Ca sĩ/Người mẫu</option>
+          <option value="bikini">Gái xinh bikini</option>
+          <option value="student">Gái xinh học sinh/sinh viên</option>
+          <option value="office">Gái xinh công sở</option>
+          <option value="cosplay">Cosplay girl</option>
+        </select>
       </div>
 
       <div class="input-group">
         <label>🖼️ Định dạng ảnh:</label>
         <select id="formatSelect">
-          <option value="jpeg">JPEG</option>
-          <option value="webp">WebP</option>
+          <option value="jpeg">JPEG (Chất lượng cao)</option>
+          <option value="webp">WebP (Tối ưu web)</option>
         </select>
       </div>
 
@@ -206,34 +296,107 @@
       </div>
     </section>
 
-    <hr style="margin: 40px 0; border: 1px solid #ddd;" />
+    <hr style="margin: 40px 0; border: 2px solid #e91e63;" />
 
     <section>
-      <h3>2. Viết bài tự động bằng AI</h3>
+      <h3>✨ 2. Tạo nội dung chuyên biệt về gái xinh & hot girl</h3>
       
-      <div class="input-group">
-        <label>📝 Nhập chủ đề hoặc tiêu đề bài viết:</label>
-        <input type="text" id="aiTopicInput" placeholder="Ví dụ: Du lịch Đà Nẵng nên đi đâu?" />
+      <div class="content-category">
+        <h4>🎯 Chọn template nội dung:</h4>
+        <div class="template-grid">
+          <div class="template-card" onclick="selectTemplate('profile')">
+            <h5>👤 Profile Gái Xinh</h5>
+            <p>Giới thiệu chi tiết về hot girl</p>
+          </div>
+          <div class="template-card" onclick="selectTemplate('collection')">
+            <h5>📸 Bộ sưu tập ảnh</h5>
+            <p>Tổng hợp ảnh đẹp theo chủ đề</p>
+          </div>
+          <div class="template-card" onclick="selectTemplate('ranking')">
+            <h5>🏆 Top gái xinh</h5>
+            <p>Bảng xếp hạng hot girl</p>
+          </div>
+          <div class="template-card" onclick="selectTemplate('fashion')">
+            <h5>👗 Thời trang & Style</h5>
+            <p>Phong cách thời trang hot girl</p>
+          </div>
+          <div class="template-card" onclick="selectTemplate('lifestyle')">
+            <h5>🌟 Lifestyle & Đời sống</h5>
+            <p>Cuộc sống hàng ngày của hot girl</p>
+          </div>
+          <div class="template-card" onclick="selectTemplate('review')">
+            <h5>💄 Review & Beauty</h5>
+            <p>Bí quyết làm đẹp của hot girl</p>
+          </div>
+        </div>
       </div>
 
       <div class="input-group">
-        <label>🖼️ Chèn ảnh vào bài viết:</label>
-        <select id="imageInsertMode">
-          <option value="none">Không chèn ảnh</option>
-          <option value="top">Chèn ảnh đầu bài</option>
-          <option value="distributed">Phân bố ảnh trong bài</option>
-          <option value="bottom">Chèn ảnh cuối bài</option>
+        <label>📝 Tên/Nickname của hot girl:</label>
+        <input type="text" id="hotgirlName" placeholder="Ví dụ: Quỳnh Alee, Lily Chen, Midu..." />
+      </div>
+
+      <div class="input-group">
+        <label>🎂 Thông tin cơ bản (tuổi, quê quán, nghề nghiệp):</label>
+        <input type="text" id="basicInfo" placeholder="Ví dụ: 22 tuổi, Hà Nội, Sinh viên/TikToker" />
+      </div>
+
+      <div class="input-group">
+        <label>📱 Mạng xã hội chính:</label>
+        <select id="socialPlatform">
+          <option value="facebook">Facebook</option>
+          <option value="instagram">Instagram</option>
+          <option value="tiktok">TikTok</option>
+          <option value="youtube">YouTube</option>
+          <option value="multiple">Nhiều platform</option>
         </select>
       </div>
 
-      <button onclick="generateAIArticle()">🤖 Tạo bài viết tự động</button>
+      <div class="advanced-options">
+        <h4>⚙️ Tùy chọn nâng cao</h4>
+        
+        <div class="input-group">
+          <label>🎨 Tone viết:</label>
+          <select id="writingTone">
+            <option value="friendly">Thân thiện, gần gũi</option>
+            <option value="professional">Chuyên nghiệp</option>
+            <option value="casual">Thoải mái, trẻ trung</option>
+            <option value="admiring">Ngưỡng mộ, khen ngợi</option>
+          </select>
+        </div>
+
+        <div class="input-group">
+          <label>📏 Độ dài bài viết:</label>
+          <select id="articleLength">
+            <option value="short">Ngắn (300-500 từ)</option>
+            <option value="medium">Trung bình (500-800 từ)</option>
+            <option value="long">Dài (800-1200 từ)</option>
+            <option value="detailed">Chi tiết (1200+ từ)</option>
+          </select>
+        </div>
+
+        <div class="input-group">
+          <label>🖼️ Cách chèn ảnh:</label>
+          <select id="imageInsertMode">
+            <option value="none">Không chèn ảnh</option>
+            <option value="top">Ảnh đầu bài</option>
+            <option value="distributed">Phân bố trong bài</option>
+            <option value="gallery">Tạo gallery ảnh</option>
+            <option value="bottom">Ảnh cuối bài</option>
+          </select>
+        </div>
+      </div>
+
+      <button onclick="generateSpecializedContent()">🚀 Tạo nội dung chuyên biệt</button>
       <button onclick="generateBloggerHTML()">📝 Tạo HTML Blogger hoàn chỉnh</button>
+      <button onclick="generateSEOTags()">🔍 Tạo thẻ SEO</button>
 
       <p id="aiStatus" class="status"></p>
 
       <div class="tabs">
         <button class="tab active" onclick="showTab('content')">📝 Nội dung</button>
         <button class="tab" onclick="showTab('html')">🔧 HTML Blogger</button>
+        <button class="tab" onclick="showTab('seo')">🔍 SEO Tags</button>
         <button class="tab" onclick="showTab('preview')">👁️ Xem trước</button>
       </div>
 
@@ -242,7 +405,7 @@
           <label>Nội dung bài viết:</label>
           <button class="copy-btn" onclick="copyToClipboard('aiOutput')">📋 Copy nội dung</button>
           <span id="contentCopySuccess" class="copy-success">Đã copy!</span>
-          <textarea id="aiOutput" placeholder="Nội dung bài viết tự động sẽ hiện ở đây..."></textarea>
+          <textarea id="aiOutput" placeholder="Nội dung bài viết chuyên biệt sẽ hiện ở đây..."></textarea>
         </div>
       </div>
 
@@ -252,6 +415,15 @@
           <button class="copy-btn" onclick="copyToClipboard('htmlBloggerOutput')">📋 Copy HTML</button>
           <span id="htmlBloggerCopySuccess" class="copy-success">Đã copy!</span>
           <textarea id="htmlBloggerOutput" placeholder="HTML hoàn chỉnh cho Blogger sẽ hiện ở đây..."></textarea>
+        </div>
+      </div>
+
+      <div id="seo-tab" class="tab-content">
+        <div class="input-group">
+          <label>Thẻ SEO và Meta Tags:</label>
+          <button class="copy-btn" onclick="copyToClipboard('seoOutput')">📋 Copy SEO</button>
+          <span id="seoCopySuccess" class="copy-success">Đã copy!</span>
+          <textarea id="seoOutput" placeholder="Thẻ SEO sẽ hiện ở đây..."></textarea>
         </div>
       </div>
 
@@ -269,6 +441,7 @@
   <script>
     let processedImages = [];
     let currentImageLinks = [];
+    let selectedTemplate = 'profile';
 
     // Hàm chuyển chuỗi tiếng Việt có dấu sang không dấu
     function removeVietnamese(str) {
@@ -276,6 +449,19 @@
       str = str.replace(/đ/g, "d").replace(/Đ/g, "D");
       str = str.replace(/[^a-zA-Z0-9\s]/g, "");
       return str.trim().replace(/\s+/g, "-").toLowerCase();
+    }
+
+    // Chọn template
+    function selectTemplate(templateType) {
+      selectedTemplate = templateType;
+      
+      // Bỏ selection cũ
+      document.querySelectorAll('.template-card').forEach(card => {
+        card.classList.remove('selected');
+      });
+      
+      // Thêm selection mới
+      event.target.closest('.template-card').classList.add('selected');
     }
 
     // Xử lý ảnh
@@ -358,7 +544,6 @@
         imgTag.alt = keyword;
         preview.appendChild(imgTag);
 
-        // Lưu thông tin ảnh đã xử lý
         processedImages.push({
           url: url,
           filename: fileName,
@@ -366,7 +551,6 @@
           title: fileName
         });
 
-        // Placeholder cho link ảnh thật (người dùng sẽ thay thế)
         const placeholderLink = `https://your-image-host.com/${fileName}`;
         currentImageLinks.push(placeholderLink);
 
@@ -378,234 +562,643 @@
 
     function generateHtml() {
       const imgs = document.querySelectorAll("#preview img");
+      const insertMode = document.getElementById("imageInsertMode").value;
       let html = "";
-      imgs.forEach((img, index) => {
-        const placeholderLink = `https://your-image-host.com/${img.title}`;
-        html += `<img src="${placeholderLink}" alt="${img.alt}" title="${img.title}" style="max-width:100%; height:auto; border-radius:5px; margin:10px 0;" /><br>\n`;
-      });
+      
+      if (insertMode === 'gallery') {
+        html = '<div class="image-gallery" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; margin: 20px 0;">\n';
+        imgs.forEach((img, index) => {
+          const placeholderLink = `https://your-image-host.com/${img.title}`;
+          html += `  <div class="gallery-item" style="text-align: center;">\n`;
+          html += `    <img src="${placeholderLink}" alt="${img.alt}" title="${img.title}" style="width: 100%; height: 300px; object-fit: cover; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);" />\n`;
+          html += `    <p style="margin-top: 10px; font-size: 14px; color: #666;">${img.title}</p>\n`;
+          html += `  </div>\n`;
+        });
+        html += '</div>\n';
+      } else {
+        imgs.forEach((img, index) => {
+          const placeholderLink = `https://your-image-host.com/${img.title}`;
+          html += `<div class="image-container" style="text-align: center; margin: 20px 0;">\n`;
+          html += `  <img src="${placeholderLink}" alt="${img.alt}" title="${img.title}" style="max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);" />\n`;
+          html += `  <p style="font-size: 14px; color: #666; margin-top: 10px; font-style: italic;">${img.alt}</p>\n`;
+          html += `</div>\n`;
+        });
+      }
       document.getElementById("htmlOutput").value = html;
     }
 
-    // Tạo bài viết AI với khả năng chèn ảnh
-    async function generateAIArticle() {
-      const topic = document.getElementById("aiTopicInput").value.trim();
-      const aiStatus = document.getElementById("aiStatus");
-      const aiOutput = document.getElementById("aiOutput");
+    // Tạo nội dung chuyên biệt
+    async function generateSpecializedContent() {
+      const hotgirlName = document.getElementById("hotgirlName").value.trim();
+      const basicInfo = document.getElementById("basicInfo").value.trim();
+      const contentType = document.getElementById("contentTypeSelect").value;
+      const socialPlatform = document.getElementById("socialPlatform").value;
+      const writingTone = document.getElementById("writingTone").value;
+      const articleLength = document.getElementById("articleLength").value;
       const insertMode = document.getElementById("imageInsertMode").value;
 
-      if (!topic) {
-        alert("Vui lòng nhập chủ đề bài viết.");
+      const aiStatus = document.getElementById("aiStatus");
+      const aiOutput = document.getElementById("aiOutput");
+
+      if (!hotgirlName) {
+        alert("Vui lòng nhập tên/nickname của hot girl.");
         return;
       }
 
-      aiStatus.textContent = "Đang tạo bài viết... vui lòng chờ trong giây lát.";
+      aiStatus.textContent = "Đang tạo nội dung chuyên biệt... vui lòng chờ trong giây lát.";
       aiStatus.className = "status";
       aiOutput.value = "";
 
-      // Tạo nội dung mẫu thay vì gọi API OpenAI
-      const sampleContent = generateSampleContent(topic);
+      const specializedContent = generateSpecializedContentByTemplate(
+        selectedTemplate, hotgirlName, basicInfo, contentType, socialPlatform, writingTone, articleLength
+      );
       
-      // Chèn ảnh vào nội dung theo mode đã chọn
-      const contentWithImages = insertImagesIntoContent(sampleContent, insertMode);
+      const contentWithImages = insertImagesIntoContent(specializedContent, insertMode);
       
       aiOutput.value = contentWithImages;
-      aiStatus.textContent = "Tạo bài viết thành công!";
+      aiStatus.textContent = "Tạo nội dung chuyên biệt thành công!";
       aiStatus.className = "status success";
 
-      // Cập nhật preview
       updatePreview();
     }
 
-    function generateSampleContent(topic) {
-      return `# ${topic}
+    function generateSpecializedContentByTemplate(template, name, info, type, platform, tone, length) {
+      const contentMap = {
+        profile: generateProfileContent,
+        collection: generateCollectionContent,
+        ranking: generateRankingContent,
+        fashion: generateFashionContent,
+        lifestyle: generateLifestyleContent,
+        review: generateReviewContent
+      };
 
-## Giới thiệu
+      return contentMap[template](name, info, type, platform, tone, length);
+    }
 
-${topic} là một chủ đề rất thú vị và được nhiều người quan tâm. Trong bài viết này, chúng ta sẽ khám phá những thông tin chi tiết và hữu ích nhất về ${topic}.
+    function generateProfileContent(name, info, type, platform, tone, length) {
+      const typeLabels = {
+        hotgirl: "Hot Girl",
+        tiktoker: "TikToker",
+        actress: "Diễn viên",
+        singer: "Ca sĩ/Người mẫu",
+        bikini: "Gái xinh bikini",
+        student: "Gái xinh học sinh",
+        office: "Gái xinh công sở",
+        cosplay: "Cosplay girl"
+      };
 
-## Những điều cần biết về ${topic}
+      return `# ${name} - ${typeLabels[type]} xinh đẹp được yêu thích nhất ${platform}
 
-### 1. Tổng quan
+## Giới thiệu về ${name}
 
-${topic} mang lại nhiều giá trị và lợi ích cho người dùng. Với sự phát triển của công nghệ hiện đại, việc tìm hiểu về ${topic} trở nên quan trọng hơn bao giờ hết.
+${name} là một trong những ${typeLabels[type]} nổi tiếng và được yêu thích nhất trên ${platform} hiện nay. ${info ? `Ở tuổi ${info}, ` : ""}${name} đã thu hút hàng triệu người hâm mộ nhờ vẻ đẹp tự nhiên và phong cách thời trang ấn tượng.
 
-### 2. Các đặc điểm nổi bật
+## Thông tin cá nhân
 
-- Dễ dàng tiếp cận và sử dụng
-- Mang lại hiệu quả cao trong thực tế
-- Có thể áp dụng trong nhiều lĩnh vực khác nhau
-- Được cộng đồng đánh giá cao
+### Đặc điểm nổi bật
+- **Tên thật/Nickname**: ${name}
+- **Thông tin cơ bản**: ${info || "Thông tin được cập nhật"}
+- **Nổi tiếng trên**: ${platform}
+- **Phong cách**: Năng động, trẻ trung, hiện đại
+- **Sở thích**: Thời trang, du lịch, nhiếp ảnh
 
-### 3. Hướng dẫn chi tiết
+### Điểm thu hút của ${name}
 
-Để hiểu rõ hơn về ${topic}, bạn cần lưu ý những điểm sau:
+${name} sở hữu vẻ đẹp tự nhiên cùng với phong cách thời trang rất riêng. Những bức ảnh của ${name} luôn được cộng đồng mạng yêu thích và chia sẻ rộng rãi.
 
-1. **Chuẩn bị kiến thức cơ bản**: Trước khi bắt đầu, hãy tìm hiểu những thông tin cơ bản nhất.
+## Phong cách thời trang đặc trưng
 
-2. **Thực hành thường xuyên**: Việc áp dụng kiến thức vào thực tế sẽ giúp bạn nắm vững hơn.
+### Trang phục hàng ngày
+- **Casual chic**: Kết hợp áo thun, quần jeans với các phụ kiện trendy
+- **Streetwear**: Phong cách đường phố năng động, cá tính
+- **Minimalist**: Đơn giản nhưng tinh tế, tôn lên nét đẹp tự nhiên
 
-3. **Tham khảo từ nhiều nguồn**: Đa dạng hóa nguồn thông tin để có cái nhìn toàn diện.
+### Phong cách dạo phố
+${name} thường xuất hiện với những set đồ được mix&match khéo léo, từ những chiếc áo croptop gợi cảm đến những bộ đầm suông thanh lịch.
+
+## Hoạt động trên mạng xã hội
+
+### Nội dung chính
+- **Ảnh đời thường**: Chia sẻ những khoảnh khắc thường ngày
+- **Thời trang**: Review và giới thiệu các outfit mới
+- **Du lịch**: Khám phá những địa điểm mới lạ
+- **Lifestyle**: Chia sẻ về cuộc sống, sở thích cá nhân
+
+### Tương tác với fan
+${name} luôn tích cực tương tác với người hâm mộ thông qua các bình luận, livestream và story. Điều này giúp ${name} có được một lượng fan trung thành đông đảo.
+
+## Bộ sưu tập ảnh nổi bật
+
+### Ảnh bikini gây sốt
+Những bức ảnh ${name} diện bikini luôn nhận được hàng nghìn like và comment. Vóc dáng chuẩn cùng với góc chụp professional tạo nên những shot hình cực kỳ ấn tượng.
+
+### Ảnh thời trang street style
+${name} có khả năng mix đồ rất tốt, từ những set casual đến formal đều được ${name} cân đẹp một cách hoàn hảo.
+
+## Bí quyết giữ dáng và làm đẹp
+
+### Chế độ ăn uống
+- Uống nhiều nước, ăn nhiều rau xanh
+- Hạn chế đồ ăn nhanh, đồ chiên rán
+- Bổ sung vitamin và collagen
+
+### Tập luyện thể thao
+- Yoga để giữ body chuẩn
+- Gym để tăng cơ bắp
+- Cardio để đốt cháy mỡ thừa
+
+### Skincare routine
+${name} luôn chăm sóc da cẩn thận với quy trình skincare 10 bước kiểu Hàn Quốc, giúp da luôn mịn màng và rạng rỡ.
+
+## Những dự án sắp tới
+
+${name} đang có kế hoạch mở rộng hoạt động sang các lĩnh vực khác như:
+- Hợp tác với các thương hiệu thời trang
+- Tham gia các show truyền hình
+- Phát triển kênh YouTube cá nhân
+- Kinh doanh mỹ phẩm và thời trang
 
 ## Kết luận
 
-${topic} thực sự là một chủ đề đáng quan tâm và có nhiều tiềm năng phát triển. Hy vọng thông qua bài viết này, bạn đã có được những thông tin bổ ích và có thể áp dụng vào thực tế.
+${name} là một ${typeLabels[type]} tài năng với vẻ đẹp tự nhiên và phong cách thời trang ấn tượng. Với sự năng động và tích cực trong các hoạt động mạng xã hội, ${name} chắc chắn sẽ còn thu hút nhiều người hâm mộ hơn nữa trong tương lai.
 
-*Cảm ơn bạn đã đọc bài viết. Hãy chia sẻ nếu thấy hữu ích!*`;
+*Theo dõi ${name} trên ${platform} để cập nhật những hình ảnh mới nhất và không bỏ lỡ những khoảnh khắc đẹp nhất!*`;
     }
 
-    function insertImagesIntoContent(content, mode) {
-      if (mode === 'none' || currentImageLinks.length === 0) {
-        return content;
-      }
+    function generateCollectionContent(name, info, type, platform, tone, length) {
+      return `# Bộ sưu tập ảnh ${name} - ${info || "Hot girl"} xinh đẹp nhất ${platform}
 
-      const lines = content.split('\n');
-      const imageHtml = currentImageLinks.map(link => 
-        `<img src="${link}" alt="${document.getElementById('keywordInput').value}" style="max-width:100%; height:auto; border-radius:5px; margin:10px 0;" />`
-      ).join('\n');
+## Giới thiệu bộ sưu tập
 
-      switch (mode) {
-        case 'top':
-          return imageHtml + '\n\n' + content;
-        
-        case 'bottom':
-          return content + '\n\n' + imageHtml;
-        
-        case 'distributed':
-          const sections = content.split('##');
-          let result = sections[0];
-          for (let i = 1; i < sections.length; i++) {
-            result += '##' + sections[i];
-            if (i <= currentImageLinks.length) {
-              result += '\n\n' + `<img src="${currentImageLinks[i-1]}" alt="${document.getElementById('keywordInput').value}" style="max-width:100%; height:auto; border-radius:5px; margin:10px 0;" />` + '\n';
-            }
-          }
-          return result;
-        
-        default:
-          return content;
-      }
+Chào mừng bạn đến với bộ sưu tập ảnh tuyệt đẹp của ${name}! Tổng hợp những hình ảnh đẹp nhất, gợi cảm nhất và phong cách nhất của ${name} trên ${platform}.
+
+## Ảnh bikini gây sốt
+
+### Bộ bikini trắng tinh khôi
+${name} khoe body chuẩn trong bộ bikini trắng, tạo nên những bức ảnh cực kỳ quyến rũ bên bãi biển. Làn da nâu khỏe khoắn cùng với nụ cười tỏa nắng tạo nên sức hút khó cưỡng.
+
+### Bikini họa tiết tropical
+Những bộ bikini với họa tiết nhiệt đới giúp ${name} tôn lên vẻ đẹp tự nhiên và năng động. Phong cách chụp ảnh professional kết hợp với setting bãi biển tuyệt đẹp.
+
+## Thời trang street style
+
+### Casual chic
+- Áo thun oversized + quần short jean
+- Sneakers trendy + túi xách mini
+- Phụ kiện đơn giản nhưng tinh tế
+
+### Elegant style
+- Váy midi + giày cao gót
+- Áo sơmi + chân váy bút chì
+- Trang sức nhẹ nhàng, thanh lịch
+
+## Ảnh trong phòng gym
+
+${name} thường xuyên chia sẻ những khoảnh khắc tập gym với trang phục thể thao gợi cảm. Những bức ảnh này không chỉ khoe body chuẩn mà còn truyền cảm hứng về lối sống healthy.
+
+## Ảnh du lịch check-in
+
+### Ảnh biển
+Những chuyến du lịch biển của ${name} luôn tạo ra những bức ảnh tuyệt đẹp với bikini và không gian thiên nhiên hùng vĩ.
+
+### Ảnh phố cổ
+${name} cũng rất thích chụp ảnh ở những con phố cổ với áo dài truyền thống, tạo nên sự kết hợp hài hòa giữa cổ điển và hiện đại.
+
+## Kết luận
+
+Bộ sưu tập ảnh của ${name} thể hiện một ${info || "hot girl"} đa phong cách, từ gợi cảm đến thanh lịch, từ năng động đến nữ tính. Mỗi bức ảnh đều có story riêng và thể hiện cá tính độc đáo của ${name}.
+
+*Hãy follow ${name} để cập nhật những bức ảnh mới nhất!*`;
     }
 
-    // Tạo HTML hoàn chỉnh cho Blogger
-    function generateBloggerHTML() {
-      const content = document.getElementById("aiOutput").value;
-      const topic = document.getElementById("aiTopicInput").value.trim();
-      
-      if (!content) {
-        alert("Vui lòng tạo nội dung bài viết trước!");
-        return;
-      }
+    function generateRankingContent(name, info, type, platform, tone, length) {
+      return `# Top 10 Hot Girl Nổi Tiếng Nhất ${platform} 2025 - ${name} Dẫn Đầu
 
-      // Chuyển đổi Markdown sang HTML đơn giản
-      let htmlContent = content
-        .replace(/^# (.*$)/gm, '<h1>$1</h1>')
-        .replace(/^## (.*$)/gm, '<h2>$1</h2>')
-        .replace(/^### (.*$)/gm, '<h3>$1</h3>')
-        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-        .replace(/\*(.*?)\*/g, '<em>$1</em>')
-        .replace(/^- (.*$)/gm, '<li>$1</li>')
-        .replace(/^(\d+)\. (.*$)/gm, '<li>$1. $2</li>')
-        .replace(/\n\n/g, '</p><p>')
-        .replace(/^(?!<h|<li|<img)(.+)$/gm, '<p>$1</p>')
-        .replace(/<p><\/p>/g, '')
-        .replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>')
-        .replace(/<\/ul>\s*<ul>/g, '');
+## Giới thiệu
 
-      // Tạo HTML hoàn chỉnh với meta tags SEO
-      const fullHTML = `<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${topic}</title>
-    <meta name="description" content="${topic} - Thông tin chi tiết và hữu ích">
-    <meta name="keywords" content="${document.getElementById('keywordInput').value || topic}">
-    <style>
-        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 20px; }
-        img { max-width: 100%; height: auto; border-radius: 5px; margin: 10px 0; }
-        h1, h2, h3 { color: #333; }
-        p { margin: 15px 0; }
-        ul { margin: 15px 0; padding-left: 30px; }
-        li { margin: 5px 0; }
-    </style>
-</head>
-<body>
-    <article>
-        ${htmlContent}
-    </article>
-</body>
-</html>`;
+Năm 2025, ${platform} tiếp tục là nơi hội tụ của những hot girl xinh đẹp và tài năng. Trong đó, ${name} nổi lên như một hiện tượng với vẻ đẹp tự nhiên và phong cách thời trang ấn tượng.
 
-      document.getElementById("htmlBloggerOutput").value = fullHTML;
-      showTab('html');
+## Top 10 Hot Girl ${platform} 2025
+
+### 🥇 TOP 1: ${name}
+- **Tuổi**: ${info || "Thông tin cập nhật"}
+- **Followers**: Hàng triệu người theo dõi
+- **Đặc điểm**: Vẻ đẹp tự nhiên, phong cách thời trang đa dạng
+- **Nổi tiếng**: Bộ sưu tập ảnh bikini gây sốt
+
+${name} xứng đáng là hot girl số 1 với những bức ảnh luôn viral trên mạng xã hội. Phong cách thời trang từ casual đến elegant đều được ${name} cân đẹp.
+
+### 🥈 TOP 2: Linh Chi
+- **Tuổi**: 23 tuổi
+- **Đặc điểm**: Gương mặt baby, body chuẩn
+- **Nổi tiếng**: Clip dance trending TikTok
+
+### 🥉 TOP 3: Minh Anh
+- **Tuổi**: 21 tuổi
+- **Đặc điểm**: Cute, dễ thương
+- **Nổi tiếng**: Phong cách Hàn Quốc
+
+### 🏆 TOP 4: Thu Hà
+- **Tuổi**: 24 tuổi
+- **Đặc điểm**: Sexy, quyến rũ
+- **Nổi tiếng**: Ảnh bikini professional
+
+### 🏆 TOP 5: Quỳnh Như
+- **Tuổi**: 22 tuổi
+- **Đặc điểm**: Trong trẻo, tinh khôi
+- **Nổi tiếng**: Ảnh áo dài truyền thống
+
+## Tiêu chí xếp hạng
+
+### Độ nổi tiếng
+- Số lượng followers và engagement rate
+- Mức độ viral của các bài đăng
+- Tần suất được nhắc đến trên mạng xã hội
+
+### Vẻ đẹp tự nhiên
+- Gương mặt xinh đẹp, hài hòa
+- Vóc dáng chuẩn, khỏe khoắn
+- Phong cách thời trang ấn tượng
+
+### Tài năng đặc biệt
+- Khả năng sáng tạo nội dung
+- Kỹ năng chụp ảnh, quay video
+- Khả năng tương tác với fan
+
+## Phân tích xu hướng
+
+### Phong cách được yêu thích
+1. **Natural beauty**: Vẻ đẹp tự nhiên, không quá cầu kỳ
+2. **Healthy lifestyle**: Lối sống lành mạnh, tích cực
+3. **Fashion sense**: Gu thời trang riêng biệt
+4. **Personality**: Cá tính độc đáo, thu hút
+
+### Nội dung hot trend
+- Ảnh bikini bãi biển
+- Outfit of the day (OOTD)
+- Gym & fitness
+- Travel & lifestyle
+
+## Kết luận
+
+${name} xứng đáng là hot girl số 1 ${platform} 2025 với sự kết hợp hoàn hảo giữa vẻ đẹp tự nhiên và tài năng sáng tạo nội dung. Cùng theo dõi để cập nhật những xu hướng mới nhất!
+
+*Bạn có đồng ý với bảng xếp hạng này? Hãy comment bình chọn hot girl yêu thích của bạn!*`;
     }
 
-    // Cập nhật preview
-    function updatePreview() {
-      const content = document.getElementById("aiOutput").value;
-      const previewContent = document.getElementById("previewContent");
-      
-      if (!content) {
-        previewContent.innerHTML = '<p style="color: #666; font-style: italic;">Bài viết sẽ được hiển thị ở đây sau khi tạo nội dung...</p>';
-        return;
-      }
+    function generateFashionContent(name, info, type, platform, tone, length) {
+      return `# Phong cách thời trang của ${name} - Biểu tượng style icon ${platform}
 
-      // Chuyển đổi Markdown sang HTML cho preview
-      let htmlContent = content
-        .replace(/^# (.*$)/gm, '<h1>$1</h1>')
-        .replace(/^## (.*$)/gm, '<h2>$1</h2>')
-        .replace(/^### (.*$)/gm, '<h3>$1</h3>')
-        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-        .replace(/\*(.*?)\*/g, '<em>$1</em>')
-        .replace(/^- (.*$)/gm, '<li>$1</li>')
-        .replace(/^(\d+)\. (.*$)/gm, '<li>$1. $2</li>')
-        .replace(/\n\n/g, '</p><p>')
-        .replace(/^(?!<h|<li|<img)(.+)$/gm, '<p>$1</p>')
-        .replace(/<p><\/p>/g, '')
-        .replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>')
-        .replace(/<\/ul>\s*<ul>/g, '');
+## Giới thiệu về style icon ${name}
 
-      previewContent.innerHTML = htmlContent;
+${name} không chỉ nổi tiếng với vẻ đẹp tự nhiên mà còn là một true fashionista với khả năng mix&match trang phục cực kỳ ấn tượng. ${info ? `Ở tuổi ${info}, ` : ""}${name} đã trở thành nguồn cảm hứng thời trang cho hàng triệu follower.
+
+## Phong cách chủ đạo
+
+### Minimalist Chic
+${name} thường theo đuổi phong cách tối giản nhưng tinh tế:
+- **Màu sắc**: Trắng, đen, be, xám - những tone màu cơ bản
+- **Thiết kế**: Đơn giản, không quá cầu kỳ
+- **Phụ kiện**: Tối giản nhưng chọn lọc kỹ càng
+
+### Street Style Cá Tính
+Khi xuống phố, ${name} luôn tạo ấn tượng với:
+- Áo thun oversized + quần short jean rách
+- Sneakers chunky + túi mini trendy
+- Kính râm aviator + trang sức layering
+
+## Tủ đồ must-have của ${name}
+
+### Basic Items
+1. **Áo thun trắng basic** - Item không thể thiếu
+2. **Quần jean skinny đen** - Dễ mix với mọi outfit
+3. **Váy mini đen** - Cho những buổi tối lãng mạn
+4. **Blazer oversized** - Tạo vẻ professional
+
+### Statement Pieces
+- **Crop top gợi cảm** - Khoe eo thon
+- **Bodycon dress** - Tôn lên đường cong
+- **Bikini set** - Cho những chuyến du lịch biển
+- **Áo dài cách tân** - Nét đẹp truyền thống
+
+## Outfit inspiration theo mùa
+
+### Mùa hè
+- **Beach look**: Bikini + kimono + sandal
+- **Casual day**: Crop top + short jean + sneaker
+- **Date night**: Sundress + sandal cao gót
+
+### Mùa đông
+- **Cozy chic**: Sweater oversized + boot cao cổ
+- **Office look**: Blazer + quần âu + giày oxford
+- **Party night**: Bodycon dress + coat dài
+
+## Bí quyết mix&match của ${name}
+
+### Quy tắc phối màu
+1. **Monochrome**: Cùng một tone màu từ nhạt đến đậm
+2. **Color blocking**: Phối 2-3 màu tương phản
+3. **Neutral base**: Nền neutral + 1 màu accent
+
+### Cách chọn phụ kiện
+- **Trang sức**: Layering chain, earrings minimalist
+- **Túi xách**: Từ mini bag đến tote bag tùy occasion
+- **Giày dép**: Sneaker, sandal, boot - đa dạng style
+
+## Style cho từng dịp
+
+### Đi học/đi làm
+- Smart casual với áo sơmi + quần âu
+- Comfortable với áo thun + cardigan + jean
+
+### Đi chơi/hẹn hò
+- Feminine với váy midi + giày cao gót
+- Edgy với leather jacket + ripped jean
+
+### Đi biển/du lịch
+- Resort wear với maxi dress + sandal
+- Sporty với biker short + crop top
+
+## Shopping list theo phong cách ${name}
+
+### Brands yêu thích
+- **Fast fashion**: Zara, H&M, Uniqlo
+- **Local brands**: Routine, Canifa, Ivy moda
+- **Luxury**: Chanel, Dior (các item đầu tư)
+
+### Budget friendly tips
+1. Đầu tư vào basic items chất lượng
+2. Mix đồ cũ với item mới
+3. Tận dụng phụ kiện để tạo điểm nhấn
+
+## Kết luận
+
+${name} chứng minh rằng thời trang không chỉ là về tiền bạc mà còn là về gu thẩm mỹ và cách phối đồ. Với những tips từ ${name}, bạn có thể tạo ra những outfit ấn tượng mà không cần tốn quá nhiều chi phí.
+
+*Follow ${name} để cập nhật những outfit inspiration mới nhất!*`;
     }
 
-    // Chuyển đổi tab
-    function showTab(tabName) {
-      // Ẩn tất cả tab content
-      const tabContents = document.querySelectorAll('.tab-content');
-      tabContents.forEach(content => content.classList.remove('active'));
-      
-      // Bỏ active cho tất cả tab
-      const tabs = document.querySelectorAll('.tab');
-      tabs.forEach(tab => tab.classList.remove('active'));
-      
-      // Hiển thị tab được chọn
-      document.getElementById(tabName + '-tab').classList.add('active');
-      event.target.classList.add('active');
+    function generateLifestyleContent(name, info, type, platform, tone, length) {
+      return `# Cuộc sống đời thường của ${name} - Lifestyle Goals của Gen Z
 
-      // Cập nhật preview nếu cần
-      if (tabName === 'preview') {
-        updatePreview();
-      }
+## Một ngày trong cuộc sống ${name}
+
+${name} luôn là nguồn cảm hứng lifestyle với lối sống healthy và tích cực. ${info ? `Ở tuổi ${info}, ` : ""}${name} đã xây dựng được một cuộc sống cân bằng giữa work và life.
+
+## Morning Routine
+
+### 6:00 AM - Thức dậy với positive energy
+${name} bắt đầu ngày mới bằng việc uống một ly nước chanh ấm để detox cơ thể. Điều này giúp ${name} có được làn da sáng khỏe và hệ tiêu hóa tốt.
+
+### 6:30 AM - Workout session
+- **Yoga**: 30 phút để stretch cơ thể
+- **Cardio**: 20 phút chạy bộ hoặc jumping jack
+- **Strength training**: Tập tạ nhẹ để giữ dáng
+
+### 7:30 AM - Skincare routine
+Quy trình chăm sóc da 10 bước:
+1. Tẩy trang (nếu có makeup từ hôm trước)
+2. Sữa rửa mặt gentle
+3. Toner cân bằng pH
+4. Essence hydrating
+5. Serum vitamin C
+6. Moisturizer
+7. Sunscreen (SPF 50+)
+
+## Chế độ ăn uống healthy
+
+### Breakfast
+- **Smoothie bowl**: Chuối + dâu + granola + hạt chia
+- **Overnight oats**: Yến mạch + sữa hạnh nhân + mật ong
+- **Avocado toast**: Bánh mì nguyên cám + bơ + trứng
+
+### Lunch
+- **Salad bowl**: Rau xanh + protein + quinoa
+- **Poke bowl**: Cá hồi + cơm + rau củ
+- **Healthy wrap**: Bánh tortilla + thịt gà + rau
+
+### Dinner
+- **Grilled**: Cá/thịt nướng + rau củ
+- **Soup**: Canh rau củ + protein
+- **Light meal**: Chào hoặc súp không quá no
+
+## Thói quen chăm sóc sức khỏe
+
+### Physical Health
+- **Gym**: 4-5 lần/tuần
+- **Yoga**: Mỗi sáng 30 phút
+- **Massage**: 2 lần/tháng để relax
+- **Check-up**: Định kỳ mỗi 6 tháng
+
+### Mental Health
+- **Meditation**: 10 phút mỗi ngày
+- **Journaling**: Viết nhật ký cảm xúc
+- **Reading**: Đọc sách self-help và novel
+- **Me time**: Thời gian riêng cho bản thân
+
+## Sở thích và hobbies
+
+### Nhiếp ảnh
+${name} đam mê chụp ảnh và có khả năng composition rất tốt. Những bức ảnh của ${name} không chỉ đẹp mà còn có story riêng.
+
+### Du lịch
+- **Biển**: Những chuyến đi biển để recharge
+- **Phố cổ**: Khám phá văn hóa truyền thống
+- **Núi rừng**: Kết nối với thiên nhiên
+
+### Cooking
+${name} thích nấu ăn và thường chia sẻ công thức healthy recipes cho fan.
+
+## Work-Life Balance
+
+### Công việc
+- **Content creation**: Tạo nội dung chất lượng cho ${platform}
+- **Collaboration**: Hợp tác với brands
+- **Planning**: Lập kế hoạch content strategy
+
+### Thời gian riêng
+- **Gia đình**: Dành thời gian với người thân
+- **Bạn bè**: Gặp gỡ, chia sẻ với friends
+- **Hobbies**: Phát triển sở thích cá nhân
+
+## Evening Routine
+
+### 8:00 PM - Skincare buổi tối
+- Double cleansing
+- Exfoliation (2-3 lần/tuần)
+- Toner
+- Treatment serum
+- Night cream
+- Lip balm
+
+### 9:00 PM - Relax time
+- Đọc sách hoặc xem phim
+- Nghe nhạc thư giãn
+- Chat với bạn bè/gia đình
+
+### 10:00 PM - Chuẩn bị ngủ
+- Tắt điện thoại
+- Thiền hoặc stretching nhẹ
+- Đi ngủ để có 8 tiếng nghỉ ngơi
+
+## Bí quyết happiness
+
+### Gratitude Practice
+${name} luôn biết ơn những gì mình có và thường viết gratitude journal.
+
+### Stay Positive
+- Surrounding với positive people
+- Tránh xa drama và negative energy
+- Focus vào những điều tích cực
+
+### Continuous Learning
+- Đọc sách phát triển bản thân
+- Học các kỹ năng mới
+- Tham gia workshop/course
+
+## Kết luận
+
+Cuộc sống của ${name} là minh chứng cho việc một lifestyle healthy và balanced hoàn toàn có thể đạt được. Với những thói quen tích cực và mindset đúng đắn, ${name} đã tạo ra một cuộc sống đáng ngưỡng mộ.
+
+*Hãy follow ${name} để học hỏi thêm những lifestyle tips hữu ích!*`;
     }
 
-    // Copy to clipboard
-    function copyToClipboard(elementId) {
-      const element = document.getElementById(elementId);
-      element.select();
-      document.execCommand('copy');
-      
-      // Hiển thị thông báo copy thành công
-      const successElement = document.getElementById(elementId.replace('Output', 'CopySuccess'));
-      if (successElement) {
-        successElement.classList.add('show');
-        setTimeout(() => {
-          successElement.classList.remove('show');
-        }, 2000);
-      }
-    }
+    function generateReviewContent(name, info, type, platform, tone, length) {
+      return `# Bí quyết làm đẹp của ${name} - Review chi tiết từ skincare đến makeup
 
-    // Tự động cập nhật preview khi nội dung thay đổi
-    document.getElementById('aiOutput').addEventListener('input', updatePreview);
-  </script>
-</body>
-</html>
+## Giới thiệu
+
+${name} luôn được biết đến với làn da mịn màng và vẻ đẹp tự nhiên. ${info ? `Ở tuổi ${info}, ` : ""}${name} đã có những bí quyết làm đẹp riêng và sẵn sàng chia sẻ với mọi người.
+
+## Skincare Routine của ${name}
+
+### Morning Skincare
+**Bước 1: Sữa rửa mặt**
+- **Sản phẩm**: CeraVe Foaming Facial Cleanser
+- **Đánh giá**: ⭐⭐⭐⭐⭐
+- **Ưu điểm**: Gentle, không làm khô da
+- **Giá**: 350K cho 355ml
+
+**Bước 2: Toner**
+- **Sản phẩm**: Paula's Choice BHA Liquid Exfoliant
+- **Đánh giá**: ⭐⭐⭐⭐⭐
+- **Ưu điểm**: Giúp se khít lỗ chân lông, làm sạch sâu
+- **Giá**: 750K cho 118ml
+
+**Bước 3: Serum**
+- **Sản phẩm**: The Ordinary Vitamin C Suspension
+- **Đánh giá**: ⭐⭐⭐⭐
+- **Ưu điểm**: Sáng da, chống lão hóa
+- **Giá**: 180K cho 30ml
+
+**Bước 4: Moisturizer**
+- **Sản phẩm**: Neutrogena Hydro Boost
+- **Đánh giá**: ⭐⭐⭐⭐⭐
+- **Ưu điểm**: Cấp ẩm tốt, không gây bóng nhờn
+- **Giá**: 420K cho 50ml
+
+**Bước 5: Sunscreen**
+- **Sản phẩm**: La Roche-Posay Anthelios SPF 60
+- **Đánh giá**: ⭐⭐⭐⭐⭐
+- **Ưu điểm**: Bảo vệ tối đa, không gây trắng bệch
+- **Giá**: 450K cho 50ml
+
+### Evening Skincare
+**Tẩy trang**: Bioderma Sensibio H2O
+**Sữa rửa mặt**: Như buổi sáng
+**Treatment**: Retinol 0.5% (2-3 lần/tuần)
+**Night cream**: Olay Regenerist Night Recovery Cream
+
+## Makeup Routine
+
+### Base Makeup
+**Primer**: Smashbox Photo Finish Primer
+- **Đánh giá**: ⭐⭐⭐⭐⭐
+- **Ưu điểm**: Giữ makeup lâu, làm mịn da
+- **Tip**: Chỉ cần một lượng nhỏ
+
+**Foundation**: Fenty Beauty Pro Filt'r
+- **Đánh giá**: ⭐⭐⭐⭐⭐
+- **Ưu điểm**: Coverage tốt, tự nhiên
+- **Shade**: 240 (Medium with warm undertones)
+
+**Concealer**: Tarte Shape Tape
+- **Đánh giá**: ⭐⭐⭐⭐⭐
+- **Ưu điểm**: Che khuyết điểm hoàn hảo
+- **Tip**: Dùng ít thôi, dễ bị cakey
+
+### Eye Makeup
+**Eyeshadow Palette**: Urban Decay Naked3
+- **Đánh giá**: ⭐⭐⭐⭐⭐
+- **Ưu điểm**: Màu đẹp, dễ blend
+- **Favorite shades**: Dust, Burnout, Nooner
+
+**Eyeliner**: Stila Stay All Day
+- **Đánh giá**: ⭐⭐⭐⭐⭐
+- **Ưu điểm**: Không trôi, dễ kẻ
+- **Tip**: Kẻ sát chân mi để tự nhiên
+
+**Mascara**: Benefit They're Real!
+- **Đánh giá**: ⭐⭐⭐⭐
+- **Ưu điểm**: Cong mi, không lem
+- **Tip**: Dùng lược mi trước khi thoa
+
+### Lip Makeup
+**Lip Balm**: Burt's Bees (base)
+**Lip Tint**: Peripera Ink Velvet
+- **Đánh giá**: ⭐⭐⭐⭐⭐
+- **Ưu điểm**: Màu đẹp, lâu trôi
+- **Favorite shade**: #08 Glimpse Brick Brown
+
+## Haircare Routine
+
+### Shampoo & Conditioner
+**Shampoo**: Herbal Essences Bio:Renew
+**Conditioner**: Cùng dòng với shampoo
+**Hair mask**: Olaplex No.3 (1 lần/tuần)
+
+### Styling Products
+**Heat protectant**: TRESemmé Thermal Creations
+**Hair oil**: Moroccan Oil Treatment
+**Dry shampoo**: Batiste (cho ngày không gội)
+
+## Body Care
+
+### Tắm và tẩy tế bào chết
+**Body wash**: Dove Deep Moisture
+**Scrub**: Frank Body Coffee Scrub (2 lần/tuần)
+**Lotion**: Vaseline Intensive Care
+
+### Nail Care
+**Base coat**: Essie First Base
+**Nail polish**: Essie/OPI
+**Top coat**: Essie Good to Go
+
+## Lifestyle Beauty Tips
+
+### Nutrition cho da đẹp
+- **Uống đủ nước**: 2-3 lít/ngày
+- **Vitamin C**: Cam, kiwi, dâu tây
+- **Omega-3**: Cá hồi, hạt chia
+- **Zinc**: Hạt bí, thịt nạc
+
+### Exercise cho da healthy
+- **Cardio**: Tăng tuần hoàn máu
+- **Yoga**: Giảm stress, tăng oxygen
+- **Strength training**: Tăng hormone tốt
+
+### Sleep Beauty
+- **8 tiếng ngủ**: Để da tái tạo
+- **Silk pillowcase**: Giảm ma sát với da và tóc
+- **Humidifier**: Giữ ẩm không khí
+
+## Budget-Friendly Alternatives
+
+### Skincare Drugstore
+- **Cleanser**: Cetaphil Daily Facial Cleanser
+- **Moisturizer**: Cetaphil Daily Moisturizer
+- **Sunscreen**: Neutrogena Ultra Sheer
+
+### Makeup Dupes
+- **Foundation**: Maybelline Fit Me thay cho Fenty
+-
