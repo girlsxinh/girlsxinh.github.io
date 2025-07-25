@@ -1,962 +1,235 @@
+
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <title>Tool xử lý ảnh SEO + Viết bài AI cho Blogger - Nâng cao</title>
+  <meta charset="UTF-8">
+  <title>Upload ảnh lên Imgur</title>
   <style>
-    body { 
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-      padding: 20px; 
-      max-width: 1200px; 
-      margin: auto; 
-      background: #f5f5f5;
+    body.loading .loading-modal { display: block; }
+    .dropzone {
+      border: 2px dashed #999;
+      border-radius: 10px;
+      position: relative;
+      margin: 0 auto;
+      clear: both;
     }
-    .container { 
-      background: white; 
-      padding: 30px; 
-      border-radius: 10px; 
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      margin-bottom: 20px;
-    }
-    h2 { 
-      color: #2c3e50; 
-      text-align: center; 
-      margin-bottom: 30px;
-      font-size: 28px;
-    }
-    h3 { 
-      color: #34495e; 
-      border-bottom: 2px solid #3498db; 
-      padding-bottom: 10px;
-      margin-top: 30px;
-    }
-    img { 
-      max-width: 150px; 
-      border: 2px solid #ddd; 
-      margin: 5px; 
-      border-radius: 5px;
-      transition: transform 0.3s ease;
-    }
-    img:hover { transform: scale(1.05); }
-    .preview-wrapper { 
-      display: flex; 
-      flex-wrap: wrap; 
-      gap: 10px; 
-      margin: 20px 0;
-      padding: 20px;
-      background: #f8f9fa;
-      border-radius: 8px;
-    }
-    textarea, input[type=text], select { 
-      width: 100%; 
-      box-sizing: border-box; 
-      padding: 12px;
-      border: 2px solid #ddd;
-      border-radius: 5px;
-      font-size: 14px;
-    }
-    textarea { 
-      height: 200px; 
-      margin-top: 10px; 
-      font-family: 'Courier New', monospace;
-      resize: vertical;
-    }
-    button { 
-      margin-top: 10px; 
-      margin-right: 10px; 
-      padding: 12px 20px; 
-      background: linear-gradient(45deg, #3498db, #2980b9);
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: all 0.3s ease;
-    }
-    button:hover { 
-      background: linear-gradient(45deg, #2980b9, #3498db);
-      transform: translateY(-2px);
-    }
-    button.copy-btn {
-      background: linear-gradient(45deg, #27ae60, #2ecc71);
-      padding: 8px 15px;
-      font-size: 12px;
-    }
-    button.copy-btn:hover {
-      background: linear-gradient(45deg, #2ecc71, #27ae60);
-    }
-    button.special-btn {
-      background: linear-gradient(45deg, #e74c3c, #c0392b);
-    }
-    button.special-btn:hover {
-      background: linear-gradient(45deg, #c0392b, #e74c3c);
-    }
-    #aiOutput { height: 300px; }
-    #htmlBloggerOutput { height: 400px; }
-    .status { 
-      color: #27ae60; 
-      font-weight: bold; 
-      margin: 10px 0;
-    }
-    .error { color: #e74c3c; }
-    .success { color: #27ae60; }
-    .input-group {
-      margin-bottom: 20px;
-    }
-    .input-group label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: bold;
-      color: #2c3e50;
-    }
-    .preview-container {
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    .infoimg {
+      margin: 0 auto;
       margin-top: 20px;
+      margin-bottom: 20px;
     }
-    .preview-content {
-      line-height: 1.6;
+    .dropzone p {
+      margin: 0;
+      text-align: center;
+      width: 100%;
+      font-weight: bold;
+      color: #999;
+    }
+    .input {
+      height: 100%;
+      left: 0;
+      outline: 0;
+      opacity: 0;
+      position: absolute;
+      top: 0;
+      width: 100%;
+      cursor: pointer;
+    }
+    .status {
+      border-radius: 5px;
+      text-align: center;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .image-url {
+      width: calc(100% - 10px);
+      padding: 5px;
+      border: 1px solid #999;
+      border-radius: 5px;
       color: #333;
     }
-    .preview-content h1, .preview-content h2, .preview-content h3 {
-      color: #2c3e50;
-    }
-    .preview-content img {
-      max-width: 100%;
-      height: auto;
-      margin: 10px 0;
-      border-radius: 5px;
-    }
-    .tabs {
-      display: flex;
-      margin-bottom: 20px;
-      border-bottom: 2px solid #ddd;
-    }
-    .tab {
-      padding: 10px 20px;
-      cursor: pointer;
-      background: #f8f9fa;
-      border: none;
-      border-bottom: 2px solid transparent;
-      margin-right: 5px;
-      border-radius: 5px 5px 0 0;
-    }
-    .tab.active {
-      background: #3498db;
-      color: white;
-      border-bottom-color: #3498db;
-    }
-    .tab-content {
+    .linkimg { margin: 20px 0; }
+    .dropzone.dropzone-dragging { border-color: #000; }
+    .loading-modal {
+      background-color: rgba(255,255,255,.8);
       display: none;
+      position: fixed;
+      z-index: 1000;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
     }
-    .tab-content.active {
-      display: block;
+    .loading-table {
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 15%;
+      margin-bottom: 15%;
     }
-    .copy-success {
-      background: #2ecc71;
+    #copyAllLinksBtn {
+      margin: 20px auto;
+      display: none;
+      padding: 10px 20px;
+      background: #007bff;
       color: white;
-      padding: 5px 10px;
-      border-radius: 3px;
-      font-size: 12px;
-      margin-left: 10px;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-    .copy-success.show {
-      opacity: 1;
-    }
-    .content-type-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 15px;
-      margin: 20px 0;
-    }
-    .content-type-card {
-      background: #f8f9fa;
-      padding: 15px;
+      border: none;
       border-radius: 8px;
-      border: 2px solid #ddd;
       cursor: pointer;
-      transition: all 0.3s ease;
-      text-align: center;
-    }
-    .content-type-card:hover {
-      border-color: #3498db;
-      transform: translateY(-2px);
-    }
-    .content-type-card.selected {
-      border-color: #e74c3c;
-      background: #fff5f5;
-    }
-    .content-type-card h4 {
-      margin: 0 0 10px 0;
-      color: #2c3e50;
-    }
-    .content-type-card p {
-      margin: 0;
-      color: #666;
-      font-size: 14px;
-    }
-    .advanced-options {
-      background: #f8f9fa;
-      padding: 20px;
-      border-radius: 8px;
-      margin: 20px 0;
-    }
-    .option-row {
-      display: flex;
-      gap: 20px;
-      margin-bottom: 15px;
-      align-items: center;
-    }
-    .option-row label {
-      min-width: 150px;
-      margin-bottom: 0;
-    }
-    .option-row select, .option-row input {
-      flex: 1;
+      font-size: 16px;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h2>🛠️ Tool Xử Lý Ảnh SEO + Viết Bài AI cho Blogger - Nâng Cao</h2>
-
-    <section>
-      <h3>1. Xử lý ảnh</h3>
-      
-      <div class="input-group">
-        <label>📤 Chọn ảnh:</label>
-        <input type="file" id="imageInput" accept="image/*" multiple />
-      </div>
-
-      <div class="input-group">
-        <label>🔑 Từ khóa SEO:</label>
-        <input type="text" id="keywordInput" placeholder="Ví dụ: Quỳnh Alee bikini" />
-      </div>
-
-      <div class="input-group">
-        <label>🖼️ Định dạng ảnh:</label>
-        <select id="formatSelect">
-          <option value="jpeg">JPEG</option>
-          <option value="webp">WebP</option>
-        </select>
-      </div>
-
-      <div class="input-group">
-        <label>🔖 Chọn watermark (PNG):</label>
-        <input type="file" id="watermarkInput" accept="image/png" />
-      </div>
-
-      <button onclick="processImages()">🔥 Xử lý ảnh & Tải về</button>
-      <button onclick="generateHtml()">📋 Sinh HTML chèn ảnh</button>
-
-      <div class="preview-wrapper" id="preview"></div>
-
-      <div class="input-group">
-        <label>📄 Mã HTML ảnh để chèn:</label>
-        <button class="copy-btn" onclick="copyToClipboard('htmlOutput')">📋 Copy HTML</button>
-        <span id="htmlCopySuccess" class="copy-success">Đã copy!</span>
-        <textarea id="htmlOutput" readonly placeholder="HTML ảnh sẽ hiện ở đây sau khi xử lý..."></textarea>
-      </div>
-    </section>
-
-    <hr style="margin: 40px 0; border: 1px solid #ddd;" />
-
-    <section>
-      <h3>2. Viết bài tự động bằng AI</h3>
-      
-      <div class="input-group">
-        <label>📝 Chọn loại nội dung:</label>
-        <div class="content-type-grid">
-          <div class="content-type-card" onclick="selectContentType('general')">
-            <h4>🌟 Nội dung tổng quát</h4>
-            <p>Bài viết thông thường về các chủ đề khác nhau</p>
-          </div>
-          <div class="content-type-card" onclick="selectContentType('facebook-girl')">
-            <h4>👩 Gái xinh Facebook</h4>
-            <p>Bài viết về những cô gái nổi tiếng trên Facebook</p>
-          </div>
-          <div class="content-type-card" onclick="selectContentType('hot-girl')">
-            <h4>🔥 Hot girl</h4>
-            <p>Nội dung về các hot girl nổi tiếng</p>
-          </div>
-          <div class="content-type-card" onclick="selectContentType('actress')">
-            <h4>🎭 Diễn viên</h4>
-            <p>Bài viết về các diễn viên, ngôi sao điện ảnh</p>
-          </div>
-          <div class="content-type-card" onclick="selectContentType('singer')">
-            <h4>🎤 Ca sĩ</h4>
-            <p>Nội dung về các ca sĩ, nghệ sĩ âm nhạc</p>
-          </div>
-          <div class="content-type-card" onclick="selectContentType('beauty-photos')">
-            <h4>📸 Ảnh gái xinh</h4>
-            <p>Bài viết giới thiệu bộ sưu tập ảnh đẹp</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="input-group">
-        <label>📝 Nhập tên/chủ đề:</label>
-        <input type="text" id="aiTopicInput" placeholder="Ví dụ: Quỳnh Alee, Du lịch Đà Nẵng..." />
-      </div>
-
-      <div class="advanced-options">
-        <h4>⚙️ Tùy chọn nâng cao</h4>
-        
-        <div class="option-row">
-          <label>🎨 Phong cách viết:</label>
-          <select id="writingStyle">
-            <option value="casual">Thân thiện, gần gũi</option>
-            <option value="professional">Chuyên nghiệp</option>
-            <option value="trendy">Xu hướng, hiện đại</option>
-            <option value="romantic">Lãng mạn, tình cảm</option>
-          </select>
-        </div>
-
-        <div class="option-row">
-          <label>📏 Độ dài bài viết:</label>
-          <select id="contentLength">
-            <option value="short">Ngắn (300-500 từ)</option>
-            <option value="medium">Trung bình (500-800 từ)</option>
-            <option value="long">Dài (800-1200 từ)</option>
-          </select>
-        </div>
-
-        <div class="option-row">
-          <label>🎯 Mục đích:</label>
-          <select id="contentPurpose">
-            <option value="introduce">Giới thiệu</option>
-            <option value="review">Đánh giá</option>
-            <option value="news">Tin tức</option>
-            <option value="gallery">Thư viện ảnh</option>
-            <option value="interview">Phỏng vấn</option>
-          </select>
-        </div>
-
-        <div class="option-row">
-          <label>🖼️ Chèn ảnh:</label>
-          <select id="imageInsertMode">
-            <option value="none">Không chèn ảnh</option>
-            <option value="top">Chèn ảnh đầu bài</option>
-            <option value="distributed">Phân bố ảnh trong bài</option>
-            <option value="bottom">Chèn ảnh cuối bài</option>
-          </select>
-        </div>
-      </div>
-
-      <button onclick="generateAIArticle()" class="special-btn">🤖 Tạo bài viết tự động</button>
-      <button onclick="generateBloggerHTML()">📝 Tạo HTML Blogger hoàn chỉnh</button>
-      <button onclick="generateSEOTags()">🔍 Tạo SEO Tags</button>
-
-      <p id="aiStatus" class="status"></p>
-
-      <div class="tabs">
-        <button class="tab active" onclick="showTab('content')">📝 Nội dung</button>
-        <button class="tab" onclick="showTab('html')">🔧 HTML Blogger</button>
-        <button class="tab" onclick="showTab('seo')">🔍 SEO Tags</button>
-        <button class="tab" onclick="showTab('preview')">👁️ Xem trước</button>
-      </div>
-
-      <div id="content-tab" class="tab-content active">
-        <div class="input-group">
-          <label>Nội dung bài viết:</label>
-          <button class="copy-btn" onclick="copyToClipboard('aiOutput')">📋 Copy nội dung</button>
-          <span id="contentCopySuccess" class="copy-success">Đã copy!</span>
-          <textarea id="aiOutput" placeholder="Nội dung bài viết tự động sẽ hiện ở đây..."></textarea>
-        </div>
-      </div>
-
-      <div id="html-tab" class="tab-content">
-        <div class="input-group">
-          <label>HTML hoàn chỉnh cho Blogger:</label>
-          <button class="copy-btn" onclick="copyToClipboard('htmlBloggerOutput')">📋 Copy HTML</button>
-          <span id="htmlBloggerCopySuccess" class="copy-success">Đã copy!</span>
-          <textarea id="htmlBloggerOutput" placeholder="HTML hoàn chỉnh cho Blogger sẽ hiện ở đây..."></textarea>
-        </div>
-      </div>
-
-      <div id="seo-tab" class="tab-content">
-        <div class="input-group">
-          <label>SEO Tags và Meta Description:</label>
-          <button class="copy-btn" onclick="copyToClipboard('seoOutput')">📋 Copy SEO</button>
-          <span id="seoCopySuccess" class="copy-success">Đã copy!</span>
-          <textarea id="seoOutput" placeholder="SEO tags sẽ hiện ở đây..."></textarea>
-        </div>
-      </div>
-
-      <div id="preview-tab" class="tab-content">
-        <div class="preview-container">
-          <h3>👁️ Xem trước bài viết</h3>
-          <div id="previewContent" class="preview-content">
-            <p style="color: #666; font-style: italic;">Bài viết sẽ được hiển thị ở đây sau khi tạo nội dung...</p>
-          </div>
-        </div>
-      </div>
-    </section>
+  <div class="dropzone">
+    <div class="infoimg"></div>
   </div>
+  <div class="status"></div>
+  <button id="copyAllLinksBtn">📋 Copy tất cả link ảnh</button>
 
-  <script>
-    let processedImages = [];
-    let currentImageLinks = [];
-    let selectedContentType = 'general';
-
-    // Hàm chuyển chuỗi tiếng Việt có dấu sang không dấu
-    function removeVietnamese(str) {
-      str = str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-      str = str.replace(/đ/g, "d").replace(/Đ/g, "D");
-      str = str.replace(/[^a-zA-Z0-9\s]/g, "");
-      return str.trim().replace(/\s+/g, "-").toLowerCase();
-    }
-
-    // Chọn loại nội dung
-    function selectContentType(type) {
-      selectedContentType = type;
-      document.querySelectorAll('.content-type-card').forEach(card => {
-        card.classList.remove('selected');
-      });
-      event.target.closest('.content-type-card').classList.add('selected');
-    }
-
-    // Xử lý ảnh
-    function processImages() {
-      const images = document.getElementById("imageInput").files;
-      const keyword = document.getElementById("keywordInput").value.trim();
-      const format = document.getElementById("formatSelect").value;
-      const watermarkFile = document.getElementById("watermarkInput").files[0];
-
-      if (!images.length || !keyword) {
-        alert("Vui lòng chọn ảnh và nhập từ khóa.");
-        return;
+  <script type="text/javascript">
+    (function (root, factory) {
+      if (typeof define === 'function' && define.amd) {
+        define([], factory);
+      } else if (typeof exports === 'object') {
+        module.exports = factory();
+      } else {
+        root.Imgur = factory();
       }
-
-      const cleanName = removeVietnamese(keyword);
-      const preview = document.getElementById("preview");
-      preview.innerHTML = "";
-      processedImages = [];
-      currentImageLinks = [];
-
-      Array.from(images).forEach((image, index) => {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          const img = new Image();
-          img.onload = function() {
-            const maxWidth = 1200;
-            let scale = 1;
-            if (img.width > maxWidth) {
-              scale = maxWidth / img.width;
-            }
-            const canvas = document.createElement("canvas");
-            canvas.width = img.width * scale;
-            canvas.height = img.height * scale;
-            const ctx = canvas.getContext("2d");
-            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-            if (watermarkFile) {
-              const wmReader = new FileReader();
-              wmReader.onload = function(ev) {
-                const wmImg = new Image();
-                wmImg.onload = function() {
-                  const wmScale = 0.2 * scale;
-                  const wmWidth = wmImg.width * wmScale;
-                  const wmHeight = wmImg.height * wmScale;
-                  ctx.drawImage(wmImg, canvas.width - wmWidth - 10, canvas.height - wmHeight - 10, wmWidth, wmHeight);
-                  exportImage(canvas, cleanName, index, format, preview, keyword);
-                };
-                wmImg.src = ev.target.result;
-              };
-              wmReader.readAsDataURL(watermarkFile);
-            } else {
-              exportImage(canvas, cleanName, index, format, preview, keyword);
+    }(this, function () {
+      var Imgur = function (options) {
+        if (!this || !(this instanceof Imgur)) return new Imgur(options);
+        if (!options) options = {};
+        if (!options.clientid) throw 'Provide a valid Client Id here: https://api.imgur.com/';
+        this.clientid = options.clientid;
+        this.endpoint = 'https://api.imgur.com/3/image';
+        this.callback = options.callback || undefined;
+        this.dropzone = document.querySelectorAll('.dropzone');
+        this.infoimg = document.querySelectorAll('.infoimg');
+        this.run();
+      };
+      Imgur.prototype = {
+        createEls: function (name, props, text) {
+          var el = document.createElement(name), p;
+          for (p in props) if (props.hasOwnProperty(p)) el[p] = props[p];
+          if (text) el.appendChild(document.createTextNode(text));
+          return el;
+        },
+        insertAfter: function (ref, node) {
+          ref.parentNode.insertBefore(node, ref.nextSibling);
+        },
+        post: function (path, data, callback) {
+          var xhttp = new XMLHttpRequest();
+          xhttp.open('POST', path, true);
+          xhttp.setRequestHeader('Authorization', 'Client-ID ' + this.clientid);
+          xhttp.onreadystatechange = function () {
+            if (this.readyState === 4) {
+              if (this.status >= 200 && this.status < 300) {
+                var response = '';
+                try { response = JSON.parse(this.responseText); } catch (err) { response = this.responseText; }
+                callback.call(window, response);
+              } else {
+                throw new Error(this.status + " - " + this.statusText);
+              }
             }
           };
-          img.src = e.target.result;
-        };
-        reader.readAsDataURL(image);
-      });
-    }
-
-    function exportImage(canvas, baseName, index, format, preview, keyword) {
-      if (!canvas.toBlob) {
-        alert("Trình duyệt của bạn không hỗ trợ tính năng này.");
-        return;
-      }
-      canvas.toBlob(function(blob) {
-        const fileName = `${baseName}-${index + 1}.${format}`;
-        const url = URL.createObjectURL(blob);
-
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = fileName;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-
-        const imgTag = document.createElement("img");
-        imgTag.src = url;
-        imgTag.title = fileName;
-        imgTag.alt = keyword;
-        preview.appendChild(imgTag);
-
-        processedImages.push({
-          url: url,
-          filename: fileName,
-          alt: keyword,
-          title: fileName
-        });
-
-        const placeholderLink = `https://your-image-host.com/${fileName}`;
-        currentImageLinks.push(placeholderLink);
-
-        setTimeout(() => {
-          URL.revokeObjectURL(url);
-        }, 300000);
-      }, `image/${format}`, 0.9);
-    }
-
-    function generateHtml() {
-      const imgs = document.querySelectorAll("#preview img");
-      let html = "";
-      imgs.forEach((img, index) => {
-        const placeholderLink = `https://your-image-host.com/${img.title}`;
-        html += `<img src="${placeholderLink}" alt="${img.alt}" title="${img.title}" style="max-width:100%; height:auto; border-radius:5px; margin:10px 0;" /><br>\n`;
-      });
-      document.getElementById("htmlOutput").value = html;
-    }
-
-    // Tạo bài viết AI với khả năng chèn ảnh
-    async function generateAIArticle() {
-      const topic = document.getElementById("aiTopicInput").value.trim();
-      const aiStatus = document.getElementById("aiStatus");
-      const aiOutput = document.getElementById("aiOutput");
-      const insertMode = document.getElementById("imageInsertMode").value;
-      const writingStyle = document.getElementById("writingStyle").value;
-      const contentLength = document.getElementById("contentLength").value;
-      const contentPurpose = document.getElementById("contentPurpose").value;
-
-      if (!topic) {
-        alert("Vui lòng nhập tên/chủ đề bài viết.");
-        return;
-      }
-
-      aiStatus.textContent = "Đang tạo bài viết... vui lòng chờ trong giây lát.";
-      aiStatus.className = "status";
-      aiOutput.value = "";
-
-      const sampleContent = generateSpecializedContent(topic, selectedContentType, writingStyle, contentLength, contentPurpose);
-      const contentWithImages = insertImagesIntoContent(sampleContent, insertMode);
-      
-      aiOutput.value = contentWithImages;
-      aiStatus.textContent = "Tạo bài viết thành công!";
-      aiStatus.className = "status success";
-
-      updatePreview();
-    }
-
-    function generateSpecializedContent(topic, type, style, length, purpose) {
-      const contentTemplates = {
-        'facebook-girl': {
-          title: `${topic} - Gái xinh Facebook đang được cộng đồng mạng yêu thích`,
-          intro: `${topic} là một trong những cô gái xinh đẹp được cộng đồng mạng Việt Nam yêu thích nhất hiện nay. Với vẻ đẹp tự nhiên và phong cách thời trang ấn tượng, ${topic} đã thu hút hàng triệu lượt theo dõi trên Facebook.`,
-          sections: [
-            'Tiểu sử và thông tin cá nhân',
-            'Hành trình nổi tiếng trên mạng xã hội',
-            'Phong cách thời trang đặc trưng',
-            'Những bức ảnh gây ấn tượng mạnh',
-            'Tương tác với cộng đồng fan'
-          ]
+          xhttp.send(data);
+          xhttp = null;
         },
-        'hot-girl': {
-          title: `${topic} - Hot girl nổi tiếng với vẻ đẹp thu hút`,
-          intro: `${topic} được biết đến là một trong những hot girl có sức hút mạnh mẽ nhất trên mạng xã hội. Với vẻ đẹp quyến rũ và tính cách thú vị, cô nàng đã trở thành biểu tượng của thế hệ trẻ.`,
-          sections: [
-            'Thông tin cá nhân và xuất thân',
-            'Hành trình trở thành hot girl',
-            'Bí quyết giữ dáng và làm đẹp',
-            'Phong cách sống và sở thích',
-            'Tương tác với fan và cộng đồng'
-          ]
+        createDragZone: function () {
+          var p1 = this.createEls('p', {}, 'Kéo file ảnh vào đây');
+          var p2 = this.createEls('p', {}, 'Hoặc click để chọn ảnh');
+          var input = this.createEls('input', { type: 'file', className: 'input', accept: 'image/*', multiple: true });
+          this.infoimg.forEach(zone => { zone.appendChild(p1); zone.appendChild(p2); });
+          this.dropzone.forEach(zone => { zone.appendChild(input); this.status(zone); this.upload(zone); });
         },
-        'actress': {
-          title: `${topic} - Diễn viên tài năng với sự nghiệp ấn tượng`,
-          intro: `${topic} là một trong những diễn viên được yêu thích nhất của màn ảnh Việt. Với tài năng diễn xuất xuất sắc và vẻ đẹp tự nhiên, cô đã để lại dấu ấn sâu đậm trong lòng khán giả.`,
-          sections: [
-            'Tiểu sử và quá trình học tập',
-            'Hành trình sự nghiệp diễn xuất',
-            'Những vai diễn ấn tượng',
-            'Cuộc sống cá nhân và gia đình',
-            'Dự án sắp tới và định hướng tương lai'
-          ]
+        loading: function () {
+          var div = this.createEls('div', { className: 'loading-modal' });
+          var table = this.createEls('table', { className: 'loading-table' });
+          var img = this.createEls('img', { className: 'loading-image', src: 'https://firebasestorage.googleapis.com/v0/b/huydc-090288.appspot.com/o/Images%20Upload%2Floading-spin.svg?alt=media&token=8a1fd8dc-30b2-4b74-acc6-9e4ce55a89b0' });
+          div.appendChild(table); table.appendChild(img); document.body.appendChild(div);
         },
-        'singer': {
-          title: `${topic} - Ca sĩ tài năng với giọng hát đầy cảm xúc`,
-          intro: `${topic} là một trong những ca sĩ được yêu thích nhất trong làng nhạc Việt. Với giọng hát đầy cảm xúc và phong cách âm nhạc độc đáo, ${topic} đã chinh phục trái tim của hàng triệu fan.`,
-          sections: [
-            'Hành trình âm nhạc và sự nghiệp',
-            'Những ca khúc hit làm nên tên tuổi',
-            'Phong cách âm nhạc đặc trưng',
-            'Cuộc sống và sở thích cá nhân',
-            'Dự án âm nhạc sắp tới'
-          ]
+        status: function (el) {
+          var div = this.createEls('div', { className: 'status' });
+          this.insertAfter(el, div);
         },
-        'beauty-photos': {
-          title: `Bộ sưu tập ảnh ${topic} - Vẻ đẹp tự nhiên và quyến rũ`,
-          intro: `Bộ sưu tập ảnh ${topic} mang đến những khoảnh khắc đẹp nhất, thể hiện vẻ đẹp tự nhiên và quyến rũ. Mỗi bức ảnh đều là một tác phẩm nghệ thuật, khắc họa được nét đẹp tinh tế và thu hút.`,
-          sections: [
-            'Những bức ảnh portrait ấn tượng',
-            'Phong cách thời trang đa dạng',
-            'Khoảnh khắc tự nhiên và gần gũi',
-            'Bối cảnh và concept chụp ảnh',
-            'Kỹ thuật nhiếp ảnh và chỉnh sửa'
-          ]
-        },
-        'general': {
-          title: topic,
-          intro: `${topic} là một chủ đề thú vị và được nhiều người quan tâm. Trong bài viết này, chúng ta sẽ khám phá những thông tin chi tiết và hữu ích nhất về ${topic}.`,
-          sections: [
-            'Tổng quan về chủ đề',
-            'Những điều cần biết',
-            'Hướng dẫn chi tiết',
-            'Kinh nghiệm và tips',
-            'Kết luận và đánh giá'
-          ]
-        }
-      };
-
-      const template = contentTemplates[type] || contentTemplates['general'];
-      
-      let content = `# ${template.title}\n\n## Giới thiệu\n\n${template.intro}\n\n`;
-      
-      template.sections.forEach((section, index) => {
-        content += `## ${index + 1}. ${section}\n\n`;
-        
-        if (length === 'short') {
-          content += `Nội dung về ${section.toLowerCase()} sẽ được trình bày một cách ngắn gọn và súc tích. Những thông tin quan trọng nhất sẽ được đưa ra để người đọc có thể nắm bắt nhanh chóng.\n\n`;
-        } else if (length === 'long') {
-          content += `Phần này sẽ đi sâu vào việc phân tích ${section.toLowerCase()} một cách chi tiết và toàn diện. Chúng ta sẽ khám phá từng khía cạnh khác nhau, từ những yếu tố cơ bản đến những điều phức tạp và sâu sắc hơn.\n\n`;
-          content += `Thông qua việc tìm hiểu ${section.toLowerCase()}, chúng ta có thể hiểu rõ hơn về bức tranh tổng thể và rút ra những bài học quý giá cho bản thân.\n\n`;
-        } else {
-          content += `${section} là một khía cạnh quan trọng cần được tìm hiểu kỹ lưỡng. Nội dung này sẽ cung cấp thông tin cân bằng, vừa đủ chi tiết vừa dễ hiểu.\n\n`;
-        }
-      });
-
-      // Thêm kết luận
-      content += `## Kết luận\n\n`;
-      if (type === 'facebook-girl' || type === 'hot-girl') {
-        content += `${topic} thực sự là một biểu tượng của thế hệ trẻ hiện nay. Với vẻ đẹp tự nhiên và tính cách thú vị, cô nàng đã và đang tiếp tục thu hút sự yêu thích của đông đảo cộng đồng mạng.\n\n`;
-      } else if (type === 'actress' || type === 'singer') {
-        content += `${topic} là một nghệ sĩ tài năng với sự nghiệp ấn tượng. Những đóng góp của ${topic} cho nghệ thuật Việt Nam thật sự đáng được ghi nhận và trân trọng.\n\n`;
-      } else if (type === 'beauty-photos') {
-        content += `Bộ sưu tập ảnh ${topic} mang đến những khoảnh khắc đẹp đẽ và ấn tượng. Mỗi bức ảnh đều thể hiện một khía cạnh khác nhau của vẻ đẹp tự nhiên.\n\n`;
-      } else {
-        content += `${topic} thực sự là một chủ đề đáng quan tâm với nhiều thông tin bổ ích. Hy vọng bài viết này đã cung cấp cái nhìn toàn diện và hữu ích.\n\n`;
-      }
-      
-      content += `*Cảm ơn bạn đã đọc bài viết. Hãy chia sẻ nếu thấy hữu ích và để lại bình luận về ý kiến của bạn!*`;
-      
-      return content;
-    }
-
-    function insertImagesIntoContent(content, mode) {
-      if (mode === 'none' || currentImageLinks.length === 0) {
-        return content;
-      }
-
-      const keyword = document.getElementById('keywordInput').value || document.getElementById('aiTopicInput').value;
-      const imageHtml = currentImageLinks.map((link, index) => 
-        `<img src="${link}" alt="${keyword} - Ảnh ${index + 1}" style="max-width:100%; height:auto; border-radius:5px; margin:10px 0;" />`
-      ).join('\n');
-
-      switch (mode) {
-        case 'top':
-          return imageHtml + '\n\n' + content;
-        
-        case 'bottom':
-          return content + '\n\n' + imageHtml;
-        
-        case 'distributed':
-          const sections = content.split('##');
-          let result = sections[0];
-          for (let i = 1; i < sections.length; i++) {
-            result += '##' + sections[i];
-            if (i <= currentImageLinks.length) {
-              result += '\n\n' + `<img src="${currentImageLinks[i-1]}" alt="${keyword} - Ảnh ${i}" style="max-width:100%; height:auto; border-radius:5px; margin:10px 0;" />` + '\n';
-            }
+        matchFiles: function (file, zone) {
+          var status = zone.nextSibling;
+          if (file.type.match(/image/) && file.type !== 'image/svg+xml') {
+            document.body.classList.add('loading');
+            status.classList.remove('bg-success', 'bg-danger');
+            status.innerHTML = '';
+            var fd = new FormData();
+            fd.append('image', file);
+            this.post(this.endpoint, fd, function (data) {
+              document.body.classList.remove('loading');
+              if (typeof this.callback === 'function') this.callback.call(this, data);
+            }.bind(this));
+          } else {
+            status.classList.remove('bg-success');
+            status.classList.add('bg-danger');
+            status.innerHTML = 'Invalid file type';
           }
-          return result;
-        
-        default:
-          return content;
-      }
-    }
-
-    // Tạo HTML hoàn chỉnh cho Blogger
-    function generateBloggerHTML() {
-      const content = document.getElementById("aiOutput").value;
-      const topic = document.getElementById("aiTopicInput").value.trim();
-      const keyword = document.getElementById("keywordInput").value || topic;
-      
-      if (!content) {
-        alert("Vui lòng tạo nội dung bài viết trước!");
-        return;
-      }
-
-      let htmlContent = content
-        .replace(/^# (.*$)/gm, '<h1>$1</h1>')
-        .replace(/^## (.*$)/gm, '<h2>$1</h2>')
-        .replace(/^### (.*$)/gm, '<h3>$1</h3>')
-        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-        .replace(/\*(.*?)\*/g, '<em>$1</em>')
-        .replace(/^- (.*$)/gm, '<li>$1</li>')
-        .replace(/^(\d+)\. (.*$)/gm, '<li>$1. $2</li>')
-        .replace(/\n\n/g, '</p><p>')
-        .replace(/^(?!<h|<li|<img)(.+)$/gm, '<p>$1</p>')
-        .replace(/<p><\/p>/g, '')
-        .replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>')
-        .replace(/<\/ul>\s*<ul>/g, '');
-
-      const fullHTML = `<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${topic}</title>
-    <meta name="description" content="${topic} - Thông tin chi tiết và hình ảnh đẹp nhất">
-    <meta name="keywords" content="${keyword}, gái xinh, hot girl, ảnh đẹp, ${selectedContentType}">
-    <meta property="og:title" content="${topic}">
-    <meta property="og:description" content="${topic} - Thông tin chi tiết và hình ảnh đẹp nhất">
-    <meta property="og:type" content="article">
-    <style>
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            line-height: 1.6; 
-            margin: 0; 
-            padding: 20px; 
-            background: #f8f9fa;
+        },
+        upload: function (zone) {
+          var events = ['dragenter', 'dragleave', 'dragover', 'drop'];
+          zone.addEventListener('change', function (e) {
+            if (e.target && e.target.nodeName === 'INPUT' && e.target.type === 'file') {
+              Array.from(e.target.files).forEach(file => this.matchFiles(file, zone));
+            }
+          }.bind(this), false);
+          events.forEach(event => {
+            zone.addEventListener(event, function (e) {
+              if (e.target && e.target.nodeName === 'INPUT' && e.target.type === 'file') {
+                if (event === 'dragleave' || event === 'drop') {
+                  e.target.parentNode.classList.remove('dropzone-dragging');
+                } else {
+                  e.target.parentNode.classList.add('dropzone-dragging');
+                }
+              }
+            }, false);
+          });
+        },
+        run: function () {
+          if (!document.querySelector('.loading-modal')) this.loading();
+          this.createDragZone();
         }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        img { 
-            max-width: 100%; 
-            height: auto; 
-            border-radius: 8px; 
-            margin: 15px 0; 
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        h1, h2, h3 { 
-            color: #2c3e50; 
-            margin-top: 30px;
-        }
-        h1 {
-            border-bottom: 3px solid #3498db;
-            padding-bottom: 10px;
-        }
-        h2 {
-            border-left: 4px solid #e74c3c;
-            padding-left: 15px;
-        }
-        p { 
-            margin: 15px 0; 
-            text-align: justify;
-        }
-        ul { 
-            margin: 15px 0; 
-            padding-left: 30px; 
-        }
-        li { 
-            margin: 8px 0; 
-        }
-        .article-meta {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            text-align: center;
-            color: #666;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="article-meta">
-            <small>Bài viết về ${topic} | Cập nhật: ${new Date().toLocaleDateString('vi-VN')}</small>
-        </div>
-        <article>
-            ${htmlContent}
-        </article>
-        <div class="article-meta">
-            <small>Tags: ${keyword}, ${selectedContentType === 'facebook-girl' ? 'gái xinh Facebook' : selectedContentType === 'hot-girl' ? 'hot girl' : selectedContentType === 'actress' ? 'diễn viên' : selectedContentType === 'singer' ? 'ca sĩ' : 'ảnh đẹp'}</small>
-        </div>
-    </div>
-</body>
-</html>`;
-
-      document.getElementById("htmlBloggerOutput").value = fullHTML;
-      showTab('html');
-    }
-
-    // Tạo SEO Tags
-    function generateSEOTags() {
-      const topic = document.getElementById("aiTopicInput").value.trim();
-      const keyword = document.getElementById("keywordInput").value || topic;
-      
-      if (!topic) {
-        alert("Vui lòng nhập tên/chủ đề bài viết!");
-        return;
-      }
-
-      const seoTags = generateSEOContent(topic, keyword, selectedContentType);
-      document.getElementById("seoOutput").value = seoTags;
-      showTab('seo');
-    }
-
-    function generateSEOContent(topic, keyword, type) {
-      const typeKeywords = {
-        'facebook-girl': ['gái xinh facebook', 'hot girl facebook', 'beauty facebook', 'girl xinh', 'ảnh gái đẹp'],
-        'hot-girl': ['hot girl', 'gái xinh', 'beauty girl', 'girl xinh đẹp', 'hot girl việt nam'],
-        'actress': ['diễn viên', 'nữ diễn viên', 'ngôi sao', 'celebrity', 'actress vietnam'],
-        'singer': ['ca sĩ', 'nữ ca sĩ', 'nghệ sĩ', 'singer vietnam', 'âm nhạc'],
-        'beauty-photos': ['ảnh gái xinh', 'ảnh đẹp', 'hình ảnh đẹp', 'beauty photos', 'girl photos'],
-        'general': ['thông tin', 'hướng dẫn', 'kinh nghiệm', 'tips', 'review']
       };
+      return Imgur;
+    }));
 
-      const keywords = typeKeywords[type] || typeKeywords['general'];
-      const allKeywords = [keyword, topic, ...keywords].join(', ');
+    const allLinks = [];
+    const copyBtn = document.getElementById('copyAllLinksBtn');
 
-      const descriptions = {
-        'facebook-girl': `${topic} - Gái xinh Facebook với những hình ảnh đẹp nhất. Khám phá thông tin và ảnh hot nhất của ${topic}.`,
-        'hot-girl': `${topic} - Hot girl nổi tiếng với vẻ đẹp quyến rũ. Xem ngay những hình ảnh đẹp nhất của ${topic}.`,
-        'actress': `${topic} - Thông tin tiểu sử và sự nghiệp của nữ diễn viên tài năng ${topic}. Những vai diễn ấn tượng nhất.`,
-        'singer': `${topic} - Ca sĩ tài năng với những ca khúc hit. Tìm hiểu về cuộc đời và sự nghiệp của ${topic}.`,
-        'beauty-photos': `Bộ sưu tập ảnh ${topic} đẹp nhất. Những hình ảnh quyến rũ và ấn tượng nhất được tuyển chọn.`,
-        'general': `${topic} - Thông tin chi tiết và hữu ích nhất. Hướng dẫn đầy đủ về ${topic}.`
-      };
-
-      const description = descriptions[type] || descriptions['general'];
-
-      return `<!-- SEO Meta Tags -->
-<meta name="description" content="${description}">
-<meta name="keywords" content="${allKeywords}">
-<meta name="author" content="Blog Admin">
-<meta name="robots" content="index, follow">
-
-<!-- Open Graph Tags -->
-<meta property="og:title" content="${topic}">
-<meta property="og:description" content="${description}">
-<meta property="og:type" content="article">
-<meta property="og:url" content="https://yourblog.com/${removeVietnamese(topic)}">
-<meta property="og:image" content="https://your-image-host.com/featured-image.jpg">
-<meta property="og:site_name" content="Your Blog Name">
-
-<!-- Twitter Card Tags -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="${topic}">
-<meta name="twitter:description" content="${description}">
-<meta name="twitter:image" content="https://your-image-host.com/featured-image.jpg">
-
-<!-- Additional SEO Tags -->
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link rel="canonical" href="https://yourblog.com/${removeVietnamese(topic)}">
-
-<!-- Schema.org Markup -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Article",
-  "headline": "${topic}",
-  "description": "${description}",
-  "author": {
-    "@type": "Person",
-    "name": "Blog Admin"
-  },
-  "datePublished": "${new Date().toISOString()}",
-  "dateModified": "${new Date().toISOString()}",
-  "image": "https://your-image-host.com/featured-image.jpg",
-  "publisher": {
-    "@type": "Organization",
-    "name": "Your Blog Name",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://yourblog.com/logo.png"
-    }
-  }
-}
-</script>`;
+    function updateCopyButton() {
+      if (allLinks.length > 0) copyBtn.style.display = 'block';
     }
 
-    // Cập nhật preview
-    function updatePreview() {
-      const content = document.getElementById("aiOutput").value;
-      const previewContent = document.getElementById("previewContent");
-      
-      if (!content) {
-        previewContent.innerHTML = '<p style="color: #666; font-style: italic;">Bài viết sẽ được hiển thị ở đây sau khi tạo nội dung...</p>';
-        return;
+    var feedback = function(res) {
+      if (res.success === true) {
+        const get_link = res.data.link.replace(/^http:\/\//i, 'https://');
+        allLinks.push(get_link);
+        document.querySelector('.status').classList.add('bg-success');
+        document.querySelector('.status').innerHTML +=
+          '<div class="linkimg"><input class="image-url" onclick="this.select()" value="' + get_link + '"/></div>' +
+          '<div class="showimg"><img class="img" style="max-width:100%;margin-bottom:10px;" src="' + get_link + '"/></div>';
+        updateCopyButton();
       }
+    };
 
-      let htmlContent = content
-        .replace(/^# (.*$)/gm, '<h1>$1</h1>')
-        .replace(/^## (.*$)/gm, '<h2>$1</h2>')
-        .replace(/^### (.*$)/gm, '<h3>$1</h3>')
-        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-        .replace(/\*(.*?)\*/g, '<em>$1</em>')
-        .replace(/^- (.*$)/gm, '<li>$1</li>')
-        .replace(/^(\d+)\. (.*$)/gm, '<li>$1. $2</li>')
-        .replace(/\n\n/g, '</p><p>')
-        .replace(/^(?!<h|<li|<img)(.+)$/gm, '<p>$1</p>')
-        .replace(/<p><\/p>/g, '')
-        .replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>')
-        .replace(/<\/ul>\s*<ul>/g, '');
+    new Imgur({
+      clientid: '3a8be4390ef3eb8',
+      callback: feedback
+    });
 
-      previewContent.innerHTML = htmlContent;
-    }
-
-    // Chuyển đổi tab
-    function showTab(tabName) {
-      const tabContents = document.querySelectorAll('.tab-content');
-      tabContents.forEach(content => content.classList.remove('active'));
-      
-      const tabs = document.querySelectorAll('.tab');
-      tabs.forEach(tab => tab.classList.remove('active'));
-      
-      document.getElementById(tabName + '-tab').classList.add('active');
-      event.target.classList.add('active');
-
-      if (tabName === 'preview') {
-        updatePreview();
-      }
-    }
-
-    // Copy to clipboard
-    function copyToClipboard(elementId) {
-      const element = document.getElementById(elementId);
-      element.select();
+    copyBtn.addEventListener('click', () => {
+      const temp = document.createElement('textarea');
+      temp.value = allLinks.join('\n');
+      document.body.appendChild(temp);
+      temp.select();
       document.execCommand('copy');
-      
-      const successElement = document.getElementById(elementId.replace('Output', 'CopySuccess'));
-      if (successElement) {
-        successElement.classList.add('show');
-        setTimeout(() => {
-          successElement.classList.remove('show');
-        }, 2000);
-      }
-    }
-
-    // Tự động cập nhật preview khi nội dung thay đổi
-    document.getElementById('aiOutput').addEventListener('input', updatePreview);
-
-    // Khởi tạo content type mặc định
-    document.addEventListener('DOMContentLoaded', function() {
-      selectContentType('general');
+      document.body.removeChild(temp);
+      alert("✅ Đã copy " + allLinks.length + " link ảnh!");
     });
   </script>
 </body>
