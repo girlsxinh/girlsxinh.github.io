@@ -1,120 +1,68 @@
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Tool Chèn Nhiều Ảnh Blogger</title>
+  <meta charset="UTF-8">
+  <title>Tool Sinh Bài Viết Nhân Vật</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; max-width: 800px; margin: auto; }
-    .dropzone {
-      border: 2px dashed #888;
-      padding: 30px;
-      text-align: center;
-      cursor: pointer;
-      margin-bottom: 20px;
-      border-radius: 10px;
-      background: #f9f9f9;
-    }
-    .output img { max-width: 100%; margin-top: 10px; }
-    textarea {
-      width: 100%;
-      height: 300px;
-      margin-top: 15px;
-      padding: 10px;
-      font-size: 14px;
-      font-family: monospace;
-    }
-    button {
-      display: inline-block;
-      margin-top: 15px;
-      background: #007bff;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-    button:hover {
-      background: #0056b3;
-    }
-    .preview {
-      margin-top: 15px;
-    }
-    .preview img {
-      max-height: 100px;
-      margin: 5px;
-      border-radius: 4px;
-      border: 1px solid #ccc;
-    }
+    body { font-family: Arial, sans-serif; max-width: 900px; margin: 40px auto; padding: 20px; background: #f9f9f9; color: #333; }
+    input, textarea { width: 100%; padding: 8px; margin-bottom: 10px; }
+    label { font-weight: bold; margin-top: 10px; display: block; }
+    #output { white-space: pre-wrap; background: #fff; padding: 15px; border: 1px solid #ccc; margin-top: 20px; }
+    button { padding: 10px 20px; background: #3498db; color: white; border: none; cursor: pointer; }
+    button:hover { background: #2c80b4; }
   </style>
 </head>
 <body>
-  <h2>🖼️ Upload nhiều ảnh → Tạo mã HTML Blogger</h2>
-  <div class="dropzone" onclick="fileInput.click()">📤 Click hoặc kéo nhiều ảnh vào đây</div>
-  <input type="file" id="fileInput" style="display:none" accept="image/*" multiple>
-  <div class="output preview"></div>
-  <textarea id="bloggerCode" readonly placeholder="HTML sẽ hiển thị ở đây sau khi upload ảnh..."></textarea>
-  <button onclick="copyCode()">📋 Copy HTML Blogger</button>
+  <h1>🧩 Tool Tạo Bài Viết Nhân Vật</h1>
+
+  <label>1. Link Ảnh Avatar:</label>
+  <input type="text" id="avatar" placeholder="Dán link ảnh từ Blogger hoặc Imgur...">
+
+  <label>2. Tên Nhân Vật:</label>
+  <input type="text" id="name" value="Hồng Diễm">
+
+  <label>3. Ngày sinh (VD: 25/03/1982):</label>
+  <input type="text" id="dob" value="25/03/1982 (43 tuổi)">
+
+  <label>4. Nơi sinh:</label>
+  <input type="text" id="birthplace" value="Việt Nam">
+
+  <label>5. Cung hoàng đạo:</label>
+  <input type="text" id="zodiac" value="Bạch Dương">
+
+  <label>6. Con giáp:</label>
+  <input type="text" id="lunar" value="Nhâm Tuất">
+
+  <button onclick="generatePost()">📄 Tạo Bài Viết</button>
+
+  <div id="output" contenteditable="true" title="Bạn có thể chỉnh HTML trực tiếp ở đây"></div>
 
   <script>
-    const clientId = '3a8be4390ef3eb8';
-    const fileInput = document.getElementById('fileInput');
-    const output = document.querySelector('.output');
-    const bloggerCode = document.getElementById('bloggerCode');
+    function generatePost() {
+      const avatar = document.getElementById("avatar").value;
+      const name = document.getElementById("name").value;
+      const dob = document.getElementById("dob").value;
+      const birthplace = document.getElementById("birthplace").value;
+      const zodiac = document.getElementById("zodiac").value;
+      const lunar = document.getElementById("lunar").value;
 
-    fileInput.addEventListener('change', async event => {
-      const files = Array.from(event.target.files).filter(f => f.type.startsWith('image/'));
-      if (files.length === 0) return;
-
-      bloggerCode.value = "⏳ Đang upload " + files.length + " ảnh...";
-      output.innerHTML = "";
-
-      const htmlBlocks = [];
-
-      for (let file of files) {
-        const formData = new FormData();
-        formData.append("image", file);
-
-        try {
-          const res = await fetch("https://api.imgur.com/3/image", {
-            method: "POST",
-            headers: { Authorization: "Client-ID " + clientId },
-            body: formData
-          });
-          const data = await res.json();
-
-          if (data.success) {
-            const url = data.data.link;
-            const id = url.split('/').pop().split('.')[0];
-            const thumb = `https://i.imgur.com/${id}l.jpg`;
-
-            const block = `
-<p>&nbsp;</p>
-<div class="separator" style="clear: both; text-align: center;">
-  <a href="${url}" imageanchor="1" style="margin-left: 1em; margin-right: 1em;">
-    <img border="0" data-original-height="800" data-original-width="600"
-         height="320" src="${thumb}" width="156" />
-  </a>
+      const html = `
+<div style="text-align: center;">
+  <img src="${avatar}" alt="${name}" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid #3498db; margin-bottom: 10px;">
 </div>
-<br /><p></p>`.trim();
+<div style="text-align: center;">
+  <h1 style="margin: 0; font-size: 28px; color: #b22222;">DIỄN VIÊN NỮ ${name.toUpperCase()}</h1>
+  <p style="margin: 5px 0; font-weight: bold;">${name} – Nữ diễn viên truyền hình nổi tiếng tại Việt Nam</p>
+  <ul style="list-style: none; padding: 0; margin: 10px 0; display: inline-block; text-align: left;">
+    <li><strong>Ngày sinh:</strong> ${dob}</li>
+    <li><strong>Nơi sinh:</strong> ${birthplace}</li>
+    <li><strong>Cung hoàng đạo:</strong> ${zodiac}</li>
+    <li><strong>Con giáp:</strong> ${lunar}</li>
+  </ul>
+</div>
+`;
 
-            htmlBlocks.push(block);
-            output.innerHTML += `<img src="${thumb}" alt="preview">`;
-          }
-        } catch (e) {
-          console.error("Upload lỗi:", e);
-        }
-      }
-
-      bloggerCode.value = htmlBlocks.join("\n\n");
-    });
-
-    function copyCode() {
-      bloggerCode.select();
-      document.execCommand('copy');
-      alert("✅ Đã copy đoạn mã!");
+      document.getElementById("output").innerText = html;
     }
   </script>
 </body>
