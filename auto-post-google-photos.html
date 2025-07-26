@@ -205,19 +205,37 @@
       if (allLinks.length > 0) copyBtn.style.display = 'block';
     }
 
-    var feedback = function(res) {
-      if (res.success === true) {
-        const get_link = res.data.link.replace(/^http:\/\//i, 'https://');
-        allLinks.push(get_link);
-        document.querySelector('.status').classList.add('bg-success');
-        document.querySelector('.status').innerHTML +=
-          '<div class="linkimg"><input class="image-url" onclick="this.select()" value="' + get_link + '"/></div>' +
-          '<div class="showimg"><img class="img" style="max-width:100%;margin-bottom:10px;" src="' + get_link + '"/></div>';
-        updateCopyButton();
-      }
-    };
+    
+var feedback = function(res) {
+  if (res.success === true) {
+    const get_link = res.data.link.replace(/^http:\/\//i, 'https://');
+    const img_id = get_link.split('/').pop().split('.')[0]; // Lấy ID ảnh
+    const thumb_link = `https://i.imgur.com/${img_id}l.jpg`; // thumbnail 'l' = large
 
-    new Imgur({
+    allLinks.push(get_link);
+
+    const blogger_html = `
+<p>&nbsp;</p>
+<div class="separator" style="clear: both; text-align: center;">
+  <a href="${get_link}" imageanchor="1" style="margin-left: 1em; margin-right: 1em;">
+    <img border="0" data-original-height="800" data-original-width="600"
+         height="320" src="${thumb_link}" width="156" />
+  </a>
+</div>
+<br /><p></p>
+`;
+
+    document.querySelector('.status').classList.add('bg-success');
+    document.querySelector('.status').innerHTML +=
+      '<div class="linkimg"><textarea class="image-url" onclick="this.select()" style="width:100%;height:140px;">' + blogger_html + '</textarea></div>' +
+      '<div class="showimg"><img class="img" style="max-width:100%;margin-bottom:10px;" src="' + get_link + '"/></div>';
+
+    updateCopyButton();
+  }
+};
+
+new Imgur({
+
       clientid: '3a8be4390ef3eb8',
       callback: feedback
     });
