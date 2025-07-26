@@ -1,254 +1,121 @@
 
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <title>Upload ảnh lên Imgur</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tool Chèn Nhiều Ảnh Blogger</title>
   <style>
-    body.loading .loading-modal { display: block; }
+    body { font-family: Arial, sans-serif; padding: 20px; max-width: 800px; margin: auto; }
     .dropzone {
-      border: 2px dashed #999;
-      border-radius: 10px;
-      position: relative;
-      margin: 0 auto;
-      clear: both;
-    }
-    .infoimg {
-      margin: 0 auto;
-      margin-top: 20px;
-      margin-bottom: 20px;
-    }
-    .dropzone p {
-      margin: 0;
+      border: 2px dashed #888;
+      padding: 30px;
       text-align: center;
-      width: 100%;
-      font-weight: bold;
-      color: #999;
-    }
-    .input {
-      height: 100%;
-      left: 0;
-      outline: 0;
-      opacity: 0;
-      position: absolute;
-      top: 0;
-      width: 100%;
       cursor: pointer;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      background: #f9f9f9;
     }
-    .status {
-      border-radius: 5px;
-      text-align: center;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    .image-url {
-      width: calc(100% - 10px);
-      padding: 5px;
-      border: 1px solid #999;
-      border-radius: 5px;
-      color: #333;
-    }
-    .linkimg { margin: 20px 0; }
-    .dropzone.dropzone-dragging { border-color: #000; }
-    .loading-modal {
-      background-color: rgba(255,255,255,.8);
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      top: 0;
-      left: 0;
-      height: 100%;
+    .output img { max-width: 100%; margin-top: 10px; }
+    textarea {
       width: 100%;
+      height: 300px;
+      margin-top: 15px;
+      padding: 10px;
+      font-size: 14px;
+      font-family: monospace;
     }
-    .loading-table {
-      margin-left: auto;
-      margin-right: auto;
-      margin-top: 15%;
-      margin-bottom: 15%;
-    }
-    #copyAllLinksBtn {
-      margin: 20px auto;
-      display: none;
-      padding: 10px 20px;
+    button {
+      display: inline-block;
+      margin-top: 15px;
       background: #007bff;
       color: white;
       border: none;
-      border-radius: 8px;
+      padding: 10px 20px;
+      border-radius: 6px;
       cursor: pointer;
       font-size: 16px;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .preview {
+      margin-top: 15px;
+    }
+    .preview img {
+      max-height: 100px;
+      margin: 5px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
     }
   </style>
 </head>
 <body>
-  <div class="dropzone">
-    <div class="infoimg"></div>
-  </div>
-  <div class="status"></div>
-  <button id="copyAllLinksBtn">📋 Copy tất cả link ảnh</button>
+  <h2>🖼️ Upload nhiều ảnh → Tạo mã HTML Blogger</h2>
+  <div class="dropzone" onclick="fileInput.click()">📤 Click hoặc kéo nhiều ảnh vào đây</div>
+  <input type="file" id="fileInput" style="display:none" accept="image/*" multiple>
+  <div class="output preview"></div>
+  <textarea id="bloggerCode" readonly placeholder="HTML sẽ hiển thị ở đây sau khi upload ảnh..."></textarea>
+  <button onclick="copyCode()">📋 Copy HTML Blogger</button>
 
-  <script type="text/javascript">
-    (function (root, factory) {
-      if (typeof define === 'function' && define.amd) {
-        define([], factory);
-      } else if (typeof exports === 'object') {
-        module.exports = factory();
-      } else {
-        root.Imgur = factory();
-      }
-    }(this, function () {
-      var Imgur = function (options) {
-        if (!this || !(this instanceof Imgur)) return new Imgur(options);
-        if (!options) options = {};
-        if (!options.clientid) throw 'Provide a valid Client Id here: https://api.imgur.com/';
-        this.clientid = options.clientid;
-        this.endpoint = 'https://api.imgur.com/3/image';
-        this.callback = options.callback || undefined;
-        this.dropzone = document.querySelectorAll('.dropzone');
-        this.infoimg = document.querySelectorAll('.infoimg');
-        this.run();
-      };
-      Imgur.prototype = {
-        createEls: function (name, props, text) {
-          var el = document.createElement(name), p;
-          for (p in props) if (props.hasOwnProperty(p)) el[p] = props[p];
-          if (text) el.appendChild(document.createTextNode(text));
-          return el;
-        },
-        insertAfter: function (ref, node) {
-          ref.parentNode.insertBefore(node, ref.nextSibling);
-        },
-        post: function (path, data, callback) {
-          var xhttp = new XMLHttpRequest();
-          xhttp.open('POST', path, true);
-          xhttp.setRequestHeader('Authorization', 'Client-ID ' + this.clientid);
-          xhttp.onreadystatechange = function () {
-            if (this.readyState === 4) {
-              if (this.status >= 200 && this.status < 300) {
-                var response = '';
-                try { response = JSON.parse(this.responseText); } catch (err) { response = this.responseText; }
-                callback.call(window, response);
-              } else {
-                throw new Error(this.status + " - " + this.statusText);
-              }
-            }
-          };
-          xhttp.send(data);
-          xhttp = null;
-        },
-        createDragZone: function () {
-          var p1 = this.createEls('p', {}, 'Kéo file ảnh vào đây');
-          var p2 = this.createEls('p', {}, 'Hoặc click để chọn ảnh');
-          var input = this.createEls('input', { type: 'file', className: 'input', accept: 'image/*', multiple: true });
-          this.infoimg.forEach(zone => { zone.appendChild(p1); zone.appendChild(p2); });
-          this.dropzone.forEach(zone => { zone.appendChild(input); this.status(zone); this.upload(zone); });
-        },
-        loading: function () {
-          var div = this.createEls('div', { className: 'loading-modal' });
-          var table = this.createEls('table', { className: 'loading-table' });
-          var img = this.createEls('img', { className: 'loading-image', src: 'https://firebasestorage.googleapis.com/v0/b/huydc-090288.appspot.com/o/Images%20Upload%2Floading-spin.svg?alt=media&token=8a1fd8dc-30b2-4b74-acc6-9e4ce55a89b0' });
-          div.appendChild(table); table.appendChild(img); document.body.appendChild(div);
-        },
-        status: function (el) {
-          var div = this.createEls('div', { className: 'status' });
-          this.insertAfter(el, div);
-        },
-        matchFiles: function (file, zone) {
-          var status = zone.nextSibling;
-          if (file.type.match(/image/) && file.type !== 'image/svg+xml') {
-            document.body.classList.add('loading');
-            status.classList.remove('bg-success', 'bg-danger');
-            status.innerHTML = '';
-            var fd = new FormData();
-            fd.append('image', file);
-            this.post(this.endpoint, fd, function (data) {
-              document.body.classList.remove('loading');
-              if (typeof this.callback === 'function') this.callback.call(this, data);
-            }.bind(this));
-          } else {
-            status.classList.remove('bg-success');
-            status.classList.add('bg-danger');
-            status.innerHTML = 'Invalid file type';
-          }
-        },
-        upload: function (zone) {
-          var events = ['dragenter', 'dragleave', 'dragover', 'drop'];
-          zone.addEventListener('change', function (e) {
-            if (e.target && e.target.nodeName === 'INPUT' && e.target.type === 'file') {
-              Array.from(e.target.files).forEach(file => this.matchFiles(file, zone));
-            }
-          }.bind(this), false);
-          events.forEach(event => {
-            zone.addEventListener(event, function (e) {
-              if (e.target && e.target.nodeName === 'INPUT' && e.target.type === 'file') {
-                if (event === 'dragleave' || event === 'drop') {
-                  e.target.parentNode.classList.remove('dropzone-dragging');
-                } else {
-                  e.target.parentNode.classList.add('dropzone-dragging');
-                }
-              }
-            }, false);
+  <script>
+    const clientId = '3a8be4390ef3eb8';
+    const fileInput = document.getElementById('fileInput');
+    const output = document.querySelector('.output');
+    const bloggerCode = document.getElementById('bloggerCode');
+
+    fileInput.addEventListener('change', async event => {
+      const files = Array.from(event.target.files).filter(f => f.type.startsWith('image/'));
+      if (files.length === 0) return;
+
+      bloggerCode.value = "⏳ Đang upload " + files.length + " ảnh...";
+      output.innerHTML = "";
+
+      const htmlBlocks = [];
+
+      for (let file of files) {
+        const formData = new FormData();
+        formData.append("image", file);
+
+        try {
+          const res = await fetch("https://api.imgur.com/3/image", {
+            method: "POST",
+            headers: { Authorization: "Client-ID " + clientId },
+            body: formData
           });
-        },
-        run: function () {
-          if (!document.querySelector('.loading-modal')) this.loading();
-          this.createDragZone();
-        }
-      };
-      return Imgur;
-    }));
+          const data = await res.json();
 
-    const allLinks = [];
-    const copyBtn = document.getElementById('copyAllLinksBtn');
+          if (data.success) {
+            const url = data.data.link;
+            const id = url.split('/').pop().split('.')[0];
+            const thumb = `https://i.imgur.com/${id}l.jpg`;
 
-    function updateCopyButton() {
-      if (allLinks.length > 0) copyBtn.style.display = 'block';
-    }
-
-    
-var feedback = function(res) {
-  if (res.success === true) {
-    const get_link = res.data.link.replace(/^http:\/\//i, 'https://');
-    const img_id = get_link.split('/').pop().split('.')[0]; // Lấy ID ảnh
-    const thumb_link = `https://i.imgur.com/${img_id}l.jpg`; // thumbnail 'l' = large
-
-    allLinks.push(get_link);
-
-    const blogger_html = `
+            const block = `
 <p>&nbsp;</p>
 <div class="separator" style="clear: both; text-align: center;">
-  <a href="${get_link}" imageanchor="1" style="margin-left: 1em; margin-right: 1em;">
+  <a href="${url}" imageanchor="1" style="margin-left: 1em; margin-right: 1em;">
     <img border="0" data-original-height="800" data-original-width="600"
-         height="320" src="${thumb_link}" width="156" />
+         height="320" src="${thumb}" width="156" />
   </a>
 </div>
-<br /><p></p>
-`;
+<br /><p></p>`.trim();
 
-    document.querySelector('.status').classList.add('bg-success');
-    document.querySelector('.status').innerHTML +=
-      '<div class="linkimg"><textarea class="image-url" onclick="this.select()" style="width:100%;height:140px;">' + blogger_html + '</textarea></div>' +
-      '<div class="showimg"><img class="img" style="max-width:100%;margin-bottom:10px;" src="' + get_link + '"/></div>';
+            htmlBlocks.push(block);
+            output.innerHTML += `<img src="${thumb}" alt="preview">`;
+          }
+        } catch (e) {
+          console.error("Upload lỗi:", e);
+        }
+      }
 
-    updateCopyButton();
-  }
-};
-
-new Imgur({
-
-      clientid: '3a8be4390ef3eb8',
-      callback: feedback
+      bloggerCode.value = htmlBlocks.join("\n\n");
     });
 
-    copyBtn.addEventListener('click', () => {
-      const temp = document.createElement('textarea');
-      temp.value = allLinks.join('\n');
-      document.body.appendChild(temp);
-      temp.select();
+    function copyCode() {
+      bloggerCode.select();
       document.execCommand('copy');
-      document.body.removeChild(temp);
-      alert("✅ Đã copy " + allLinks.length + " link ảnh!");
-    });
+      alert("✅ Đã copy đoạn mã!");
+    }
   </script>
 </body>
 </html>
