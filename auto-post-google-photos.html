@@ -73,7 +73,17 @@
     .preview-root img,.preview-root video{max-width:100%;height:auto;border-radius:12px;box-shadow:0 8px 18px rgba(0,0,0,.12)}
     .preview-root .hashtags{color:#1da1f2;font-weight:700}
     .wm-wrap{position:relative;display:inline-block}
-    .wm-overlay{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;opacity:.16;font-weight:800;font-size:28px;letter-spacing:2px;mix-blend-mode:multiply}
+    .wm-overlay{
+  position:absolute;
+  bottom:8px;
+  right:12px;
+  pointer-events:none;
+  opacity:.4;
+  font-weight:800;
+  font-size:18px;
+  color:white;
+  text-shadow:1px 1px 3px rgba(0,0,0,0.6);
+}
     @media (max-width:720px){.form-grid{grid-template-columns:1fr}}
   </style>
 </head>
@@ -655,7 +665,17 @@ ${hashtags}
   .preview-root img,.preview-root video{max-width:100%;height:auto;border-radius:12px;box-shadow:0 8px 18px rgba(0,0,0,.12)}
   .preview-root .hashtags{color:#1da1f2;font-weight:700}
   .wm-wrap{position:relative;display:inline-block}
-  .wm-overlay{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;opacity:.16;font-weight:800;font-size:28px;letter-spacing:2px;mix-blend-mode:multiply}
+  .wm-overlay{
+  position:absolute;
+  bottom:8px;
+  right:12px;
+  pointer-events:none;
+  opacity:.4;
+  font-weight:800;
+  font-size:18px;
+  color:white;
+  text-shadow:1px 1px 3px rgba(0,0,0,0.6);
+}
 </style>
 </head><body><div class="preview-root">
 ${inner}
