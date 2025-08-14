@@ -2,278 +2,725 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <title>Tool tạo bài viết girlxinh đa quốc gia</title>
+  <title>Tool Tạo Bài Viết Gái Xinh Đa Nền Tảng - Phiên Bản Hoàn Chỉnh</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    body { font-family: Arial; max-width: 900px; margin: auto; padding: 20px; }
-    h2 { text-align: center; }
-    label { font-weight: bold; display: block; margin-top: 15px; }
-    input[type=text], select, textarea {
-      width: 100%; padding: 8px; margin-top: 5px;
-      border: 1px solid #ccc; border-radius: 4px;
+    :root{
+      --p1:#667eea; --p2:#764ba2; --text:#333; --muted:#555; --bd:#e1e5e9; --bg:#f8f9ff;
     }
-    textarea { height: 180px; font-family: monospace; resize: vertical; }
-    button {
-      margin-top: 15px; padding: 10px 20px; font-weight: bold;
-      background-color: #007bff; color: white; border: none; border-radius: 4px;
-      cursor: pointer;
+    *{box-sizing:border-box}
+    body{
+      font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      max-width:1000px; margin:auto; padding:20px;
+      background:linear-gradient(135deg,var(--p1) 0%,var(--p2) 100%);
+      min-height:100vh;
     }
-    button:hover { background-color: #0056b3; }
-    .dropzone {
-      border: 2px dashed #999; border-radius: 10px; padding: 30px;
-      text-align: center; color: #666; cursor: pointer; margin-top: 15px;
+    .container{background:#fff;border-radius:16px;padding:30px;box-shadow:0 20px 40px rgba(0,0,0,.12)}
+    h1{margin:0 0 24px;text-align:center;font-size:28px;color:var(--text);
+      background:linear-gradient(45deg,var(--p1),var(--p2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .feature-tabs{display:flex;margin-bottom:20px;border-radius:10px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,.08)}
+    .tab-btn{flex:1;padding:14px 16px;background:#f8f9fa;border:none;cursor:pointer;font-weight:700}
+    .tab-btn:focus{outline:none}
+    .tab-btn.active{background:linear-gradient(45deg,var(--p1),var(--p2));color:#fff}
+    .tab-content{display:none}
+    .tab-content.active{display:block}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px}
+    .form-group{display:flex;flex-direction:column}
+    .form-group.full-width{grid-column:1/-1}
+    label{font-weight:700;margin-bottom:8px;color:var(--muted);display:flex;align-items:center;gap:8px}
+    input[type=text], select, textarea{
+      padding:12px;border:2px solid var(--bd);border-radius:8px;font-size:14px;transition:.2s
     }
-    .dropzone.dragover { border-color: #333; color: #000; }
-    .image-preview { margin-top: 15px; text-align: center; }
-    .image-preview img { max-width: 100%; border-radius: 6px; box-shadow: 0 0 8px rgba(0,0,0,0.1); }
-    .loading-modal {
-      background-color: rgba(255,255,255,.8);
-      display: none; position: fixed; z-index: 10000;
-      top: 0; left: 0; height: 100%; width: 100%;
+    input[type=text]:focus, select:focus, textarea:focus{
+      outline:none;border-color:var(--p1);box-shadow:0 0 0 3px rgba(102,126,234,.12)
     }
-    .loading-modal.show {
-      display: block;
+    textarea{height:220px;font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;resize:vertical}
+    .dropzone{
+      border:3px dashed var(--p1);border-radius:12px;padding:38px;text-align:center;
+      color:var(--p1);cursor:pointer;background:var(--bg);transition:.2s
     }
-    .loading-modal .loading-text {
-      position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%);
-      font-size: 20px; color: #333; font-weight: bold;
+    .dropzone.dragover{border-color:var(--p2);background:#f0f2ff;transform:scale(1.01)}
+    .image-preview{margin-top:14px;text-align:center}
+    .image-preview img{max-width:100%;max-height:320px;border-radius:12px;box-shadow:0 10px 26px rgba(0,0,0,.15)}
+    .checks{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}
+    .checks .item{display:flex;align-items:center;gap:10px}
+    .checks input[type=checkbox]{width:18px;height:18px;accent-color:var(--p1)}
+    .actions{text-align:center;margin-top:18px}
+    button{
+      padding:14px 22px;border:none;border-radius:10px;cursor:pointer;font-weight:800;color:#fff;margin:8px;
+      background:linear-gradient(45deg,var(--p1),var(--p2));box-shadow:0 10px 22px rgba(102,126,234,.28);
+      transition:.18s transform, .18s box-shadow
     }
-    .text-center { text-align: center; margin-top: 15px; }
-    .btnlook.download-wall {
-      padding: 10px 15px;
-      border: 1px solid #333;
-      border-radius: 5px;
-      text-decoration: none;
-      font-weight: bold;
-      display: inline-block;
-    }
-    .btnlook.download-wall:hover {
-      background-color: #eee;
-    }
+    button:hover{transform:translateY(-2px);box-shadow:0 14px 28px rgba(102,126,234,.35)}
+    .btn-green{background:linear-gradient(45deg,#28a745,#20c997)}
+    .btn-cyan{background:linear-gradient(45deg,#17a2b8,#138496)}
+    .btn-red{background:linear-gradient(45deg,#dc3545,#c82333)}
+    .btn-plain{background:#fff;color:#333;border:2px solid #333;box-shadow:none}
+    .note{font-size:13px;color:#666}
+    .loading-modal{position:fixed;inset:0;background:rgba(255,255,255,.92);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:9999}
+    .loading-modal.show{display:flex}
+    .loading-content{background:#fff;padding:34px;border-radius:14px;box-shadow:0 18px 40px rgba(0,0,0,.12);text-align:center}
+    .spinner{width:48px;height:48px;border:4px solid #eee;border-top:4px solid var(--p1);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 16px}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .topic-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:6px}
+    .topic-card{padding:14px;border:2px solid var(--bd);border-radius:10px;background:var(--bg);cursor:pointer;text-align:center;font-weight:600;transition:.18s}
+    .topic-card:hover{transform:translateY(-2px);border-color:var(--p1);box-shadow:0 8px 18px rgba(102,126,234,.22)}
+    .topic-card.selected{border-color:var(--p1);background:linear-gradient(45deg,var(--p1),var(--p2));color:#fff}
+    .helper{padding:14px;background:#fff7e6;border:1px solid #ffe3a3;color:#8a6d3b;border-radius:10px;margin-top:8px;font-size:13px}
+    /* Preview styles inside popup */
+    .preview-root{max-width:860px;margin:auto;padding:18px;font-family:system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif}
+    .preview-root .hero{display:block;text-align:center;margin:16px 0}
+    .preview-root img,.preview-root video{max-width:100%;height:auto;border-radius:12px;box-shadow:0 8px 18px rgba(0,0,0,.12)}
+    .preview-root .hashtags{color:#1da1f2;font-weight:700}
+    .wm-wrap{position:relative;display:inline-block}
+    .wm-overlay{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;opacity:.16;font-weight:800;font-size:28px;letter-spacing:2px;mix-blend-mode:multiply}
+    @media (max-width:720px){.form-grid{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
+  <div class="container">
+    <h1>🎥 Tool Tạo Bài Viết Gái Xinh Đa Nền Tảng</h1>
 
-<h2>🎥 Tool tạo bài viết girlxinh - đa quốc gia</h2>
+    <!-- Tabs -->
+    <div class="feature-tabs" id="tabs">
+      <button class="tab-btn active" data-tab="basic">🎬 Cơ Bản</button>
+      <button class="tab-btn" data-tab="advanced">⚡ Nâng Cao</button>
+      <button class="tab-btn" data-tab="batch">📚 Hàng Loạt</button>
+    </div>
 
-<label>📸 Upload ảnh thumbnail (Imgur):</label>
-<div class="dropzone" id="dropzone">Kéo ảnh vào đây hoặc click để chọn</div>
-<div class="image-preview" id="imagePreview"></div>
-<input type="hidden" id="imgurLink" />
+    <!-- BASIC TAB -->
+    <div class="tab-content active" id="tab-basic">
+      <div class="form-grid">
+        <div class="form-group full-width">
+          <label>📸 Upload ảnh thumbnail (Imgur):</label>
+          <div class="dropzone" id="dropzone">Kéo ảnh vào đây hoặc click để chọn</div>
+          <div class="image-preview" id="imagePreview"></div>
+          <input type="hidden" id="imgurLink" />
+          <div class="note">Dùng Imgur API. Nếu không upload, bạn có thể nhập ảnh trực tiếp ở phần video/ảnh MP4 (hỗ trợ .jpg/.png/.mp4).</div>
+        </div>
 
-<label>🎬 Nhập link video MP4:</label>
-<input type="text" id="videoLink" placeholder="https://example.com/video.mp4" />
+        <div class="form-group">
+          <label>🎬 Link video/ảnh MP4 or Image URL:</label>
+          <input type="text" id="mediaLink" placeholder="https://example.com/video.mp4 hoặc https://example.com/image.jpg" />
+        </div>
 
-<label>🧍‍♀️ Tên nhân vật (có thể để trống):</label>
-<input type="text" id="characterName" placeholder="Ví dụ: Ngọc Trinh, Arisa, Lisa..." />
+        <div class="form-group">
+          <label>👧‍♀️ Tên nhân vật (tuỳ chọn):</label>
+          <input type="text" id="characterName" placeholder="Ví dụ: Ngọc Trinh, Arisa, Lisa..." />
+        </div>
 
-<label>🌏 Chọn quốc gia:</label>
-<select id="country">
-  <option value="Việt Nam">Việt Nam</option>
-  <option value="Nhật Bản">Nhật Bản</option>
-  <option value="Hàn Quốc">Hàn Quốc</option>
-  <option value="Trung Quốc">Trung Quốc</option>
-  <option value="Thái Lan">Thái Lan</option>
-  <option value="Mỹ">Mỹ</option>
-</select>
+        <div class="form-group">
+          <label>🌍 Quốc gia:</label>
+          <select id="country">
+            <option value="Việt Nam">🇻🇳 Việt Nam</option>
+            <option value="Nhật Bản">🇯🇵 Nhật Bản</option>
+            <option value="Hàn Quốc">🇰🇷 Hàn Quốc</option>
+            <option value="Trung Quốc">🇨🇳 Trung Quốc</option>
+            <option value="Thái Lan">🇹🇭 Thái Lan</option>
+            <option value="Châu Âu">🇪🇺 Châu Âu</option>
+            <option value="Mỹ">🇺🇸 Mỹ</option>
+          </select>
+        </div>
 
-<label>📚 Chọn chủ đề bài viết:</label>
-<select id="topic">
-  <option value="hotgirl">Hot girl</option>
-  <option value="tiktok">TikTok girl</option>
-  <option value="dienvien">Diễn viên</option>
-  <option value="nguoimau">Người mẫu</option>
-  <option value="idol">Idol</option>
-  <option value="influencer">Người nổi tiếng</option>
-</select>
+        <div class="form-group">
+          <label>✏️ Phong cách viết:</label>
+          <select id="style">
+            <option value="goi-cam">🔥 Gợi cảm, quyến rũ</option>
+            <option value="nhe-nhang">🌸 Nhẹ nhàng, tinh tế</option>
+            <option value="thu-vi">😄 Thú vị, hài hước</option>
+            <option value="nghe-thuat">🎨 Nghệ thuật</option>
+            <option value="sexy">💋 Sexy</option>
+            <option value="cute">😍 Cute</option>
+          </select>
+        </div>
+      </div>
 
-<label>✍️ Phong cách viết bài:</label>
-<select id="style">
-  <option value="goi-cam">Gợi cảm, quyến rũ</option>
-  <option value="nhe-nhang">Nhẹ nhàng, giới thiệu cá nhân</option>
-</select>
+      <div class="form-group full-width">
+        <label>📚 Chọn chủ đề bài viết:</label>
+        <div class="topic-grid" id="topicGrid"></div>
+        <div class="helper">⚠️ Không hỗ trợ chủ đề liên quan trẻ vị thành niên. Vui lòng chọn chủ đề an toàn.</div>
+      </div>
 
-<button onclick="generateArticle()">📝 Tạo bài viết</button>
+      <div class="form-group full-width">
+        <div class="checks">
+          <div class="item">
+            <input type="checkbox" id="confirmAdult" />
+            <label for="confirmAdult">Tôi xác nhận người trong ảnh/video **đã đủ 18 tuổi**.</label>
+          </div>
+          <div class="item">
+            <input type="checkbox" id="addHashtags" checked />
+            <label for="addHashtags">Thêm hashtags</label>
+          </div>
+          <div class="item">
+            <input type="checkbox" id="addSEO" checked />
+            <label for="addSEO">Tối ưu SEO (meta tags, OG)</label>
+          </div>
+          <div class="item">
+            <input type="checkbox" id="autoplay" />
+            <label for="autoplay">Video tự phát (autoplay + muted)</label>
+          </div>
+          <div class="item">
+            <input type="checkbox" id="addWatermark" />
+            <label for="addWatermark">Thêm watermark nền nhạt trên ảnh/video</label>
+          </div>
+        </div>
+      </div>
 
-<label>Kết quả bài viết (HTML đầy đủ):</label>
-<textarea id="resultHTML" readonly></textarea>
+      <div class="actions">
+        <button id="btnGenerate">🔮 Tạo Bài Viết</button>
+        <button class="btn-green" id="btnPreview">👁️ Xem Trước</button>
+      </div>
+    </div>
 
-<button onclick="copyResult()">📄 Sao chép HTML</button>
+    <!-- ADVANCED TAB -->
+    <div class="tab-content" id="tab-advanced">
+      <div class="form-group">
+        <label>🎯 Template tuỳ chỉnh:</label>
+        <textarea id="customTemplate" placeholder="Dùng các biến: {{title}}, {{description}}, {{image}}, {{video}}, {{content}}, {{hashtags}}"></textarea>
+      </div>
+      <div class="form-group">
+        <label>🏷️ Keywords SEO (phân tách bởi dấu phẩy):</label>
+        <input type="text" id="seoKeywords" placeholder="gái xinh, hot girl, beauty..." />
+      </div>
+      <div class="note">Nếu để trống template, tool sẽ dùng template mặc định đẹp, có OG tags.</div>
+    </div>
 
-<div class="loading-modal" id="loadingModal"><div class="loading-text">Đang xử lý AI...</div></div>
+    <!-- BATCH TAB -->
+    <div class="tab-content" id="tab-batch">
+      <div class="form-group">
+        <label>📋 Danh sách URL (mỗi dòng một URL ảnh hoặc video):</label>
+        <textarea id="batchUrls" placeholder="https://example.com/image1.jpg&#10;https://example.com/video1.mp4"></textarea>
+      </div>
+      <div class="actions">
+        <button id="btnBatch">⚡ Xử Lý Hàng Loạt</button>
+      </div>
+    </div>
 
-<script>
-const clientId = '3a8be4390ef3eb8';
-const dropzone = document.getElementById('dropzone');
-const imagePreview = document.getElementById('imagePreview');
-const imgurLinkInput = document.getElementById('imgurLink');
+    <div class="form-group full-width">
+      <label>Kết quả bài viết (HTML đầy đủ):</label>
+      <textarea id="resultHTML" readonly></textarea>
+    </div>
 
-dropzone.addEventListener('dragover', e => {
-  e.preventDefault();
-  dropzone.classList.add('dragover');
-});
-dropzone.addEventListener('dragleave', e => {
-  dropzone.classList.remove('dragover');
-});
-dropzone.addEventListener('drop', e => {
-  e.preventDefault();
-  dropzone.classList.remove('dragover');
-  if(e.dataTransfer.files.length) uploadFile(e.dataTransfer.files[0]);
-});
-dropzone.addEventListener('click', () => {
-  const fileInput = document.createElement('input');
-  fileInput.type = 'file';
-  fileInput.accept = 'image/*';
-  fileInput.onchange = () => {
-    if(fileInput.files.length) uploadFile(fileInput.files[0]);
-  };
-  fileInput.click();
-});
-
-function uploadFile(file) {
-  if(!file.type.startsWith('image/')) {
-    alert('Vui lòng chọn ảnh!');
-    return;
-  }
-  showLoading(true);
-  const formData = new FormData();
-  formData.append('image', file);
-
-  fetch('https://api.imgur.com/3/image', {
-    method: 'POST',
-    headers: { Authorization: 'Client-ID ' + clientId },
-    body: formData
-  })
-  .then(res => res.json())
-  .then(data => {
-    showLoading(false);
-    if(data.success) {
-      const link = data.data.link;
-      imgurLinkInput.value = link;
-      imagePreview.innerHTML = `<img src="${link}" alt="Thumbnail">`;
-    } else {
-      alert('Upload ảnh thất bại!');
-    }
-  })
-  .catch(() => {
-    showLoading(false);
-    alert('Lỗi upload ảnh!');
-  });
-}
-
-function showLoading(show) {
-  document.getElementById('loadingModal').classList.toggle('show', show);
-}
-
-function generateArticle() {
-  const img = document.getElementById('imgurLink').value.trim();
-  const video = document.getElementById('videoLink').value.trim();
-  const name = document.getElementById('characterName').value.trim();
-  const country = document.getElementById('country').value;
-  const topic = document.getElementById('topic').value;
-  const style = document.getElementById('style').value;
-
-  if(!img || !video) return alert('Vui lòng nhập ảnh và video!');
-
-  showLoading(true);
-
-  setTimeout(() => {
-    const subject = name ? name : `cô gái ${country.toLowerCase()}`;
-    let intro = '', content = '', title = '', desc = '';
-
-    if(style === 'goi-cam') {
-      const intros = [
-        `Video clip nóng bỏng và quyến rũ của ${subject} khiến người xem không thể rời mắt.`,
-        `Một bộ phim ngắn thể hiện trọn vẹn vẻ đẹp gợi cảm, cá tính của ${subject}.`,
-        `${subject} xuất hiện đầy mê hoặc trong clip mới, khoe dáng chuẩn, thần thái sắc lạnh thu hút mọi ánh nhìn.`
-      ];
-      const bodies = [
-        `Với thân hình cân đối, đường cong quyến rũ, ${subject} khiến người xem như bị thôi miên qua từng chuyển động uyển chuyển, từng ánh mắt đầy mê hoặc.`,
-        `Khung hình được đầu tư tỉ mỉ, nhấn mạnh vẻ đẹp bốc lửa và cá tính riêng biệt của ${subject}. Từng cảnh quay toát lên sự sang trọng pha chút phá cách gợi cảm.`,
-        `Clip không chỉ thu hút bởi hình ảnh bắt mắt mà còn tạo cảm giác chân thực, sống động, giúp người xem cảm nhận trọn vẹn nét đẹp độc đáo của ${subject}.`,
-        `Không chỉ ngoại hình mà phong thái tự tin, ánh mắt sắc sảo làm nên sức hút khó cưỡng, biến ${subject} thành tâm điểm của mọi ánh nhìn.`
-      ];
-      const outros = [
-        `Nếu bạn yêu thích vẻ đẹp gợi cảm và quyến rũ, không nên bỏ qua clip này.`,
-        `Video đã thu hút hàng nghìn lượt xem và chia sẻ chỉ sau vài giờ đăng tải.`,
-        `Hãy cùng chiêm ngưỡng và cảm nhận vẻ đẹp nóng bỏng của ${subject} qua từng khoảnh khắc.`
-      ];
-      intro = pick(intros);
-      content = bodies.map(p => `<p>${p}</p>`).join('') + `<p>${pick(outros)}</p>`;
-    } else {
-      const intros = [
-        `Clip nhẹ nhàng và đầy sức sống của ${subject} khiến người xem cảm thấy dễ chịu và gần gũi.`,
-        `Một đoạn video chân thật ghi lại những khoảnh khắc đời thường, giản dị của ${subject}.`,
-        `${subject} xuất hiện với nụ cười tươi tắn, vẻ đẹp trong sáng và tinh tế trong clip mới.`
-      ];
-      const bodies = [
-        `Phong cách tự nhiên và giản dị giúp ${subject} ghi điểm tuyệt đối trong mắt người xem. Đoạn video mang lại cảm giác thư thái, dịu dàng.`,
-        `Nét duyên dáng, nụ cười tỏa nắng cùng ánh mắt chân thành là điểm nhấn đặc biệt của ${subject} trong clip.`,
-        `Khung cảnh đơn giản, không cầu kỳ nhưng vẫn thể hiện trọn vẹn nét đẹp nhẹ nhàng, thuần khiết, khiến người xem cảm thấy gần gũi hơn bao giờ hết.`,
-        `Đây là lựa chọn hoàn hảo cho những ai yêu thích phong cách giản dị mà vẫn tinh tế, nhẹ nhàng, thanh lịch.`
-      ];
-      const outros = [
-        `Nếu bạn yêu thích sự chân thật và giản dị, đừng bỏ qua video này.`,
-        `Video nhận được rất nhiều lời khen ngợi vì sự gần gũi và tự nhiên của ${subject}.`,
-        `Hãy dành chút thời gian để cảm nhận vẻ đẹp nhẹ nhàng và trong sáng của ${subject} qua clip.`
-      ];
-      intro = pick(intros);
-      content = bodies.map(p => `<p>${p}</p>`).join('') + `<p>${pick(outros)}</p>`;
-    }
-
-    title = `Clip ${subject} - ${topic} ${country}`;
-    desc = `Xem video ${topic} ${country} của ${subject} đang gây chú ý trên mạng xã hội với nhiều lượt xem và bình luận.`;
-
-    const html = `
-<!-- Tiêu đề SEO -->
-<h1>${title}</h1>
-<meta name="description" content="${desc}" />
-
-<!-- Ảnh đại diện -->
-<div class="separator" style="clear: both;">
-  <a href="${img}" style="display: block; padding: 1em 0px; text-align: center;">
-    <img alt="${subject}" border="0" height="400" src="${img}" />
-  </a>
-</div>
-
-<!-- Video ẩn autoplay -->
-<div style="display: none;">
-  <div id="live-wallpaper">
-    <video class="live-wp" controlsList="nodownload" controls autoplay loop muted playsinline poster="${img}">
-      <source src="${video}" type="video/mp4" />
-      <source src="${video}" type="video/ogg" />
-      Your browser does not support the video tag.
-    </video>
+    <div class="actions">
+      <button class="btn-plain" id="btnCopy">📄 Sao Chép HTML</button>
+      <button class="btn-cyan" id="btnDownload">💾 Tải Xuống</button>
+      <button class="btn-red" id="btnClear">🗑️ Xoá Tất Cả</button>
+    </div>
   </div>
+
+  <!-- Loading -->
+  <div class="loading-modal" id="loadingModal">
+    <div class="loading-content">
+      <div class="spinner"></div>
+      <div>Đang xử lý…</div>
+    </div>
+  </div>
+
+  <script>
+    /** ============ CẤU HÌNH & DỮ LIỆU ============ **/
+    const IMGUR_CLIENT_ID = '3a8be4390ef3eb8'; // thay bằng Client-ID của bạn nếu cần
+
+    let selectedTopic = 'hotgirl';
+
+    // Chỉ giữ chủ đề an toàn, loại bỏ các chủ đề gợi ý trẻ vị thành niên
+    const TOPICS = {
+      'hotgirl': '🔥 Hot girl',
+      'facebook': '👥 Gái xinh Facebook',
+      'instagram': '📷 Gái xinh Instagram',
+      'twitter': '🐦 Gái xinh Twitter',
+      'tiktok': '🎵 TikTok girl',
+      'gai-xinh-vn': '🇻🇳 Ảnh Gái Xinh VN',
+      'gai-chau-au-my': '🌍 Gái xinh Châu Âu/Mỹ',
+      'gai-nhat': '🇯🇵 Ảnh gái Nhật',
+      'gai-han': '🇰🇷 Ảnh gái Hàn',
+      'bikini': '👙 Bikini (18+)',
+      'ao-dai': '👗 Áo dài',
+      'cosplay': '🎭 Cosplay',
+      'dienvien': '🎬 Diễn viên',
+      'nguoimau': '📸 Người mẫu',
+      'idol': '⭐ Idol',
+      'influencer': '💫 Influencer'
+    };
+
+    /** ============ TIỆN ÍCH ============ **/
+    const $ = sel => document.querySelector(sel);
+    const $$ = sel => document.querySelectorAll(sel);
+    const showLoading = (s) => $('#loadingModal').classList.toggle('show', !!s);
+    const isVideo = (url) => /\.mp4($|\?)/i.test(url);
+    const isImage = (url) => /\.(png|jpe?g|webp|gif)($|\?)/i.test(url);
+
+    function safeReplaceAll(template, map){
+      let out = template;
+      Object.entries(map).forEach(([k,v])=>{
+        const re = new RegExp(`\\{\\{${k}\\}\\}`,'g');
+        out = out.replace(re, v ?? '');
+      });
+      return out;
+    }
+
+    function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+
+    /** ============ NỘI DUNG TỰ ĐỘNG ============ **/
+    function generateEnhancedContent(topic, subject, country, style){
+      const blocks = {
+        'goi-cam': {
+          intro: [
+            `${subject} xuất hiện đầy quyến rũ trong bộ ảnh mới.`,
+            `Vẻ đẹp nóng bỏng của ${subject} khiến người xem không thể rời mắt.`
+          ],
+          body: [
+            `Thần thái tự tin và phong cách thời trang tinh tế làm bật lên nét cuốn hút của ${subject}.`,
+            `Mỗi khung hình đều toát lên sự gợi cảm nhưng vẫn sang trọng.`
+          ]
+        },
+        'nhe-nhang': {
+          intro: [
+            `${subject} toát lên vẻ dịu dàng và tinh tế.`,
+            `Nét đẹp tự nhiên của ${subject} mang lại cảm giác dễ chịu ngay từ ánh nhìn đầu tiên.`
+          ],
+          body: [
+            `Gam màu nhẹ nhàng và bố cục tối giản giúp tôn lên gương mặt xinh xắn của ${subject}.`,
+            `Nụ cười rạng rỡ chính là điểm nhấn làm say lòng người xem.`
+          ]
+        },
+        'thu-vi': {
+          intro: [
+            `${subject} mang đến năng lượng tích cực với phong cách trẻ trung.`,
+            `Những khoảnh khắc ngẫu hứng của ${subject} khiến bộ ảnh tràn đầy sức sống.`
+          ],
+          body: [
+            `Cách tạo dáng tự nhiên, biểu cảm đa dạng tạo nên series ảnh đầy thú vị.`,
+            `Mỗi bức ảnh là một câu chuyện nhỏ đáng yêu về ${subject}.`
+          ]
+        },
+        'nghe-thuat': {
+          intro: [
+            `Bộ ảnh của ${subject} gây ấn tượng mạnh với bố cục và ánh sáng đầy tính nghệ thuật.`,
+            `Phong cách thị giác tối giản nhưng sâu sắc tôn lên vẻ đẹp ${country.toLowerCase()}.`
+          ],
+          body: [
+            `Từng chi tiết đều được chăm chút kỹ lưỡng, tạo nên cảm xúc thị giác đặc biệt.`,
+            `Sự hòa quyện giữa màu sắc và chất liệu tạo nên tổng thể tinh tế.`
+          ]
+        },
+        'sexy': {
+          intro: [
+            `${subject} khoe trọn đường cong nóng bỏng trong concept đầy táo bạo (18+).`,
+            `Sức hút khó cưỡng của ${subject} khiến cộng đồng mạng “đứng ngồi không yên”.`
+          ],
+          body: [
+            `Tuy gợi cảm nhưng từng khung hình vẫn giữ sự chỉn chu và thẩm mỹ.`,
+            `Sự tự tin là “vũ khí” giúp ${subject} toả sáng trong mọi góc máy.`
+          ]
+        },
+        'cute': {
+          intro: [
+            `${subject} đáng yêu hết nấc với biểu cảm ngọt ngào.`,
+            `Phong cách trẻ trung và tươi tắn của ${subject} ghi điểm tuyệt đối.`
+          ],
+          body: [
+            `Tông màu tươi sáng và concept gần gũi khiến bộ ảnh dễ thương vô cùng.`,
+            `Mỗi khoảnh khắc đều toát lên nét đáng yêu khó cưỡng.`
+          ]
+        }
+      };
+      const t = blocks[style] || blocks['nhe-nhang'];
+      const intro = pick(t.intro);
+      const bodies = t.body.map(p=>`<p>${p}</p>`).join('');
+      return `<p>${intro}</p>${bodies}`;
+    }
+
+    function generateTitle(topic, subject, country){
+      const map = {
+        'facebook': `Ảnh Facebook ${subject} - Gái xinh ${country} gây sốt`,
+        'instagram': `Instagram ${subject} - Bộ ảnh gái xinh ${country}`,
+        'twitter': `Twitter ${subject} - Khoảnh khắc gây chú ý`,
+        'tiktok': `TikTok ${subject} - Video viral của gái xinh ${country}`,
+        'bikini': `Bộ ảnh bikini ${subject} (18+) - Nóng bỏng và cuốn hút`,
+        'ao-dai': `${subject} diện áo dài - Vẻ đẹp truyền thống Việt Nam`,
+        'cosplay': `Cosplay ${subject} - Hóa thân ấn tượng`,
+      };
+      return map[topic] || `Ảnh ${subject} - Gái xinh ${country}`;
+    }
+
+    function generateDescription(topic, subject, country){
+      return `Xem bộ sưu tập ${subject} - gái xinh ${country}: hình ảnh chất lượng cao, nội dung chọn lọc, phong cách cuốn hút.`;
+    }
+
+    function generateHashtags(topic, country){
+      const base = ['#gaixinh','#hotgirl','#beauty','#xinh','#dep'];
+      const map = {
+        'facebook':['#facebook','#social'],
+        'instagram':['#instagram','#insta'],
+        'twitter':['#twitter'],
+        'tiktok':['#tiktok','#video','#viral'],
+        'bikini':['#bikini','#summer'],
+        'cosplay':['#cosplay','#anime']
+      };
+      const countryTag = `#${country.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,'').toLowerCase()}`;
+      const tags = [...base, ...(map[topic]||[]), countryTag];
+      return `<p class="hashtags">${[...new Set(tags)].join(' ')}</p>`;
+    }
+
+    /** ============ TEMPLATE & XUẤT HTML ============ **/
+    function buildHTML({title, description, image, video, content, hashtags, addSEO, autoplay, watermarkText=''}){
+      const seo = addSEO ? `
+<meta name="keywords" content="gái xinh, hot girl, beauty, ${selectedTopic}">
+<meta name="description" content="${description}">
+<meta property="og:title" content="${title}">
+<meta property="og:description" content="${description}">
+<meta property="og:type" content="article">
+<meta property="og:image" content="${image || ''}">
+` : '';
+
+      const wmWrapOpen = watermarkText ? `<div class="wm-wrap">` : '';
+      const wmOverlay = watermarkText ? `<div class="wm-overlay">${watermarkText}</div>` : '';
+      const wmWrapClose = watermarkText ? `</div>` : '';
+
+      const heroImg = image ? `
+<div class="hero">
+  ${wmWrapOpen}
+  <img src="${image}" alt="${title}">
+  ${wmOverlay}
+  ${wmWrapClose}
+</div>` : '';
+
+      const heroVideo = video ? `
+<div class="hero">
+  ${wmWrapOpen}
+  <video controls ${autoplay ? 'autoplay muted playsinline' : ''} loop poster="${image || ''}">
+    <source src="${video}" type="video/mp4">
+    Trình duyệt của bạn không hỗ trợ video.
+  </video>
+  ${wmOverlay}
+  ${wmWrapClose}
+</div>` : '';
+
+      return `
+<!-- ===== SEO ===== -->
+${seo}
+<!-- ===== TITLE ===== -->
+<h1>${title}</h1>
+
+<!-- ===== MEDIA ===== -->
+${heroImg}
+${heroVideo}
+
+<!-- ===== CONTENT ===== -->
+<div style="line-height:1.65;font-size:16px">${content}</div>
+
+<!-- ===== TAGS ===== -->
+${hashtags}
+
+<!-- ===== RELATED ===== -->
+<div style="margin-top:34px;padding:18px;background:#f8f9ff;border-radius:12px">
+  <h3 style="color:#667eea;margin-top:0">🔗 Bài viết liên quan</h3>
+  <ul style="line-height:1.9;margin:0;padding-left:18px">
+    <li><a href="#" style="color:#667eea;text-decoration:none">Top ảnh ${selectedTopic} đẹp nhất</a></li>
+    <li><a href="#" style="color:#667eea;text-decoration:none">Xu hướng chụp ảnh ${new Date().getFullYear()}</a></li>
+    <li><a href="#" style="color:#667eea;text-decoration:none">Bí quyết tạo dáng tôn dáng</a></li>
+  </ul>
 </div>
+      `.trim();
+    }
 
-<!-- Nội dung bài viết -->
-${intro}
-${content}
+    function renderWithTemplate(customTpl, data){
+      if(!customTpl) return buildHTML(data);
+      return safeReplaceAll(customTpl, {
+        title: data.title,
+        description: data.description,
+        image: data.image || '',
+        video: data.video || '',
+        content: data.content,
+        hashtags: data.hashtags
+      });
+    }
 
-<!-- Nút tải video -->
-<div class="text-center">
-  <a alt="Download Video" class="btnlook download-wall" href="${video}" style="color: black;" title="Download Video" download>
-    Download
-  </a>
-</div>
-    `.trim();
+    /** ============ UI KHỞI TẠO ============ **/
+    function initTopics(){
+      const grid = $('#topicGrid');
+      grid.innerHTML = '';
+      Object.entries(TOPICS).forEach(([key, label])=>{
+        const card = document.createElement('div');
+        card.className = 'topic-card' + (key===selectedTopic?' selected':'');
+        card.textContent = label;
+        card.addEventListener('click', (e)=>{
+          selectedTopic = key;
+          $$('.topic-card').forEach(c=>c.classList.remove('selected'));
+          e.currentTarget.classList.add('selected');
+        });
+        grid.appendChild(card);
+      });
+    }
 
-    document.getElementById('resultHTML').value = html;
-    showLoading(false);
-  }, 1200);
-}
+    function initTabs(){
+      const tabs = $('#tabs');
+      tabs.addEventListener('click', (e)=>{
+        const btn = e.target.closest('button[data-tab]');
+        if(!btn) return;
+        $$('.tab-btn').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
 
-function copyResult() {
-  const textarea = document.getElementById('resultHTML');
-  textarea.select();
-  document.execCommand('copy');
-  alert('✅ Đã sao chép HTML!');
-}
+        const id = 'tab-' + btn.dataset.tab;
+        $$('.tab-content').forEach(c=>c.classList.remove('active'));
+        $('#'+id).classList.add('active');
+      });
+    }
 
-function pick(arr) {
-  return arr[Math.floor(Math.random() * arr.length)];
-}
-</script>
+    /** ============ DROPZONE / IMGUR UPLOAD ============ **/
+    function initDropzone(){
+      const dz = $('#dropzone');
+      dz.addEventListener('dragover', e=>{ e.preventDefault(); dz.classList.add('dragover'); });
+      dz.addEventListener('dragleave', ()=> dz.classList.remove('dragover'));
+      dz.addEventListener('drop', (e)=>{
+        e.preventDefault();
+        dz.classList.remove('dragover');
+        const file = e.dataTransfer.files?.[0];
+        if(file) uploadToImgur(file);
+      });
+      dz.addEventListener('click', ()=>{
+        const input = document.createElement('input');
+        input.type = 'file'; input.accept='image/*';
+        input.onchange = ()=>{ if(input.files?.[0]) uploadToImgur(input.files[0]); };
+        input.click();
+      });
+    }
 
+    async function uploadToImgur(file){
+      if(!file.type.startsWith('image/')) return alert('Vui lòng chọn file ảnh!');
+      showLoading(true);
+      try{
+        const formData = new FormData();
+        formData.append('image', file);
+        const res = await fetch('https://api.imgur.com/3/image', {
+          method: 'POST',
+          headers: { Authorization: 'Client-ID ' + IMGUR_CLIENT_ID },
+          body: formData
+        });
+        const data = await res.json();
+        if(data?.success){
+          const link = data.data.link;
+          $('#imgurLink').value = link;
+          $('#imagePreview').innerHTML = `<img src="${link}" alt="Thumbnail">`;
+        } else {
+          alert('Upload thất bại. Vui lòng thử lại!');
+        }
+      }catch(err){
+        console.error(err);
+        alert('Lỗi kết nối khi upload Imgur.');
+      }finally{
+        showLoading(false);
+      }
+    }
+
+    /** ============ TẠO BÀI VIẾT ============ **/
+    function getInputs(){
+      const img = $('#imgurLink').value.trim();
+      const media = $('#mediaLink').value.trim();
+      const name = $('#characterName').value.trim();
+      const country = $('#country').value;
+      const style = $('#style').value;
+      const addHashtags = $('#addHashtags').checked;
+      const addSEO = $('#addSEO').checked;
+      const autoplay = $('#autoplay').checked;
+      const addWatermark = $('#addWatermark').checked;
+      const confirmAdult = $('#confirmAdult').checked;
+      const customTemplate = $('#customTemplate').value.trim();
+      const seoKeywords = $('#seoKeywords').value.trim();
+      return {img, media, name, country, style, addHashtags, addSEO, autoplay, addWatermark, customTemplate, seoKeywords, confirmAdult};
+    }
+
+    function validateSingle({img, media, confirmAdult}){
+      if(!confirmAdult){
+        alert('Bạn phải xác nhận người trong ảnh/video đã đủ 18 tuổi.');
+        return false;
+      }
+      if(!img && !media){
+        alert('Vui lòng upload ảnh bằng Imgur hoặc nhập URL ảnh/video!');
+        return false;
+      }
+      if(media && !(isVideo(media) || isImage(media))){
+        // Cho phép nhưng cảnh báo để người dùng kiểm tra
+        if(!confirm('URL không có đuôi phổ biến (.mp4/.jpg/.png/.webp). Vẫn tiếp tục?')) return false;
+      }
+      return true;
+    }
+
+    function makeArticle({img, media, name, country, style, addHashtags, addSEO, autoplay, addWatermark, customTemplate, seoKeywords}){
+      const subject = name || `cô gái ${country.toLowerCase()}`;
+      const title = generateTitle(selectedTopic, subject, country);
+      const description = generateDescription(selectedTopic, subject, country);
+      const content = generateEnhancedContent(selectedTopic, subject, country, style);
+      const hashtags = addHashtags ? generateHashtags(selectedTopic, country) : '';
+
+      const image = img || (isImage(media) ? media : '');
+      const video = isVideo(media) ? media : '';
+
+      // Gắn thêm keyword nếu user nhập
+      const descPlus = seoKeywords ? `${description} Từ khoá: ${seoKeywords}.` : description;
+
+      const result = renderWithTemplate(customTemplate, {
+        title, description: descPlus, image, video, content, hashtags
+      });
+
+      // Nếu dùng template mặc định, buildHTML đã làm rồi; còn nếu custom template, không có CSS preview => ta không thêm gì ở đây
+      // Watermark chỉ áp dụng khi dùng template mặc định (vì custom có thể tự xử lý)
+      if(!customTemplate){
+        return buildHTML({
+          title, description: descPlus, image, video, content, hashtags,
+          addSEO, autoplay, watermarkText: addWatermark ? 'WATERMARK' : ''
+        });
+      }
+      return result;
+    }
+
+    /** ============ SỰ KIỆN CHÍNH ============ **/
+    async function onGenerate(){
+      const state = getInputs();
+      if(!validateSingle(state)) return;
+      showLoading(true);
+      // mô phỏng xử lý
+      setTimeout(()=>{
+        const html = makeArticle(state);
+        $('#resultHTML').value = wrapPreviewHTML(html); // Lưu full để preview đẹp
+        showLoading(false);
+      }, 400);
+    }
+
+    function onPreview(){
+      const content = $('#resultHTML').value.trim();
+      if(!content) return alert('Vui lòng tạo bài viết trước!');
+      const w = window.open('', '_blank');
+      w.document.write(content);
+      w.document.close();
+    }
+
+    function onCopy(){
+      const text = $('#resultHTML').value;
+      if(!text) return alert('Không có nội dung để sao chép!');
+      if(navigator.clipboard?.writeText){
+        navigator.clipboard.writeText(text).then(()=>alert('✅ Đã sao chép HTML!')).catch(()=>fallbackCopy());
+      }else{ fallbackCopy(); }
+      function fallbackCopy(){
+        const ta = $('#resultHTML'); ta.removeAttribute('readonly'); ta.select();
+        document.execCommand('copy'); ta.setAttribute('readonly','');
+        alert('✅ Đã sao chép HTML!');
+      }
+    }
+
+    function onDownload(){
+      const content = $('#resultHTML').value;
+      if(!content) return alert('Không có nội dung để tải xuống!');
+      const blob = new Blob([content], {type:'text/html'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = `bai-viet-gaixinh-${Date.now()}.html`;
+      document.body.appendChild(a); a.click(); a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function onClear(){
+      if(!confirm('Bạn có chắc muốn xoá tất cả?')) return;
+      $('#imgurLink').value = '';
+      $('#mediaLink').value = '';
+      $('#characterName').value = '';
+      $('#resultHTML').value = '';
+      $('#imagePreview').innerHTML = '';
+      $('#customTemplate').value = '';
+      $('#seoKeywords').value = '';
+      $('#batchUrls').value = '';
+      $('#confirmAdult').checked = false;
+      $('#addHashtags').checked = true;
+      $('#addSEO').checked = true;
+      $('#autoplay').checked = false;
+      $('#addWatermark').checked = false;
+      selectedTopic = 'hotgirl';
+      initTopics();
+      // về tab basic
+      $$('.tab-btn').forEach(b=>b.classList.remove('active'));
+      $$('.tab-content').forEach(c=>c.classList.remove('active'));
+      document.querySelector('[data-tab="basic"]').classList.add('active');
+      $('#tab-basic').classList.add('active');
+    }
+
+    function wrapPreviewHTML(inner){
+      // Bọc thêm HTML + CSS nhẹ để preview mở tab mới hiển thị đẹp
+      return `
+<!doctype html><html><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Preview</title>
+<style>
+  .preview-root{max-width:860px;margin:auto;padding:18px;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+  .preview-root .hero{display:block;text-align:center;margin:16px 0}
+  .preview-root img,.preview-root video{max-width:100%;height:auto;border-radius:12px;box-shadow:0 8px 18px rgba(0,0,0,.12)}
+  .preview-root .hashtags{color:#1da1f2;font-weight:700}
+  .wm-wrap{position:relative;display:inline-block}
+  .wm-overlay{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;opacity:.16;font-weight:800;font-size:28px;letter-spacing:2px;mix-blend-mode:multiply}
+</style>
+</head><body><div class="preview-root">
+${inner}
+</div></body></html>
+`.trim();
+    }
+
+    /** ============ HÀNG LOẠT ============ **/
+    function onBatch(){
+      const list = $('#batchUrls').value.trim().split('\n').map(s=>s.trim()).filter(Boolean);
+      if(!list.length) return alert('Vui lòng nhập danh sách URL!');
+      if(!$('#confirmAdult').checked) return alert('Bạn phải xác nhận 18+ (áp dụng cho tất cả URL).');
+
+      const base = getInputs(); // lấy country/style/template/… hiện tại
+      showLoading(true);
+      setTimeout(()=>{
+        const results = [];
+        list.forEach((url, idx)=>{
+          const state = {
+            ...base,
+            media: url,
+            img: '', // ưu tiên url dòng
+            name: `gái xinh #${idx+1}`
+          };
+          const html = makeArticle(state);
+          results.push(html);
+        });
+        $('#resultHTML').value = wrapPreviewHTML(results.join('\n\n<!-- ========== ARTICLE SEPARATOR ========== -->\n\n'));
+        showLoading(false);
+        alert(`✅ Đã xử lý ${list.length} mục!`);
+      }, 500);
+    }
+
+    /** ============ KHỞI TẠO  ============ **/
+    function init(){
+      initTabs();
+      initTopics();
+      initDropzone();
+
+      // Nút
+      $('#btnGenerate').addEventListener('click', onGenerate);
+      $('#btnPreview').addEventListener('click', onPreview);
+      $('#btnCopy').addEventListener('click', onCopy);
+      $('#btnDownload').addEventListener('click', onDownload);
+      $('#btnClear').addEventListener('click', onClear);
+      $('#btnBatch').addEventListener('click', onBatch);
+
+      // Auto-save vài trường
+      ['characterName','mediaLink','customTemplate','seoKeywords','batchUrls'].forEach(id=>{
+        const el = $('#'+id);
+        const saved = localStorage.getItem('sav_'+id);
+        if(saved) el.value = saved;
+        el.addEventListener('input', ()=> localStorage.setItem('sav_'+id, el.value));
+      });
+
+      // Phím tắt
+      document.addEventListener('keydown',(e)=>{
+        if(!(e.ctrlKey||e.metaKey)) return;
+        if(e.key.toLowerCase()==='enter'){ e.preventDefault(); onGenerate(); }
+        if(e.key.toLowerCase()==='s'){ e.preventDefault(); onDownload(); }
+        if(e.shiftKey && e.key.toLowerCase()==='c'){ e.preventDefault(); onCopy(); }
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
 </body>
 </html>
