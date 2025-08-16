@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <title>Tool tạo bài viết girlxinh đa quốc gia</title>
+  <title>Tool tạo bài viết girlxinh đa quốc gia - Việt/Anh</title>
   <style>
     body { font-family: Arial; max-width: 900px; margin: auto; padding: 20px; }
     h2 { text-align: center; }
@@ -49,11 +49,29 @@
     .btnlook.download-wall:hover {
       background-color: #eee;
     }
+    .language-selector {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+    .language-selector select {
+      background: white;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
 
-<h2>🎥 Tool tạo bài viết girlxinh - đa quốc gia</h2>
+<h2>🎥 Tool tạo bài viết girlxinh - Đa quốc gia & Đa ngôn ngữ</h2>
+
+<div class="language-selector">
+  <label style="color: white; margin-bottom: 5px;">🌐 Chọn ngôn ngữ bài viết:</label>
+  <select id="language">
+    <option value="vi">🇻🇳 Tiếng Việt</option>
+    <option value="en">🇺🇸 English</option>
+  </select>
+</div>
 
 <label>📸 Upload ảnh thumbnail (Imgur):</label>
 <div class="dropzone" id="dropzone">Kéo ảnh vào đây hoặc click để chọn</div>
@@ -63,10 +81,10 @@
 <label>🎬 Nhập link video MP4:</label>
 <input type="text" id="videoLink" placeholder="https://example.com/video.mp4" />
 
-<label>🧍‍♀️ Tên nhân vật (có thể để trống):</label>
+<label>🧙‍♀️ Tên nhân vật (có thể để trống):</label>
 <input type="text" id="characterName" placeholder="Ví dụ: Ngọc Trinh, Arisa, Lisa..." />
 
-<label>🌏 Chọn quốc gia:</label>
+<label>🌍 Chọn quốc gia:</label>
 <select id="country">
   <option value="Việt Nam">Việt Nam</option>
   <option value="Nhật Bản">Nhật Bản</option>
@@ -86,7 +104,7 @@
   <option value="influencer">Người nổi tiếng</option>
 </select>
 
-<label>✍️ Phong cách viết bài:</label>
+<label>✏️ Phong cách viết bài:</label>
 <select id="style">
   <option value="goi-cam">Gợi cảm, quyến rũ</option>
   <option value="nhe-nhang">Nhẹ nhàng, giới thiệu cá nhân</option>
@@ -106,6 +124,102 @@ const clientId = '3a8be4390ef3eb8';
 const dropzone = document.getElementById('dropzone');
 const imagePreview = document.getElementById('imagePreview');
 const imgurLinkInput = document.getElementById('imgurLink');
+
+// Content templates for both languages
+const contentTemplates = {
+  vi: {
+    countries: {
+      "Việt Nam": "việt nam",
+      "Nhật Bản": "nhật bản", 
+      "Hàn Quốc": "hàn quốc",
+      "Trung Quốc": "trung quốc",
+      "Thái Lan": "thái lan",
+      "Mỹ": "mỹ"
+    },
+    'goi-cam': {
+      intros: [
+        `Video clip nóng bỏng và quyến rũ của {subject} khiến người xem không thể rời mắt.`,
+        `Một bộ phim ngắn thể hiện trọn vẹn vẻ đẹp gợi cảm, cá tính của {subject}.`,
+        `{subject} xuất hiện đầy mê hoặc trong clip mới, khoe dáng chuẩn, thần thái sắc lạnh thu hút mọi ánh nhìn.`
+      ],
+      bodies: [
+        `Với thân hình cân đối, đường cong quyến rũ, {subject} khiến người xem như bị thôi miên qua từng chuyển động uyển chuyển, từng ánh mắt đầy mê hoặc.`,
+        `Khung hình được đầu tư tỉ mỉ, nhấn mạnh về đẹp bốc lửa và cá tính riêng biệt của {subject}. Từng cảnh quay toát lên sự sang trọng pha chút phá cách gợi cảm.`,
+        `Clip không chỉ thu hút bởi hình ảnh bắt mắt mà còn tạo cảm giác chân thực, sống động, giúp người xem cảm nhận trọn vẹn nét đẹp độc đáo của {subject}.`,
+        `Không chỉ ngoại hình mà phong thái tự tin, ánh mắt sắc sảo làm nên sức hút khó cưỡng, biến {subject} thành tâm điểm của mọi ánh nhìn.`
+      ],
+      outros: [
+        `Nếu bạn yêu thích vẻ đẹp gợi cảm và quyến rũ, không nên bỏ qua clip này.`,
+        `Video đã thu hút hàng nghìn lượt xem và chia sẻ chỉ sau vài giờ đăng tải.`,
+        `Hãy cùng chiêm ngưỡng và cảm nhận vẻ đẹp nóng bỏng của {subject} qua từng khoảnh khắc.`
+      ]
+    },
+    'nhe-nhang': {
+      intros: [
+        `Clip nhẹ nhàng và đầy sức sống của {subject} khiến người xem cảm thấy dễ chịu và gần gũi.`,
+        `Một đoạn video chân thật ghi lại những khoảnh khắc đời thường, giản dị của {subject}.`,
+        `{subject} xuất hiện với nụ cười tươi tắn, vẻ đẹp trong sáng và tinh tế trong clip mới.`
+      ],
+      bodies: [
+        `Phong cách tự nhiên và giản dị giúp {subject} ghi điểm tuyệt đối trong mắt người xem. Đoạn video mang lại cảm giác thư thái, dịu dàng.`,
+        `Nét duyên dáng, nụ cười tỏa nắng cùng ánh mắt chân thành là điểm nhấn đặc biệt của {subject} trong clip.`,
+        `Khung cảnh đơn giản, không cầu kỳ nhưng vẫn thể hiện trọn vẹn nét đẹp nhẹ nhàng, thuần khiết, khiến người xem cảm thấy gần gũi hơn bao giờ hết.`,
+        `Đây là lựa chọn hoàn hảo cho những ai yêu thích phong cách giản dị mà vẫn tinh tế, nhẹ nhàng, thanh lịch.`
+      ],
+      outros: [
+        `Nếu bạn yêu thích sự chân thật và giản dị, đừng bỏ qua video này.`,
+        `Video nhận được rất nhiều lời khen ngợi vì sự gần gũi và tự nhiên của {subject}.`,
+        `Hãy dành chút thời gian để cảm nhận vẻ đẹp nhẹ nhàng và trong sáng của {subject} qua clip.`
+      ]
+    }
+  },
+  en: {
+    countries: {
+      "Việt Nam": "vietnamese",
+      "Nhật Bản": "japanese",
+      "Hàn Quốc": "korean", 
+      "Trung Quốc": "chinese",
+      "Thái Lan": "thai",
+      "Mỹ": "american"
+    },
+    'goi-cam': {
+      intros: [
+        `Hot and seductive video clip of {subject} that captivates viewers and keeps them glued to the screen.`,
+        `A short film showcasing the complete sensual beauty and unique personality of {subject}.`,
+        `{subject} appears mesmerizingly in the new clip, showing off perfect curves and a striking charisma that draws all eyes.`
+      ],
+      bodies: [
+        `With a perfectly proportioned body and alluring curves, {subject} mesmerizes viewers through every graceful movement and captivating gaze.`,
+        `The footage is meticulously crafted, emphasizing the fiery beauty and distinctive personality of {subject}. Every scene exudes elegance mixed with boldly seductive elements.`,
+        `The clip attracts not only with eye-catching visuals but also creates an authentic, vibrant feeling, allowing viewers to fully appreciate the unique beauty of {subject}.`,
+        `Not just the appearance, but the confident attitude and sharp gaze create an irresistible attraction, making {subject} the center of all attention.`
+      ],
+      outros: [
+        `If you love sensual and seductive beauty, don't miss this clip.`,
+        `The video has attracted thousands of views and shares just hours after being posted.`,
+        `Come and admire the sizzling beauty of {subject} through every moment.`
+      ]
+    },
+    'nhe-nhang': {
+      intros: [
+        `Gentle and lively clip of {subject} that makes viewers feel comfortable and close.`,
+        `An authentic video capturing the everyday, simple moments of {subject}.`,
+        `{subject} appears with a bright smile, pure beauty and elegance in the new clip.`
+      ],
+      bodies: [
+        `The natural and simple style helps {subject} score perfectly in viewers' eyes. The video brings a relaxing, gentle feeling.`,
+        `The graceful features, radiant smile and sincere eyes are the special highlights of {subject} in the clip.`,
+        `The simple, unpretentious setting still perfectly showcases the gentle, pure beauty, making viewers feel more connected than ever.`,
+        `This is the perfect choice for those who love a simple yet refined, gentle, and elegant style.`
+      ],
+      outros: [
+        `If you love authenticity and simplicity, don't miss this video.`,
+        `The video received many compliments for the closeness and naturalness of {subject}.`,
+        `Take some time to appreciate the gentle and pure beauty of {subject} through the clip.`
+      ]
+    }
+  }
+};
 
 dropzone.addEventListener('dragover', e => {
   e.preventDefault();
@@ -171,71 +285,48 @@ function generateArticle() {
   const country = document.getElementById('country').value;
   const topic = document.getElementById('topic').value;
   const style = document.getElementById('style').value;
+  const language = document.getElementById('language').value;
 
   if(!img || !video) return alert('Vui lòng nhập ảnh và video!');
 
   showLoading(true);
 
   setTimeout(() => {
-    const subject = name ? name : `cô gái ${country.toLowerCase()}`;
-    let intro = '', content = '', title = '', desc = '';
+    const templates = contentTemplates[language];
+    const countryLower = templates.countries[country];
+    const subject = name ? name : `${language === 'vi' ? 'cô gái' : 'girl'} ${countryLower}`;
+    
+    const styleTemplates = templates[style];
+    const intro = pick(styleTemplates.intros).replace('{subject}', subject);
+    const bodyParagraphs = styleTemplates.bodies.map(p => 
+      `<p>${p.replace('{subject}', subject)}</p>`
+    ).join('');
+    const outro = pick(styleTemplates.outros).replace('{subject}', subject);
+    const content = bodyParagraphs + `<p>${outro}</p>`;
 
-    if(style === 'goi-cam') {
-      const intros = [
-        `Video clip nóng bỏng và quyến rũ của ${subject} khiến người xem không thể rời mắt.`,
-        `Một bộ phim ngắn thể hiện trọn vẹn vẻ đẹp gợi cảm, cá tính của ${subject}.`,
-        `${subject} xuất hiện đầy mê hoặc trong clip mới, khoe dáng chuẩn, thần thái sắc lạnh thu hút mọi ánh nhìn.`
-      ];
-      const bodies = [
-        `Với thân hình cân đối, đường cong quyến rũ, ${subject} khiến người xem như bị thôi miên qua từng chuyển động uyển chuyển, từng ánh mắt đầy mê hoặc.`,
-        `Khung hình được đầu tư tỉ mỉ, nhấn mạnh vẻ đẹp bốc lửa và cá tính riêng biệt của ${subject}. Từng cảnh quay toát lên sự sang trọng pha chút phá cách gợi cảm.`,
-        `Clip không chỉ thu hút bởi hình ảnh bắt mắt mà còn tạo cảm giác chân thực, sống động, giúp người xem cảm nhận trọn vẹn nét đẹp độc đáo của ${subject}.`,
-        `Không chỉ ngoại hình mà phong thái tự tin, ánh mắt sắc sảo làm nên sức hút khó cưỡng, biến ${subject} thành tâm điểm của mọi ánh nhìn.`
-      ];
-      const outros = [
-        `Nếu bạn yêu thích vẻ đẹp gợi cảm và quyến rũ, không nên bỏ qua clip này.`,
-        `Video đã thu hút hàng nghìn lượt xem và chia sẻ chỉ sau vài giờ đăng tải.`,
-        `Hãy cùng chiêm ngưỡng và cảm nhận vẻ đẹp nóng bỏng của ${subject} qua từng khoảnh khắc.`
-      ];
-      intro = pick(intros);
-      content = bodies.map(p => `<p>${p}</p>`).join('') + `<p>${pick(outros)}</p>`;
+    // Generate title and description based on language
+    let title, desc;
+    if (language === 'vi') {
+      title = `Clip ${subject} - ${topic} ${country}`;
+      desc = `Xem video ${topic} ${country} của ${subject} đang gây chú ý trên mạng xã hội với nhiều lượt xem và bình luận.`;
     } else {
-      const intros = [
-        `Clip nhẹ nhàng và đầy sức sống của ${subject} khiến người xem cảm thấy dễ chịu và gần gũi.`,
-        `Một đoạn video chân thật ghi lại những khoảnh khắc đời thường, giản dị của ${subject}.`,
-        `${subject} xuất hiện với nụ cười tươi tắn, vẻ đẹp trong sáng và tinh tế trong clip mới.`
-      ];
-      const bodies = [
-        `Phong cách tự nhiên và giản dị giúp ${subject} ghi điểm tuyệt đối trong mắt người xem. Đoạn video mang lại cảm giác thư thái, dịu dàng.`,
-        `Nét duyên dáng, nụ cười tỏa nắng cùng ánh mắt chân thành là điểm nhấn đặc biệt của ${subject} trong clip.`,
-        `Khung cảnh đơn giản, không cầu kỳ nhưng vẫn thể hiện trọn vẹn nét đẹp nhẹ nhàng, thuần khiết, khiến người xem cảm thấy gần gũi hơn bao giờ hết.`,
-        `Đây là lựa chọn hoàn hảo cho những ai yêu thích phong cách giản dị mà vẫn tinh tế, nhẹ nhàng, thanh lịch.`
-      ];
-      const outros = [
-        `Nếu bạn yêu thích sự chân thật và giản dị, đừng bỏ qua video này.`,
-        `Video nhận được rất nhiều lời khen ngợi vì sự gần gũi và tự nhiên của ${subject}.`,
-        `Hãy dành chút thời gian để cảm nhận vẻ đẹp nhẹ nhàng và trong sáng của ${subject} qua clip.`
-      ];
-      intro = pick(intros);
-      content = bodies.map(p => `<p>${p}</p>`).join('') + `<p>${pick(outros)}</p>`;
+      title = `${subject} ${topic} video - ${country}`;
+      desc = `Watch ${countryLower} ${topic} video of ${subject} that's getting attention on social media with many views and comments.`;
     }
 
-    title = `Clip ${subject} - ${topic} ${country}`;
-    desc = `Xem video ${topic} ${country} của ${subject} đang gây chú ý trên mạng xã hội với nhiều lượt xem và bình luận.`;
-
     const html = `
-<!-- Tiêu đề SEO -->
+<!-- ${language === 'vi' ? 'Tiêu đề SEO' : 'SEO Title'} -->
 <h1>${title}</h1>
 <meta name="description" content="${desc}" />
 
-<!-- Ảnh đại diện -->
+<!-- ${language === 'vi' ? 'Ảnh đại diện' : 'Thumbnail Image'} -->
 <div class="separator" style="clear: both;">
   <a href="${img}" style="display: block; padding: 1em 0px; text-align: center;">
     <img alt="${subject}" border="0" height="400" src="${img}" />
   </a>
 </div>
 
-<!-- Video ẩn autoplay -->
+<!-- ${language === 'vi' ? 'Video ẩn autoplay' : 'Hidden autoplay video'} -->
 <div style="display: none;">
   <div id="live-wallpaper">
     <video class="live-wp" controlsList="nodownload" controls autoplay loop muted playsinline poster="${img}">
@@ -246,14 +337,14 @@ function generateArticle() {
   </div>
 </div>
 
-<!-- Nội dung bài viết -->
+<!-- ${language === 'vi' ? 'Nội dung bài viết' : 'Article Content'} -->
 ${intro}
 ${content}
 
-<!-- Nút tải video -->
+<!-- ${language === 'vi' ? 'Nút tải video' : 'Download Video Button'} -->
 <div class="text-center">
   <a alt="Download Video" class="btnlook download-wall" href="${video}" style="color: black;" title="Download Video" download>
-    Download
+    ${language === 'vi' ? 'Tải về' : 'Download'}
   </a>
 </div>
     `.trim();
