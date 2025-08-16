@@ -108,6 +108,10 @@
 <select id="style">
   <option value="goi-cam">Gợi cảm, quyến rũ</option>
   <option value="nhe-nhang">Nhẹ nhàng, giới thiệu cá nhân</option>
+  <option value="thoi-trang">Thời trang, phong cách</option>
+  <option value="tai-nang">Tài năng, kỹ năng</option>
+  <option value="doi-thuong">Đời thường, gần gũi</option>
+  <option value="nghe-thuat">Nghệ thuật, sáng tạo</option>
 </select>
 
 <button onclick="generateArticle()">📝 Tạo bài viết</button>
@@ -152,6 +156,150 @@ const contentTemplates = {
         `Nếu bạn yêu thích vẻ đẹp gợi cảm và quyến rũ, không nên bỏ qua clip này.`,
         `Video đã thu hút hàng nghìn lượt xem và chia sẻ chỉ sau vài giờ đăng tải.`,
         `Hãy cùng chiêm ngưỡng và cảm nhận vẻ đẹp nóng bỏng của {subject} qua từng khoảnh khắc.`
+      ]
+    },
+    'thoi-trang': {
+      intros: [
+        `{subject} gây ấn tượng mạnh với phong cách thời trang độc đáo và cá tính trong video mới nhất.`,
+        `Clip thời trang của {subject} khiến nhiều người phải xuýt xoa với gu ăn mặc tinh tế và hiện đại.`,
+        `{subject} tỏa sáng với outfit hoàn hảo, thể hiện đẳng cấp thời trang không thể phủ nhận.`
+      ],
+      bodies: [
+        `Từng chi tiết trong trang phục được {subject} lựa chọn kỹ lưỡng, tạo nên tổng thể hài hòa và thu hút.`,
+        `Phong cách mix-match táo bạo nhưng vẫn giữ được sự tinh tế, {subject} chứng minh khả năng thời trang đỉnh cao.`,
+        `Không chỉ đẹp mà còn rất trendy, {subject} luôn bắt kịp xu hướng và tạo ra phong cách riêng độc đáo.`,
+        `Video là nguồn cảm hứng tuyệt vời cho những ai yêu thích thời trang và muốn học hỏi cách phối đồ.`
+      ],
+      outros: [
+        `Đây chắc chắn là video không thể bỏ qua cho những tín đồ thời trang.`,
+        `{subject} một lần nữa chứng minh mình là biểu tượng thời trang thực thụ.`,
+        `Hãy cùng chiêm ngưỡng và học hỏi phong cách thời trang đỉnh cao của {subject}.`
+      ]
+    },
+    'tai-nang': {
+      intros: [
+        `Video mới của {subject} khoe trọn tài năng đặc biệt khiến khán giả không khỏi trầm trồ.`,
+        `{subject} gây bất ngờ với những kỹ năng tuyệt vời trong clip vừa được chia sẻ.`,
+        `Tài năng của {subject} được thể hiện một cách ấn tượng trong video thu hút hàng nghìn lượt xem.`
+      ],
+      bodies: [
+        `Mỗi chuyển động, mỗi biểu hiện của {subject} đều thể hiện sự chuyên nghiệp và tài năng thiên bẩm.`,
+        `Không chỉ có ngoại hình, {subject} còn sở hữu khả năng đặc biệt khiến nhiều người ngưỡng mộ.`,
+        `Video là minh chứng rõ ràng cho thấy {subject} không chỉ đẹp mà còn rất tài năng và đa năng.`,
+        `Sự kết hợp hoàn hảo giữa tài năng và nhan sắc giúp {subject} tỏa sáng trong từng khoảnh khắc.`
+      ],
+      outros: [
+        `Một video đáng xem để cảm nhận tài năng thực sự của {subject}.`,
+        `{subject} xứng đáng nhận được nhiều sự chú ý hơn nữa với tài năng này.`,
+        `Đừng bỏ lỡ cơ hội chiêm ngưỡng tài năng độc đáo của {subject}.`
+      ]
+    },
+    'doi-thuong': {
+      intros: [
+        `Khoảnh khắc đời thường giản dị nhưng đầy cuốn hút của {subject} trong video mới.`,
+        `{subject} chia sẻ những phút giây bình thường nhưng vô cùng đáng yêu và gần gũi.`,
+        `Video đời thường của {subject} mang lại cảm giác thân thiết như đang trò chuyện cùng bạn bè.`
+      ],
+      bodies: [
+        `Sự tự nhiên và chân thật trong mỗi cử chỉ giúp {subject} trở nên gần gũi hơn với người xem.`,
+        `Dù trong hoàn cảnh bình thường, {subject} vẫn tỏa ra sức hút đặc biệt khó có thể chối từ.`,
+        `Video cho thấy một {subject} rất đời thường nhưng không kém phần dễ thương và thu hút.`,
+        `Những khoảnh khắc giản dị này lại tạo nên sự kết nối mạnh mẽ giữa {subject} và khán giả.`
+      ],
+      outros: [
+        `Một video nhẹ nhàng, thích hợp cho những lúc muốn thư giãn.`,
+        `{subject} chứng minh rằng đôi khi sự giản dị lại là điều hấp dẫn nhất.`,
+        `Hãy dành thời gian cảm nhận những khoảnh khắc đời thường đáng yêu của {subject}.`
+      ]
+    },
+    'nghe-thuat': {
+      intros: [
+        `Video nghệ thuật đầy sáng tạo của {subject} mang đến trải nghiệm thị giác tuyệt vời.`,
+        `{subject} thể hiện khả năng nghệ thuật ấn tượng trong clip được đầu tư kỹ lưỡng.`,
+        `Một tác phẩm nghệ thuật thực thụ với sự tham gia của {subject} đầy cảm xúc.`
+      ],
+      bodies: [
+        `Từng khung hình được tạo nên như một bức tranh nghệ thuật với {subject} là nhân vật chính.`,
+        `Sự kết hợp giữa âm nhạc, hình ảnh và sự hiện diện của {subject} tạo nên một tổng thể hoàn hảo.`,
+        `Video không chỉ giải trí mà còn mang giá trị nghệ thuật cao, thể hiện gu thẩm mỹ tinh tế.`,
+        `{subject} như một nàng thơ trong tác phẩm nghệ thuật đầy cảm hứng và sáng tạo này.`
+      ],
+      outros: [
+        `Một video nghệ thuật không thể bỏ qua cho những ai yêu thích cái đẹp.`,
+        `{subject} một lần nữa chứng minh khả năng nghệ thuật đáng ngưỡng mộ.`,
+        `Hãy thưởng thức tác phẩm nghệ thuật đầy cảm xúc này của {subject}.`
+      ]
+    },
+    'thoi-trang': {
+      intros: [
+        `{subject} makes a strong impression with unique and stylish fashion sense in the latest video.`,
+        `{subject}'s fashion clip has many people admiring the refined and modern dressing style.`,
+        `{subject} shines with perfect outfits, showcasing undeniable fashion class.`
+      ],
+      bodies: [
+        `Every detail in the outfit is carefully chosen by {subject}, creating a harmonious and attractive overall look.`,
+        `The bold but still refined mix-match style, {subject} proves top-tier fashion ability.`,
+        `Not only beautiful but also very trendy, {subject} always keeps up with trends and creates a unique personal style.`,
+        `The video is a great source of inspiration for fashion lovers who want to learn styling techniques.`
+      ],
+      outros: [
+        `This is definitely a must-watch video for fashion enthusiasts.`,
+        `{subject} once again proves to be a true fashion icon.`,
+        `Come and admire and learn from {subject}'s top-tier fashion style.`
+      ]
+    },
+    'tai-nang': {
+      intros: [
+        `{subject}'s new video showcases special talents that leave the audience amazed.`,
+        `{subject} surprises with wonderful skills in the recently shared clip.`,
+        `{subject}'s talent is impressively displayed in this video that attracts thousands of views.`
+      ],
+      bodies: [
+        `Every movement, every expression of {subject} shows professionalism and natural talent.`,
+        `Not just appearance, {subject} also possesses special abilities that many people admire.`,
+        `The video is clear evidence that {subject} is not only beautiful but also very talented and versatile.`,
+        `The perfect combination of talent and beauty helps {subject} shine in every moment.`
+      ],
+      outros: [
+        `A video worth watching to appreciate {subject}'s real talent.`,
+        `{subject} deserves to receive much more attention with this talent.`,
+        `Don't miss the chance to admire {subject}'s unique talent.`
+      ]
+    },
+    'doi-thuong': {
+      intros: [
+        `Simple but charming everyday moments of {subject} in the new video.`,
+        `{subject} shares ordinary moments that are incredibly lovely and relatable.`,
+        `{subject}'s daily life video brings an intimate feeling like chatting with friends.`
+      ],
+      bodies: [
+        `The naturalness and authenticity in every gesture helps {subject} become closer to viewers.`,
+        `Even in ordinary circumstances, {subject} still radiates special charm that's hard to resist.`,
+        `The video shows a very ordinary {subject} but no less cute and attractive.`,
+        `These simple moments create a strong connection between {subject} and the audience.`
+      ],
+      outros: [
+        `A light video, perfect for relaxing moments.`,
+        `{subject} proves that sometimes simplicity is the most attractive thing.`,
+        `Take time to appreciate the lovely everyday moments of {subject}.`
+      ]
+    },
+    'nghe-thuat': {
+      intros: [
+        `{subject}'s creative artistic video brings a wonderful visual experience.`,
+        `{subject} shows impressive artistic ability in this carefully invested clip.`,
+        `A true work of art featuring {subject} full of emotion.`
+      ],
+      bodies: [
+        `Every frame is created like an artistic painting with {subject} as the main character.`,
+        `The combination of music, visuals and {subject}'s presence creates a perfect whole.`,
+        `The video is not only entertaining but also has high artistic value, showing refined aesthetic taste.`,
+        `{subject} is like a muse in this inspiring and creative artistic work.`
+      ],
+      outros: [
+        `An artistic video not to be missed for those who love beauty.`,
+        `{subject} once again proves admirable artistic ability.`,
+        `Enjoy this emotional artistic work by {subject}.`
       ]
     },
     'nhe-nhang': {
@@ -297,6 +445,11 @@ function generateArticle() {
     const subject = name ? name : `${language === 'vi' ? 'cô gái' : 'girl'} ${countryLower}`;
     
     const styleTemplates = templates[style];
+    if (!styleTemplates) {
+      alert('Phong cách này chưa được hỗ trợ!');
+      showLoading(false);
+      return;
+    }
     const intro = pick(styleTemplates.intros).replace('{subject}', subject);
     const bodyParagraphs = styleTemplates.bodies.map(p => 
       `<p>${p.replace('{subject}', subject)}</p>`
