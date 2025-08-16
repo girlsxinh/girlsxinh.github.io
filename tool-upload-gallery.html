@@ -102,6 +102,21 @@
   <option value="nguoimau">Người mẫu</option>
   <option value="idol">Idol</option>
   <option value="influencer">Người nổi tiếng</option>
+  <option value="facebook">Gái xinh Facebook</option>
+  <option value="instagram">Gái xinh Instagram</option>
+  <option value="twitter">Gái xinh Twitter</option>
+  <option value="gaixinh-vn">Ảnh Gái Xinh VN</option>
+  <option value="gaixinh-chauau">Ảnh gái xinh Châu Âu Mỹ</option>
+  <option value="bosuutap">Bộ Sưu Tập Ảnh Gái Xinh</option>
+  <option value="gaixinh-nhat">Ảnh gái Nhật xinh đẹp</option>
+  <option value="gaixinh-europe">Hình ảnh gái xinh Châu Âu</option>
+  <option value="tocngan">Gái Xinh Tóc Ngắn</option>
+  <option value="hinhnен">Bộ sưu tập hình nền gái xinh</option>
+  <option value="bikini">Gái xinh mặc bikini</option>
+  <option value="cap3">Gái xinh cấp 3</option>
+  <option value="aodai">Gái xinh mặc áo dài Việt Nam</option>
+  <option value="cute">Ảnh Gái Xinh Cute</option>
+  <option value="cosplay">Ảnh gái cosplay</option>
 </select>
 
 <label>✏️ Phong cách viết bài:</label>
@@ -139,6 +154,71 @@ const contentTemplates = {
       "Trung Quốc": "trung quốc",
       "Thái Lan": "thái lan",
       "Mỹ": "mỹ"
+    },
+    topics: {
+      facebook: "Facebook",
+      instagram: "Instagram", 
+      twitter: "Twitter",
+      tiktok: "TikTok",
+      "gaixinh-vn": "gái xinh Việt Nam",
+      "gaixinh-chauau": "gái xinh Châu Âu Mỹ",
+      bosuutap: "bộ sưu tập ảnh gái xinh",
+      "gaixinh-nhat": "gái Nhật xinh đẹp",
+      "gaixinh-europe": "gái xinh Châu Âu",
+      tocngan: "gái xinh tóc ngắn",
+      hinhnен: "hình nền gái xinh",
+      bikini: "gái xinh bikini",
+      cap3: "gái xinh cấp 3",
+      aodai: "gái xinh áo dài",
+      cute: "gái xinh cute",
+      cosplay: "gái cosplay",
+      hotgirl: "hot girl",
+      dienvien: "diễn viên",
+      nguoimau: "người mẫu",
+      idol: "idol",
+      influencer: "influencer"
+    },
+    topicContent: {
+      facebook: {
+        intro: "Clip nóng hổi từ Facebook của {subject} đang viral khắp mạng xã hội với hàng triệu lượt view.",
+        body: "Trên nền tảng Facebook, {subject} luôn biết cách thu hút sự chú ý với những bài đăng chất lượng và hình ảnh ấn tượng. Mỗi video đều nhận được hàng nghìn reaction và comment từ fan hâm mộ.",
+        outro: "Theo dõi Facebook của {subject} để không bỏ lỡ những clip hot nhất!"
+      },
+      instagram: {
+        intro: "Story Instagram của {subject} khiến cộng đồng mạng 'đứng ngồi không yên' với độ hot không thể chối từ.",
+        body: "Instagram là nơi {subject} thường xuyên chia sẻ những khoảnh khắc đẹp nhất. Với lối chụp ảnh nghệ thuật và caption ý nghĩa, mỗi post đều trở thành trend trên platform này.",
+        outro: "Đừng quên follow Instagram của {subject} để cập nhật những hình ảnh mới nhất!"
+      },
+      twitter: {
+        intro: "Tweet của {subject} trên Twitter gây bão mạng xã hội với nội dung thú vị và hình ảnh cuốn hút.",
+        body: "Twitter là nơi {subject} tương tác trực tiếp với fan và chia sẻ những suy nghĩ cá nhân. Mỗi tweet đều nhận được hàng nghìn retweet và like từ cộng đồng.",
+        outro: "Follow Twitter của {subject} để cập nhật những thông tin mới nhất!"
+      },
+      "gaixinh-vn": {
+        intro: "Bộ ảnh gái xinh Việt Nam của {subject} thể hiện vẻ đẹp truyền thống kết hợp hiện đại đầy quyến rũ.",
+        body: "Vẻ đẹp của gái Việt luôn có sức hút đặc biệt, và {subject} chính là minh chứng rõ ràng nhất. Nét đẹp dịu dàng, thùy mị nhưng không kém phần cá tính và hiện đại.",
+        outro: "Tự hào với vẻ đẹp gái Việt qua hình ảnh tuyệt đẹp của {subject}!"
+      },
+      "gaixinh-chauau": {
+        intro: "Vẻ đẹp Châu Âu - Mỹ đặc trưng của {subject} với những đường nét sắc sảo và quyến rũ không thể cưỡng lại.",
+        body: "Phong cách Tây Âu hiện đại kết hợp với nét đẹp cá tính, {subject} toả sáng với vẻ ngoài thu hút và phong thái tự tin. Mỗi khoảnh khắc đều thể hiện sự sang trọng và đẳng cấp.",
+        outro: "Chiêm ngưỡng vẻ đẹp quốc tế đầy cuốn hút của {subject}!"
+      },
+      bikini: {
+        intro: "Bộ ảnh bikini của {subject} khoe trọn thân hình chuẩn mực và làn da nâu quyến rũ dưới nắng vàng.",
+        body: "Với thân hình hoàn hảo và sự tự tin tỏa sáng, {subject} trở thành tâm điểm chú ý. Bộ bikini được chọn lựa tinh tế, tôn lên những đường cong quyến rũ một cách tự nhiên nhất.",
+        outro: "Một bộ ảnh bikini không thể bỏ qua của {subject} đầy quyến rũ!"
+      },
+      aodai: {
+        intro: "Hình ảnh {subject} trong tà áo dài truyền thống Việt Nam tôn lên vẻ đẹp dịu dàng, thùy mị đặc trưng.",
+        body: "Áo dài không chỉ là trang phục truyền thống mà còn là biểu tượng của vẻ đẹp Việt. {subject} trong áo dài tỏa sáng với nét đẹp thuần khiết, duyên dáng và đầy lôi cuốn.",
+        outro: "Vẻ đẹp truyền thống Việt Nam qua hình ảnh tuyệt đẹp của {subject} trong áo dài!"
+      },
+      cosplay: {
+        intro: "Bộ ảnh cosplay của {subject} tái hiện nhân vật anime/game một cách hoàn hảo và sáng tạo.",
+        body: "Với khả năng hóa thân tuyệt vời, {subject} mang đến những bộ cosplay chất lượng cao. Từ trang phục, make-up đến thần thái đều được đầu tư kỹ lưỡng, tạo nên sự sống động cho nhân vật.",
+        outro: "Một bộ cosplay đẹp mắt và chất lượng không thể bỏ qua của {subject}!"
+      }
     },
     'goi-cam': {
       intros: [
@@ -330,6 +410,71 @@ const contentTemplates = {
       "Thái Lan": "thai",
       "Mỹ": "american"
     },
+    topics: {
+      facebook: "Facebook",
+      instagram: "Instagram",
+      twitter: "Twitter", 
+      tiktok: "TikTok",
+      "gaixinh-vn": "Vietnamese beautiful girl",
+      "gaixinh-chauau": "European American beautiful girl",
+      bosuutap: "beautiful girl photo collection",
+      "gaixinh-nhat": "beautiful Japanese girl",
+      "gaixinh-europe": "European beautiful girl",
+      tocngan: "short hair beautiful girl",
+      hinhnen: "beautiful girl wallpaper",
+      bikini: "bikini girl",
+      cap3: "high school girl",
+      aodai: "ao dai girl",
+      cute: "cute girl",
+      cosplay: "cosplay girl",
+      hotgirl: "hot girl",
+      dienvien: "actress",
+      nguoimau: "model",
+      idol: "idol",
+      influencer: "influencer"
+    },
+    topicContent: {
+      facebook: {
+        intro: "Hot clip from {subject}'s Facebook going viral across social media with millions of views.",
+        body: "On Facebook platform, {subject} always knows how to attract attention with quality posts and impressive images. Each video receives thousands of reactions and comments from fans.",
+        outro: "Follow {subject}'s Facebook to not miss the hottest clips!"
+      },
+      instagram: {
+        intro: "{subject}'s Instagram story makes the online community 'restless' with undeniable hotness.",
+        body: "Instagram is where {subject} regularly shares the most beautiful moments. With artistic photography and meaningful captions, each post becomes a trend on this platform.",
+        outro: "Don't forget to follow {subject}'s Instagram for the latest photos!"
+      },
+      twitter: {
+        intro: "{subject}'s tweet on Twitter storms social media with interesting content and captivating images.",
+        body: "Twitter is where {subject} directly interacts with fans and shares personal thoughts. Each tweet receives thousands of retweets and likes from the community.",
+        outro: "Follow {subject}'s Twitter for the latest updates!"
+      },
+      "gaixinh-vn": {
+        intro: "Vietnamese beautiful girl photo set of {subject} showcases traditional beauty combined with charming modernity.",
+        body: "Vietnamese beauty always has special attraction, and {subject} is the clearest evidence. Gentle, graceful beauty but no less personality and modernity.",
+        outro: "Proud of Vietnamese beauty through {subject}'s stunning images!"
+      },
+      "gaixinh-chauau": {
+        intro: "Distinctive European-American beauty of {subject} with sharp and irresistible charming features.",
+        body: "Modern Western style combined with personality beauty, {subject} shines with attractive appearance and confident demeanor. Each moment shows elegance and class.",
+        outro: "Admire the captivating international beauty of {subject}!"
+      },
+      bikini: {
+        intro: "{subject}'s bikini photo set shows off perfect body and seductive tan skin under golden sunlight.",
+        body: "With perfect body and radiant confidence, {subject} becomes the center of attention. The bikini is carefully chosen, highlighting the seductive curves in the most natural way.",
+        outro: "A must-see seductive bikini photo set of {subject}!"
+      },
+      aodai: {
+        intro: "Image of {subject} in traditional Vietnamese ao dai highlights the characteristic gentle, graceful beauty.",
+        body: "Ao dai is not only traditional clothing but also a symbol of Vietnamese beauty. {subject} in ao dai shines with pure, graceful and captivating beauty.",
+        outro: "Traditional Vietnamese beauty through stunning images of {subject} in ao dai!"
+      },
+      cosplay: {
+        intro: "{subject}'s cosplay photo set perfectly and creatively recreates anime/game characters.",
+        body: "With excellent transformation ability, {subject} brings high-quality cosplay sets. From costumes, makeup to spirit, everything is carefully invested, bringing characters to life.",
+        outro: "A beautiful and quality cosplay set not to be missed by {subject}!"
+      }
+    },
     'goi-cam': {
       intros: [
         `Hot and seductive video clip of {subject} that captivates viewers and keeps them glued to the screen.`,
@@ -457,14 +602,14 @@ function generateArticle() {
     const outro = pick(styleTemplates.outros).replace('{subject}', subject);
     const content = bodyParagraphs + `<p>${outro}</p>`;
 
-    // Generate title and description based on language
+    // Generate title and description based on language and topic
     let title, desc;
     if (language === 'vi') {
-      title = `Clip ${subject} - ${topic} ${country}`;
-      desc = `Xem video ${topic} ${country} của ${subject} đang gây chú ý trên mạng xã hội với nhiều lượt xem và bình luận.`;
+      title = `${topicName} ${subject} - ${country}`;
+      desc = `Xem ${topicName} ${country} của ${subject} đang gây chú ý trên mạng xã hội với nhiều lượt xem và bình luận.`;
     } else {
-      title = `${subject} ${topic} video - ${country}`;
-      desc = `Watch ${countryLower} ${topic} video of ${subject} that's getting attention on social media with many views and comments.`;
+      title = `${subject} ${topicName} - ${country}`;
+      desc = `Watch ${countryLower} ${topicName} of ${subject} that's getting attention on social media with many views and comments.`;
     }
 
     const html = `
