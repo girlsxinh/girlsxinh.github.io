@@ -2,19 +2,19 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <title>Tool tạo bài viết girlxinh - Chuẩn SEO Blogger (fix lỗi + LSI + Schema)</title>
+  <title>Tool tạo bài viết girlxinh đa quốc gia - Việt/Anh</title>
   <style>
-    body { font-family: Arial, sans-serif; max-width: 980px; margin: auto; padding: 20px; }
+    body { font-family: Arial; max-width: 900px; margin: auto; padding: 20px; }
     h2 { text-align: center; }
     label { font-weight: bold; display: block; margin-top: 15px; }
     input[type=text], select, textarea {
       width: 100%; padding: 8px; margin-top: 5px;
-      border: 1px solid #ccc; border-radius: 6px;
+      border: 1px solid #ccc; border-radius: 4px;
     }
-    textarea { height: 220px; font-family: monospace; resize: vertical; }
+    textarea { height: 180px; font-family: monospace; resize: vertical; }
     button {
       margin-top: 15px; padding: 10px 20px; font-weight: bold;
-      background-color: #007bff; color: #fff; border: none; border-radius: 6px;
+      background-color: #007bff; color: white; border: none; border-radius: 4px;
       cursor: pointer;
     }
     button:hover { background-color: #0056b3; }
@@ -27,25 +27,46 @@
     .image-preview img { max-width: 100%; border-radius: 6px; box-shadow: 0 0 8px rgba(0,0,0,0.1); }
     .loading-modal {
       background-color: rgba(255,255,255,.8);
-      display: none; position: fixed; z-index: 10000; inset: 0;
+      display: none; position: fixed; z-index: 10000;
+      top: 0; left: 0; height: 100%; width: 100%;
     }
-    .loading-modal.show { display: block; }
+    .loading-modal.show {
+      display: block;
+    }
     .loading-modal .loading-text {
       position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%);
       font-size: 20px; color: #333; font-weight: bold;
     }
-    .language-selector { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 10px; border-radius: 10px; margin-bottom: 10px; color: #fff; }
-    .language-selector select { background: #fff; font-weight: bold; }
-    .tips { font-size: 12px; color: #555; }
+    .text-center { text-align: center; margin-top: 15px; }
+    .btnlook.download-wall {
+      padding: 10px 15px;
+      border: 1px solid #333;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: bold;
+      display: inline-block;
+    }
+    .btnlook.download-wall:hover {
+      background-color: #eee;
+    }
+    .language-selector {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+    .language-selector select {
+      background: white;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
 
-<h2>🎥 Tool tạo bài viết girlxinh - Đa ngôn ngữ · Chuẩn SEO Blogger</h2>
-<p class="tips">Bản đã <b>fix lỗi</b> (sai chính tả value chủ đề, slug Unicode), bổ sung <b>LSI keyword</b>, <b>Schema Article + VideoObject</b>, <b>internal link</b>, lazy-load hình, và bảo vệ chính sách nội dung.</p>
+<h2>🎥 Tool tạo bài viết girlxinh - Đa quốc gia & Đa ngôn ngữ</h2>
 
 <div class="language-selector">
-  <label style="margin-bottom: 5px;">🌍 Chọn ngôn ngữ bài viết:</label>
+  <label style="color: white; margin-bottom: 5px;">🌍 Chọn ngôn ngữ bài viết:</label>
   <select id="language">
     <option value="vi">🇻🇳 Tiếng Việt</option>
     <option value="en">🇺🇸 English</option>
@@ -90,13 +111,13 @@
   <option value="gaixinh-nhat">Ảnh gái Nhật xinh đẹp</option>
   <option value="gaixinh-europe">Hình ảnh gái xinh Châu Âu</option>
   <option value="tocngan">Gái Xinh Tóc Ngắn</option>
-  <option value="hinhnen">Bộ sưu tập hình nền gái xinh</option>
+  <option value="hinhnеn">Bộ sưu tập hình nền gái xinh</option>
   <option value="bikini">Gái xinh mặc bikini</option>
+  <option value="cap3">Gái xinh cấp 3</option>
   <option value="aodai">Gái xinh mặc áo dài Việt Nam</option>
   <option value="cute">Ảnh Gái Xinh Cute</option>
   <option value="cosplay">Ảnh gái cosplay</option>
 </select>
-<p class="tips">Đã loại bỏ mục nhạy cảm để đảm bảo an toàn và tuân thủ chính sách.</p>
 
 <label>✏️ Phong cách viết bài:</label>
 <select id="style">
@@ -110,12 +131,12 @@
 
 <button onclick="generateArticle()">📝 Tạo bài viết</button>
 
-<label>Kết quả bài viết (HTML đầy đủ để dán vào Blogger):</label>
+<label>Kết quả bài viết (HTML đầy đủ):</label>
 <textarea id="resultHTML" readonly></textarea>
 
 <button onclick="copyResult()">📄 Sao chép HTML</button>
 
-<div class="loading-modal" id="loadingModal"><div class="loading-text">Đang xử lý...</div></div>
+<div class="loading-modal" id="loadingModal"><div class="loading-text">Đang xử lý AI...</div></div>
 
 <script>
 const clientId = '3a8be4390ef3eb8';
@@ -123,12 +144,12 @@ const dropzone = document.getElementById('dropzone');
 const imagePreview = document.getElementById('imagePreview');
 const imgurLinkInput = document.getElementById('imgurLink');
 
-// ====== TEMPLATE NỘI DUNG (fix key hinhnen) ======
+// Content templates for both languages
 const contentTemplates = {
   vi: {
     countries: {
       "Việt Nam": "việt nam",
-      "Nhật Bản": "nhật bản",
+      "Nhật Bản": "nhật bản", 
       "Hàn Quốc": "hàn quốc",
       "Trung Quốc": "trung quốc",
       "Thái Lan": "thái lan",
@@ -136,7 +157,7 @@ const contentTemplates = {
     },
     topics: {
       facebook: "Facebook",
-      instagram: "Instagram",
+      instagram: "Instagram", 
       twitter: "Twitter",
       tiktok: "TikTok",
       "gaixinh-vn": "gái xinh Việt Nam",
@@ -147,6 +168,7 @@ const contentTemplates = {
       tocngan: "gái xinh tóc ngắn",
       hinhnen: "hình nền gái xinh",
       bikini: "gái xinh bikini",
+      cap3: "gái xinh cấp 3",
       aodai: "gái xinh áo dài",
       cute: "gái xinh cute",
       cosplay: "gái cosplay",
@@ -157,48 +179,59 @@ const contentTemplates = {
       influencer: "influencer"
     },
     topicContent: {
+      facebook: {
+        intro: "Clip nóng hổi từ Facebook của {subject} đang viral khắp mạng xã hội với hàng triệu lượt view.",
+        body: "Trên nền tảng Facebook, {subject} luôn biết cách thu hút sự chú ý với những bài đăng chất lượng và hình ảnh ấn tượng. Mỗi video đều nhận được hàng nghìn reaction và comment từ fan hâm mộ.",
+        outro: "Theo dõi Facebook của {subject} để không bỏ lỡ những clip hot nhất!"
+      },
       instagram: {
-        intro: "Story Instagram của {subject} đang gây sốt với độ hot không thể chối từ.",
-        body: "{subject} thường xuyên chia sẻ những khoảnh khắc đẹp nhất. Với ảnh chụp nghệ thuật và caption ý nghĩa, mỗi post đều thành trend.",
-        outro: "Theo dõi Instagram để cập nhật ảnh mới nhất của {subject}!"
+        intro: "Story Instagram của {subject} khiến cộng đồng mạng 'đứng ngồi không yên' với độ hot không thể chối từ.",
+        body: "Instagram là nơi {subject} thường xuyên chia sẻ những khoảnh khắc đẹp nhất. Với lối chụp ảnh nghệ thuật và caption ý nghĩa, mỗi post đều trở thành trend trên platform này.",
+        outro: "Đừng quên follow Instagram của {subject} để cập nhật những hình ảnh mới nhất!"
+      },
+      bikini: {
+        intro: "Bộ ảnh bikini của {subject} khoe trọn thân hình chuẩn mực và làn da nâu quyến rũ dưới nắng vàng.",
+        body: "Với thân hình hoàn hảo và sự tự tin tỏa sáng, {subject} trở thành tâm điểm chú ý. Bộ bikini được chọn lựa tinh tế, tôn lên những đường cong quyến rũ một cách tự nhiên nhất.",
+        outro: "Một bộ ảnh bikini không thể bỏ qua của {subject} đầy quyến rũ!"
       },
       aodai: {
-        intro: "Hình ảnh {subject} trong tà áo dài truyền thống tôn vẻ đẹp dịu dàng, thùy mị.",
-        body: "Áo dài là biểu tượng của vẻ đẹp Việt. {subject} tỏa sáng với nét đẹp thuần khiết và duyên dáng.",
-        outro: "Vẻ đẹp truyền thống Việt Nam qua bộ ảnh của {subject}."
+        intro: "Hình ảnh {subject} trong tà áo dài truyền thống Việt Nam tôn lên vẻ đẹp dịu dàng, thùy mị đặc trưng.",
+        body: "Áo dài không chỉ là trang phục truyền thống mà còn là biểu tượng của vẻ đẹp Việt. {subject} trong áo dài tỏa sáng với nét đẹp thuần khiết, duyên dáng và đầy lôi cuốn.",
+        outro: "Vẻ đẹp truyền thống Việt Nam qua hình ảnh tuyệt đẹp của {subject} trong áo dài!"
       },
       cosplay: {
-        intro: "Bộ ảnh cosplay của {subject} tái hiện nhân vật anime/game sáng tạo và chỉn chu.",
-        body: "Từ trang phục, make-up đến thần thái đều được đầu tư kỹ, mang lại cảm giác nhân vật sống động.",
-        outro: "Một bộ cosplay chất lượng không thể bỏ qua của {subject}."
+        intro: "Bộ ảnh cosplay của {subject} tái hiện nhân vật anime/game một cách hoàn hảo và sáng tạo.",
+        body: "Với khả năng hóa thân tuyệt vời, {subject} mang đến những bộ cosplay chất lượng cao. Từ trang phục, make-up đến thần thái đều được đầu tư kỹ lưỡng, tạo nên sự sống động cho nhân vật.",
+        outro: "Một bộ cosplay đẹp mắt và chất lượng không thể bỏ qua của {subject}!"
       }
     },
     'goi-cam': {
       intros: [
-        `Video nóng bỏng, quyến rũ của {subject} khiến người xem không thể rời mắt.`,
-        `{subject} xuất hiện đầy mê hoặc, khoe dáng chuẩn và thần thái thu hút.`
+        `Video clip nóng bỏng và quyến rũ của {subject} khiến người xem không thể rời mắt.`,
+        `Một bộ phim ngắn thể hiện trọn vẹn vẻ đẹp gợi cảm, cá tính của {subject}.`,
+        `{subject} xuất hiện đầy mê hoặc trong clip mới, khoe dáng chuẩn, thần thái sắc lạnh thu hút mọi ánh nhìn.`
       ],
       bodies: [
-        `Với đường cong cuốn hút, {subject} mê hoặc qua từng chuyển động uyển chuyển và ánh mắt.`,
-        `Các khung hình được chăm chút, tôn lên vẻ đẹp bốc lửa và cá tính riêng của {subject}.`
+        `Với thân hình cân đối, đường cong quyến rũ, {subject} khiến người xem như bị thôi miên qua từng chuyển động uyển chuyển, từng ánh mắt đầy mê hoặc.`,
+        `Khung hình được đầu tư tỉ mỉ, nhấn mạnh vẻ đẹp bốc lửa và cá tính riêng biệt của {subject}. Từng cảnh quay toát lên sự sang trọng pha chút phá cách gợi cảm.`
       ],
       outros: [
-        `Nếu bạn yêu thích vẻ đẹp gợi cảm, đừng bỏ qua clip này.`,
-        `Video thu hút hàng nghìn lượt xem và chia sẻ chỉ sau vài giờ.`
+        `Nếu bạn yêu thích vẻ đẹp gợi cảm và quyến rũ, không nên bỏ qua clip này.`,
+        `Video đã thu hút hàng nghìn lượt xem và chia sẻ chỉ sau vài giờ đăng tải.`
       ]
     },
     'nhe-nhang': {
       intros: [
-        `Clip nhẹ nhàng, gần gũi của {subject} mang lại cảm giác thư thái.`,
-        `Đoạn video chân thật ghi lại khoảnh khắc đời thường của {subject}.`
+        `Clip nhẹ nhàng và đầy sức sống của {subject} khiến người xem cảm thấy dễ chịu và gần gũi.`,
+        `Một đoạn video chân thật ghi lại những khoảnh khắc đời thường, giản dị của {subject}.`
       ],
       bodies: [
-        `{subject} ghi điểm nhờ phong cách tự nhiên, giản dị.`,
-        `Nụ cười tỏa nắng và ánh mắt chân thành là điểm nhấn của {subject}.`
+        `Phong cách tự nhiên và giản dị giúp {subject} ghi điểm tuyệt đối trong mắt người xem. Đoạn video mang lại cảm giác thư thái, dịu dàng.`,
+        `Nét duyên dáng, nụ cười tỏa nắng cùng ánh mắt chân thành là điểm nhấn đặc biệt của {subject} trong clip.`
       ],
       outros: [
-        `Nếu bạn yêu sự chân thật, hãy xem video này.`,
-        `Video nhận nhiều lời khen vì sự gần gũi và tự nhiên.`
+        `Nếu bạn yêu thích sự chân thật và giản dị, đừng bỏ qua video này.`,
+        `Video nhận được rất nhiều lời khen ngợi vì sự gần gũi và tự nhiên của {subject}.`
       ]
     }
   },
@@ -206,7 +239,7 @@ const contentTemplates = {
     countries: {
       "Việt Nam": "vietnamese",
       "Nhật Bản": "japanese",
-      "Hàn Quốc": "korean",
+      "Hàn Quốc": "korean", 
       "Trung Quốc": "chinese",
       "Thái Lan": "thai",
       "Mỹ": "american"
@@ -214,7 +247,7 @@ const contentTemplates = {
     topics: {
       facebook: "Facebook",
       instagram: "Instagram",
-      twitter: "Twitter",
+      twitter: "Twitter", 
       tiktok: "TikTok",
       "gaixinh-vn": "Vietnamese beautiful girl",
       "gaixinh-chauau": "European American beautiful girl",
@@ -224,6 +257,7 @@ const contentTemplates = {
       tocngan: "short hair beautiful girl",
       hinhnen: "beautiful girl wallpaper",
       bikini: "bikini girl",
+      cap3: "high school girl",
       aodai: "ao dai girl",
       cute: "cute girl",
       cosplay: "cosplay girl",
@@ -232,14 +266,90 @@ const contentTemplates = {
       nguoimau: "model",
       idol: "idol",
       influencer: "influencer"
+    },
+    topicContent: {
+      facebook: {
+        intro: "Hot clip from {subject}'s Facebook going viral across social media with millions of views.",
+        body: "On Facebook platform, {subject} always knows how to attract attention with quality posts and impressive images. Each video receives thousands of reactions and comments from fans.",
+        outro: "Follow {subject}'s Facebook to not miss the hottest clips!"
+      },
+      instagram: {
+        intro: "{subject}'s Instagram story makes the online community 'restless' with undeniable hotness.",
+        body: "Instagram is where {subject} regularly shares the most beautiful moments. With artistic photography and meaningful captions, each post becomes a trend on this platform.",
+        outro: "Don't forget to follow {subject}'s Instagram for the latest photos!"
+      },
+      bikini: {
+        intro: "{subject}'s bikini photo set shows off perfect body and seductive tan skin under golden sunlight.",
+        body: "With perfect body and radiant confidence, {subject} becomes the center of attention. The bikini is carefully chosen, highlighting the seductive curves in the most natural way.",
+        outro: "A must-see seductive bikini photo set of {subject}!"
+      },
+      aodai: {
+        intro: "Image of {subject} in traditional Vietnamese ao dai highlights the characteristic gentle, graceful beauty.",
+        body: "Ao dai is not only traditional clothing but also a symbol of Vietnamese beauty. {subject} in ao dai shines with pure, graceful and captivating beauty.",
+        outro: "Traditional Vietnamese beauty through stunning images of {subject} in ao dai!"
+      },
+      cosplay: {
+        intro: "{subject}'s cosplay photo set perfectly and creatively recreates anime/game characters.",
+        body: "With excellent transformation ability, {subject} brings high-quality cosplay sets. From costumes, makeup to spirit, everything is carefully invested, bringing characters to life.",
+        outro: "A beautiful and quality cosplay set not to be missed by {subject}!"
+      }
+    },
+    'goi-cam': {
+      intros: [
+        `Hot and seductive video clip of {subject} that captivates viewers and keeps them glued to the screen.`,
+        `A short film showcasing the complete sensual beauty and unique personality of {subject}.`
+      ],
+      bodies: [
+        `With a perfectly proportioned body and alluring curves, {subject} mesmerizes viewers through every graceful movement and captivating gaze.`,
+        `The footage is meticulously crafted, emphasizing the fiery beauty and distinctive personality of {subject}. Every scene exudes elegance mixed with boldly seductive elements.`
+      ],
+      outros: [
+        `If you love sensual and seductive beauty, don't miss this clip.`,
+        `The video has attracted thousands of views and shares just hours after being posted.`
+      ]
+    },
+    'nhe-nhang': {
+      intros: [
+        `Gentle and lively clip of {subject} that makes viewers feel comfortable and close.`,
+        `An authentic video capturing the everyday, simple moments of {subject}.`
+      ],
+      bodies: [
+        `The natural and simple style helps {subject} score perfectly in viewers' eyes. The video brings a relaxing, gentle feeling.`,
+        `The graceful features, radiant smile and sincere eyes are the special highlights of {subject} in the clip.`
+      ],
+      outros: [
+        `If you love authenticity and simplicity, don't miss this video.`,
+        `The video received many compliments for the closeness and naturalness of {subject}.`
+      ]
     }
   }
 };
 
-// ====== UPLOAD ẢNH IMGUR ======
+dropzone.addEventListener('dragover', e => {
+  e.preventDefault();
+  dropzone.classList.add('dragover');
+});
+dropzone.addEventListener('dragleave', e => {
+  dropzone.classList.remove('dragover');
+});
+dropzone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropzone.classList.remove('dragover');
+  if(e.dataTransfer.files.length) uploadFile(e.dataTransfer.files[0]);
+});
+dropzone.addEventListener('click', () => {
+  const fileInput = document.createElement('input');
+  fileInput.type = 'file';
+  fileInput.accept = 'image/*';
+  fileInput.onchange = () => {
+    if(fileInput.files.length) uploadFile(fileInput.files[0]);
+  };
+  fileInput.click();
+});
+
 function uploadFile(file) {
-  if(!file || !file.type || !file.type.startsWith('image/')) {
-    alert('Vui lòng chọn đúng định dạng ảnh!');
+  if(!file.type.startsWith('image/')) {
+    alert('Vui lòng chọn ảnh!');
     return;
   }
   showLoading(true);
@@ -254,10 +364,10 @@ function uploadFile(file) {
   .then(res => res.json())
   .then(data => {
     showLoading(false);
-    if(data && data.success && data.data && data.data.link) {
+    if(data.success) {
       const link = data.data.link;
       imgurLinkInput.value = link;
-      imagePreview.innerHTML = `<img src="${link}" alt="Thumbnail" loading="lazy">`;
+      imagePreview.innerHTML = `<img src="${link}" alt="Thumbnail">`;
     } else {
       alert('Upload ảnh thất bại!');
     }
@@ -272,48 +382,6 @@ function showLoading(show) {
   document.getElementById('loadingModal').classList.toggle('show', show);
 }
 
-// ====== SLUG AN TOÀN (không dùng \p{Diacritic}) ======
-function toSlug(str) {
-  return (str || '')
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '') // loại dấu tiếng Việt an toàn trình duyệt
-    .replace(/đ/g, 'd').replace(/Đ/g, 'd')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/(^-|-$)/g, '');
-}
-
-// ====== LSI KEYWORDS ======
-function buildLSI(language, topic, country, subject) {
-  const base = [topic, country, subject].filter(Boolean);
-  const uniq = (arr) => [...new Set(arr.filter(Boolean))];
-  let lsi;
-  if (language === 'vi') {
-    lsi = uniq([
-      `${topic} ${country}`,
-      `${topic} đẹp`,
-      `gái xinh ${country}`,
-      `${topic} nổi bật`,
-      `hình ảnh ${topic}`,
-      `video ${topic}`,
-      `${topic} ${subject}`,
-      `hot girl ${country}`,
-      `idol ${country}`
-    ]);
-  } else {
-    lsi = uniq([
-      `${country} ${topic}`,
-      `${topic} photos`,
-      `${topic} video`,
-      `${subject} ${topic}`,
-      `beautiful ${topic}`,
-      `trending ${topic}`
-    ]);
-  }
-  return `<ul>` + lsi.map(k => `<li>${k}</li>`).join('') + `</ul>`;
-}
-
-// ====== TẠO BÀI VIẾT ======
 function generateArticle() {
   const img = document.getElementById('imgurLink').value.trim();
   const video = document.getElementById('videoLink').value.trim();
@@ -323,149 +391,113 @@ function generateArticle() {
   const style = document.getElementById('style').value;
   const language = document.getElementById('language').value;
 
-  if(!img || !video) { alert('Vui lòng nhập ảnh và video!'); return; }
+  if(!img || !video) {
+    alert('Vui lòng nhập ảnh và video!');
+    return;
+  }
 
   showLoading(true);
+
   setTimeout(() => {
     try {
-      const T = contentTemplates[language];
-      const countryLower = T.countries[country] || country;
-      const subject = name || (language === 'vi' ? `cô gái ${countryLower}` : `the ${countryLower} girl`);
-      const topicName = T.topics[topic] || topic;
-
-      // Intro/body theo topic đặc thù hoặc style fallback
-      const topicContent = T.topicContent && T.topicContent[topic];
+      const templates = contentTemplates[language];
+      const countryLower = templates.countries[country];
+      const subject = name ? name : `${language === 'vi' ? 'cô gái' : 'girl'} ${countryLower}`;
+      const topicName = templates.topics[topic] || topic;
+      
+      // Get topic-specific content if available
+      const topicContent = templates.topicContent && templates.topicContent[topic];
+      
       let intro, content;
+      
       if (topicContent) {
-        intro = topicContent.intro.replaceAll('{subject}', subject);
-        const bodyContent = topicContent.body.replaceAll('{subject}', subject);
-        const outroContent = topicContent.outro.replaceAll('{subject}', subject);
+        // Use topic-specific content
+        intro = topicContent.intro.replace(/{subject}/g, subject);
+        const bodyContent = topicContent.body.replace(/{subject}/g, subject);
+        const outroContent = topicContent.outro.replace(/{subject}/g, subject);
         content = `<p>${bodyContent}</p><p>${outroContent}</p>`;
       } else {
-        const styleTemplates = T[style];
+        // Use style-based content as fallback
+        const styleTemplates = templates[style];
         if (!styleTemplates) {
           alert('Phong cách này chưa được hỗ trợ!');
           showLoading(false);
           return;
         }
-        intro = pick(styleTemplates.intros).replaceAll('{subject}', subject);
-        const bodyParagraphs = styleTemplates.bodies.map(p => `<p>${p.replaceAll('{subject}', subject)}</p>`).join('');
-        const outro = pick(styleTemplates.outros).replaceAll('{subject}', subject);
+        
+        intro = pick(styleTemplates.intros).replace(/{subject}/g, subject);
+        const bodyParagraphs = styleTemplates.bodies.map(p => 
+          `<p>${p.replace(/{subject}/g, subject)}</p>`
+        ).join('');
+        const outro = pick(styleTemplates.outros).replace(/{subject}/g, subject);
         content = bodyParagraphs + `<p>${outro}</p>`;
       }
 
-      // Title + Description đa ngôn ngữ
+      // Generate title and description based on language and topic
       let title, desc;
       if (language === 'vi') {
         title = `${topicName} ${subject} - ${country}`;
-        desc = `Xem ${topicName} ${country} của ${subject} đang được quan tâm với nhiều lượt xem, chia sẻ.`;
+        desc = `Xem ${topicName} ${country} của ${subject} đang gây chú ý trên mạng xã hội với nhiều lượt xem và bình luận.`;
       } else {
         title = `${subject} ${topicName} - ${country}`;
-        desc = `Watch ${countryLower} ${topicName} of ${subject} getting attention with many views and shares.`;
+        desc = `Watch ${countryLower} ${topicName} of ${subject} that's getting attention on social media with many views and comments.`;
       }
-      const slug = toSlug(title);
-
-      // JSON-LD Article + VideoObject (đặt trong nội dung để Blogger vẫn hiểu)
-      const nowISO = new Date().toISOString();
-      const jsonld = {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": title,
-        "description": desc,
-        "image": img,
-        "datePublished": nowISO,
-        "author": {"@type": "Person", "name": subject},
-        "mainEntityOfPage": {"@type": "WebPage", "@id": `https://www.example.com/${slug}`},
-        "video": {
-          "@type": "VideoObject",
-          "name": title,
-          "description": desc,
-          "thumbnailUrl": img,
-          "uploadDate": nowISO,
-          "contentUrl": video
-        }
-      };
-
-      const lsiHTML = buildLSI(language, topicName, country, subject);
 
       const html = `
-<!-- Canonical gợi ý (dán vào theme/hoặc dùng tham khảo) -->
-<!-- <link rel="canonical" href="https://www.example.com/${slug}"> -->
-
-<!-- Schema JSON-LD cho Google -->
-<script type="application/ld+json">${JSON.stringify(jsonld)}</script>
-
-<!-- Tiêu đề H1 -->
+<!-- ${language === 'vi' ? 'Tiêu đề SEO' : 'SEO Title'} -->
 <h1>${title}</h1>
+<meta name="description" content="${desc}" />
 
-<!-- Thumbnail -->
+<!-- ${language === 'vi' ? 'Ảnh đại diện' : 'Thumbnail Image'} -->
 <div class="separator" style="clear: both;">
-  <a href="${img}" style="display:block; padding: 1em 0; text-align:center;" target="_blank" rel="noopener noreferrer">
-    <img alt="${subject}" src="${img}" loading="lazy" />
+  <a href="${img}" style="display: block; padding: 1em 0px; text-align: center;">
+    <img alt="${subject}" border="0" height="400" src="${img}" />
   </a>
 </div>
 
-<!-- Nội dung bài viết -->
-<p>${intro}</p>
+<!-- ${language === 'vi' ? 'Video ẩn autoplay' : 'Hidden autoplay video'} -->
+<div style="display: none;">
+  <div id="live-wallpaper">
+    <video class="live-wp" controlsList="nodownload" controls autoplay loop muted playsinline poster="${img}">
+      <source src="${video}" type="video/mp4" />
+      <source src="${video}" type="video/ogg" />
+      Your browser does not support the video tag.
+    </video>
+  </div>
+</div>
 
-<h2>${language === 'vi' ? 'Giới thiệu' : 'Introduction'} ${subject}</h2>
+<!-- ${language === 'vi' ? 'Nội dung bài viết' : 'Article Content'} -->
+<p>${intro}</p>
 ${content}
 
-<h2>${language === 'vi' ? 'Video' : 'Video'} ${topicName}</h2>
-<video class="live-wp" controls controlsList="nodownload" preload="metadata" muted playsinline poster="${img}" style="max-width:100%; border-radius:8px;">
-  <source src="${video}" type="video/mp4" />
-  ${language === 'vi' ? 'Trình duyệt không hỗ trợ video.' : 'Your browser does not support the video tag.'}
-</video>
+<!-- ${language === 'vi' ? 'Nút tải video' : 'Download Video Button'} -->
+<div class="text-center">
+  <a alt="Download Video" class="btnlook download-wall" href="https://t.me/girlxinhhd" style="color: black;" title="Download Video" target="_blank">
+    ${language === 'vi' ? 'Tải về' : 'Download'}
+  </a>
+</div>
+      `.trim();
 
-<h2>${language === 'vi' ? 'Từ khóa liên quan' : 'Related keywords'}</h2>
-${lsiHTML}
-
-<!-- Internal link theo tag/chủ đề -->
-<p>${language === 'vi' ? 'Xem thêm:' : 'See more:'} <a href="/search/label/${toSlug(topicName)}">${topicName}</a></p>
-
-<!-- Nút tải về/TG channel -->
-<div style="text-align:center; margin-top:12px;">
-  <a class="btnlook download-wall" href="${video}" style="color:#000;" title="Download Video" target="_blank" rel="noopener">${language === 'vi' ? 'Tải về' : 'Download'}</a>
-</div>`;
-
-      document.getElementById('resultHTML').value = html.trim();
+      document.getElementById('resultHTML').value = html;
       showLoading(false);
     } catch (error) {
-      console.error(error);
-      alert('Có lỗi khi tạo bài viết!');
+      console.error('Error generating article:', error);
+      alert('Có lỗi xảy ra khi tạo bài viết!');
       showLoading(false);
     }
-  }, 300);
+  }, 1000);
 }
 
 function copyResult() {
   const textarea = document.getElementById('resultHTML');
-  textarea.focus();
   textarea.select();
-  try { document.execCommand('copy'); alert('✅ Đã sao chép HTML!'); }
-  catch(e){ navigator.clipboard.writeText(textarea.value).then(()=>alert('✅ Đã sao chép HTML!')).catch(()=>alert('Không thể sao chép tự động. Hãy copy thủ công.')); }
+  document.execCommand('copy');
+  alert('✅ Đã sao chép HTML!');
 }
 
-function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
-
-// Drag-drop & click upload
-['dragover','dragleave','drop','click'].forEach(evt=>{
-  dropzone.addEventListener(evt, e => {
-    e.preventDefault();
-    if(evt==='dragover') dropzone.classList.add('dragover');
-    if(evt==='dragleave') dropzone.classList.remove('dragover');
-    if(evt==='drop') {
-      dropzone.classList.remove('dragover');
-      if(e.dataTransfer.files && e.dataTransfer.files.length) uploadFile(e.dataTransfer.files[0]);
-    }
-    if(evt==='click') {
-      const fileInput=document.createElement('input');
-      fileInput.type='file'; fileInput.accept='image/*';
-      fileInput.onchange=()=>{ if(fileInput.files && fileInput.files.length) uploadFile(fileInput.files[0]); };
-      fileInput.click();
-    }
-  });
-});
+function pick(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
 </script>
 
 </body>
