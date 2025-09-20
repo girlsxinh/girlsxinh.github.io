@@ -37,6 +37,8 @@
     .language-selector { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 10px; border-radius: 10px; margin-bottom: 10px; color: #fff; }
     .language-selector select { background: #fff; font-weight: bold; }
     .tips { font-size: 12px; color: #555; }
+    .checkbox-group { margin-top: 10px; }
+    .checkbox-group label { font-weight: normal; margin-right: 15px; }
   </style>
 </head>
 <body>
@@ -110,6 +112,12 @@
 <label>🔗 External link tùy chỉnh (tối đa 2, cách nhau dấu phẩy):</label>
 <input type="text" id="customLinks" placeholder="https://example.com, https://instagram.com/user" />
 
+<div class="checkbox-group">
+  <label><input type="checkbox" id="includeWiki" checked> Wikipedia</label>
+  <label><input type="checkbox" id="includeIG" checked> Instagram</label>
+  <label><input type="checkbox" id="includeFB" checked> Facebook</label>
+</div>
+
 <button onclick="generateArticle()">📝 Tạo bài viết</button>
 
 <label>Kết quả bài viết (HTML dán vào Blogger):</label>
@@ -153,9 +161,11 @@ function generateArticle(){
   const name = document.getElementById('characterName').value.trim();
   const country = document.getElementById('country').value;
   const topic = document.getElementById('topic').value;
-  const style = document.getElementById('style').value;
   const language = document.getElementById('language').value;
   const customLinks = document.getElementById('customLinks').value.trim();
+  const includeWiki = document.getElementById('includeWiki').checked;
+  const includeIG = document.getElementById('includeIG').checked;
+  const includeFB = document.getElementById('includeFB').checked;
 
   if(!img || !video) { alert('Vui lòng nhập ảnh và video!'); return; }
 
@@ -173,17 +183,17 @@ function generateArticle(){
 
   const lsiHTML = buildLSI(language, topicName, country, subject);
 
-  let externalLinks = `<p>${language==='vi'?'Nguồn tham khảo':'References'}: 
-    <a href="https://vi.wikipedia.org/wiki/${encodeURIComponent(subject)}" target="_blank" rel="nofollow noopener">Wikipedia</a> | 
-    <a href="https://www.instagram.com/" target="_blank" rel="nofollow noopener">Instagram</a>
-  </p>`;
-
+  let externalLinks = `<p>${language==='vi'?'Nguồn tham khảo':'References'}:</p><ul>`;
+  if(includeWiki) externalLinks += `<li><a href="https://vi.wikipedia.org/wiki/${encodeURIComponent(subject)}" target="_blank" rel="nofollow noopener">Wikipedia</a></li>`;
+  if(includeIG) externalLinks += `<li><a href="https://www.instagram.com/" target="_blank" rel="nofollow noopener">Instagram</a></li>`;
+  if(includeFB) externalLinks += `<li><a href="https://www.facebook.com/" target="_blank" rel="nofollow noopener">Facebook</a></li>`;
   if(customLinks){
     const links = customLinks.split(',').map(l=>l.trim()).filter(Boolean);
-    if(links.length){
-      externalLinks += `<ul>`+links.map(l=>`<li><a href="${l}" target="_blank" rel="nofollow noopener">${l}</a></li>`).join('')+`</ul>`;
-    }
+    links.forEach(l=>{
+      externalLinks += `<li><a href="${l}" target="_blank" rel="nofollow noopener">${l}</a></li>`;
+    });
   }
+  externalLinks += `</ul>`;
 
   const html = `
 <title>${title}</title>
