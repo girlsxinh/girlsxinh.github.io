@@ -54,10 +54,8 @@
   </select>
 </div>
 
-<label>📸 Upload ảnh thumbnail (Imgur):</label>
-<div class="dropzone" id="dropzone">Kéo ảnh vào đây hoặc click để chọn</div>
-<div class="image-preview" id="imagePreview"></div>
-<input type="hidden" id="imgurLink" />
+<label>📸 Nhập link ảnh thumbnail:</label>
+<input type="text" id="imgurLink" placeholder="https://i.imgur.com/example.jpg" />
 
 <label>🎬 Nhập link video MP4:</label>
 <input type="text" id="videoLink" placeholder="https://example.com/video.mp4" />
@@ -133,7 +131,7 @@ function toSlug(str) {
   return (str || '')
     .toLowerCase()
     .normalize('NFD')
-    .replace(/\u0300-\u036f/g, '')
+    .replace(/[\u0300-\u036f]/g, '')
     .replace(/đ/g, 'd').replace(/Đ/g, 'd')
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/(^-|-$)/g, '');
@@ -155,6 +153,57 @@ function buildLSI(language, topic, country, subject) {
   }
 }
 
+function getTopicDisplayName(topic, language) {
+  const topicMap = {
+    'vi': {
+      'hotgirl': 'Hot girl',
+      'tiktok': 'TikTok girl',
+      'dienvien': 'Diễn viên',
+      'nguoimau': 'Người mẫu',
+      'idol': 'Idol',
+      'influencer': 'Người nổi tiếng',
+      'facebook': 'Gái xinh Facebook',
+      'instagram': 'Gái xinh Instagram',
+      'twitter': 'Gái xinh Twitter',
+      'gaixinh-vn': 'Ảnh Gái Xinh VN',
+      'gaixinh-chauau': 'Ảnh gái xinh Châu Âu Mỹ',
+      'bosuutap': 'Bộ Sưu Tập Ảnh Gái Xinh',
+      'gaixinh-nhat': 'Ảnh gái Nhật xinh đẹp',
+      'gaixinh-europe': 'Hình ảnh gái xinh Châu Âu',
+      'tocngan': 'Gái Xinh Tóc Ngắn',
+      'hinhnen': 'Bộ sưu tập hình nền gái xinh',
+      'bikini': 'Gái xinh mặc bikini',
+      'aodai': 'Gái xinh mặc áo dài Việt Nam',
+      'cute': 'Ảnh Gái Xinh Cute',
+      'cosplay': 'Ảnh gái cosplay'
+    },
+    'en': {
+      'hotgirl': 'Hot girl',
+      'tiktok': 'TikTok girl',
+      'dienvien': 'Actress',
+      'nguoimau': 'Model',
+      'idol': 'Idol',
+      'influencer': 'Influencer',
+      'facebook': 'Facebook girl',
+      'instagram': 'Instagram girl',
+      'twitter': 'Twitter girl',
+      'gaixinh-vn': 'Vietnamese girl photos',
+      'gaixinh-chauau': 'European American girl photos',
+      'bosuutap': 'Beautiful girl photo collection',
+      'gaixinh-nhat': 'Japanese beautiful girl photos',
+      'gaixinh-europe': 'European girl images',
+      'tocngan': 'Short hair girl',
+      'hinhnen': 'Beautiful girl wallpaper collection',
+      'bikini': 'Girl in bikini',
+      'aodai': 'Girl in Vietnamese ao dai',
+      'cute': 'Cute girl photos',
+      'cosplay': 'Cosplay girl photos'
+    }
+  };
+  
+  return topicMap[language][topic] || topic;
+}
+
 function generateArticle(){
   const img = document.getElementById('imgurLink').value.trim();
   const video = document.getElementById('videoLink').value.trim();
@@ -167,19 +216,40 @@ function generateArticle(){
   const includeIG = document.getElementById('includeIG').checked;
   const includeFB = document.getElementById('includeFB').checked;
 
-  if(!img || !video) { alert('Vui lòng nhập ảnh và video!'); return; }
+  if(!img || !video) { 
+    alert('Vui lòng nhập ảnh và video!'); 
+    return; 
+  }
 
   const subject = name || (language === 'vi' ? `cô gái ${country}` : `the ${country} girl`);
-  const topicName = topic;
+  const topicName = getTopicDisplayName(topic, language);
 
   const title = language==='vi' ? `${topicName} ${subject} - ${country}` : `${subject} ${topicName} - ${country}`;
   const desc = language==='vi' ? `Xem ${topicName} ${country} của ${subject} đang hot.` : `Watch ${country} ${topicName} of ${subject} getting attention.`;
   const slug = toSlug(title);
 
   const nowISO = new Date().toISOString();
-  const jsonld = {"@context":"https://schema.org","@type":"Article","headline":title,"description":desc,"image":img,"datePublished":nowISO,"author":{"@type":"Person","name":subject},"mainEntityOfPage":{"@type":"WebPage","@id":`https://www.example.com/${slug}`},"video":{"@type":"VideoObject","name":title,"description":desc,"thumbnailUrl":img,"uploadDate":nowISO,"contentUrl":video}};
+  const jsonld = {
+    "@context":"https://schema.org",
+    "@type":"Article",
+    "headline":title,
+    "description":desc,
+    "image":img,
+    "datePublished":nowISO,
+    "author":{"@type":"Person","name":subject},
+    "mainEntityOfPage":{"@type":"WebPage","@id":`https://www.example.com/${slug}`},
+    "video":{"@type":"VideoObject","name":title,"description":desc,"thumbnailUrl":img,"uploadDate":nowISO,"contentUrl":video}
+  };
 
-  const breadcrumb = {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Trang chủ","item":"https://www.example.com/"},{"@type":"ListItem","position":2,"name":topicName,"item":`https://www.example.com/search/label/${toSlug(topicName)}`},{"@type":"ListItem","position":3,"name":title}]};
+  const breadcrumb = {
+    "@context":"https://schema.org",
+    "@type":"BreadcrumbList",
+    "itemListElement":[
+      {"@type":"ListItem","position":1,"name":"Trang chủ","item":"https://www.example.com/"},
+      {"@type":"ListItem","position":2,"name":topicName,"item":`https://www.example.com/search/label/${toSlug(topicName)}`},
+      {"@type":"ListItem","position":3,"name":title}
+    ]
+  };
 
   const lsiHTML = buildLSI(language, topicName, country, subject);
 
@@ -195,8 +265,7 @@ function generateArticle(){
   }
   externalLinks += `</ul>`;
 
-  const html = `
-<title>${title}</title>
+  const html = `<title>${title}</title>
 <meta name="description" content="${desc}">
 <meta name="keywords" content="${subject}, ${topicName}, ${country}, hot girl, ${topicName} ${country}">
 <meta property="og:title" content="${title}">
@@ -208,8 +277,8 @@ function generateArticle(){
 <meta name="twitter:description" content="${desc}">
 <meta name="twitter:image" content="${img}">
 
-<script type="application/ld+json">${JSON.stringify(jsonld)}</script>
-<script type="application/ld+json">${JSON.stringify(breadcrumb)}</script>
+<script type="application/ld+json">${JSON.stringify(jsonld)}<\/script>
+<script type="application/ld+json">${JSON.stringify(breadcrumb)}<\/script>
 
 <h1>${title}</h1>
 <div class="separator" style="clear: both;">
@@ -240,9 +309,19 @@ ${externalLinks}`;
 
 function copyResult(){
   const textarea = document.getElementById('resultHTML');
-  textarea.focus(); textarea.select();
-  document.execCommand('copy');
-  alert('✅ Đã sao chép HTML!');
+  textarea.focus(); 
+  textarea.select();
+  try {
+    document.execCommand('copy');
+    alert('✅ Đã sao chép HTML!');
+  } catch(err) {
+    // Fallback for modern browsers
+    navigator.clipboard.writeText(textarea.value).then(function() {
+      alert('✅ Đã sao chép HTML!');
+    }, function(err) {
+      alert('Lỗi sao chép. Vui lòng chọn và copy thủ công.');
+    });
+  }
 }
 </script>
 
