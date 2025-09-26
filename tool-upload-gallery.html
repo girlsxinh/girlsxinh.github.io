@@ -2,149 +2,694 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Tool tạo bài viết girlxinh - SEO nâng cao + AI content</title>
+  <title>Tool tạo bài viết girlxinh đa quốc gia - SEO chuẩn Google</title>
   <style>
-    body { font-family: Inter, Arial, sans-serif; max-width: 1100px; margin: 18px auto; padding: 18px; color: #111 }
-    h1 { text-align: center }
-    label { display:block; margin-top:12px; font-weight:600 }
-    input[type=text], select, textarea { width:100%; padding:8px; margin-top:6px; border:1px solid #ddd; border-radius:6px }
-    textarea { min-height:160px; font-family: monospace }
-    .dropzone { border:2px dashed #cbd5e1; border-radius:10px; padding:26px; text-align:center; cursor:pointer; color:#64748b }
-    .btn { display:inline-block; background:#0ea5a4; color:white; padding:10px 14px; border-radius:8px; margin-top:12px; cursor:pointer; border:none }
-    .btn.secondary { background:#64748b }
-    .row { display:flex; gap:12px }
-    .col { flex:1 }
-    .preview img { max-width:100%; border-radius:8px; box-shadow:0 6px 18px rgba(2,6,23,0.06) }
-    .small { font-size:13px; color:#475569 }
-    .meta-preview { background:#f8fafc; padding:12px; border-radius:8px; margin-top:10px }
-    .actions { margin-top:12px }
-    .note { font-size:13px; color:#334155 }
-    .chip { display:inline-block; background:#eef2ff; color:#3730a3; padding:6px 8px; border-radius:20px; margin-right:6px; margin-top:6px }
+    body { font-family: Arial; max-width: 1000px; margin: auto; padding: 20px; }
+    h2 { text-align: center; color: #2c3e50; }
+    .form-section { 
+      background: #f8f9fa; 
+      padding: 20px; 
+      margin-bottom: 20px; 
+      border-radius: 8px; 
+      border-left: 4px solid #007bff;
+    }
+    .form-section h3 { 
+      color: #007bff; 
+      margin-top: 0; 
+      border-bottom: 2px solid #007bff; 
+      padding-bottom: 10px;
+    }
+    label { font-weight: bold; display: block; margin-top: 15px; }
+    input[type=text], select, textarea {
+      width: 100%; padding: 10px; margin-top: 5px;
+      border: 1px solid #ccc; border-radius: 4px; font-size: 14px;
+    }
+    textarea { height: 300px; font-family: monospace; resize: vertical; }
+    button {
+      margin-top: 15px; padding: 12px 25px; font-weight: bold;
+      background-color: #007bff; color: white; border: none; border-radius: 4px;
+      cursor: pointer; font-size: 16px;
+    }
+    button:hover { background-color: #0056b3; }
+    .dropzone {
+      border: 2px dashed #999; border-radius: 10px; padding: 30px;
+      text-align: center; color: #666; cursor: pointer; margin-top: 15px;
+      transition: all 0.3s ease;
+    }
+    .dropzone.dragover { border-color: #007bff; color: #007bff; background-color: #f0f8ff; }
+    .image-preview { margin-top: 15px; text-align: center; }
+    .image-preview img { max-width: 100%; max-height: 300px; border-radius: 6px; box-shadow: 0 0 8px rgba(0,0,0,0.1); }
+    .loading-modal {
+      background-color: rgba(255,255,255,.9);
+      display: none; position: fixed; z-index: 10000;
+      top: 0; left: 0; height: 100%; width: 100%;
+    }
+    .loading-modal.show { display: block; }
+    .loading-modal .loading-text {
+      position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%);
+      font-size: 20px; color: #007bff; font-weight: bold;
+    }
+    .text-center { text-align: center; margin-top: 15px; }
+    .btnlook.download-wall {
+      padding: 10px 15px; border: 1px solid #333; border-radius: 5px;
+      text-decoration: none; font-weight: bold; display: inline-block;
+    }
+    .btnlook.download-wall:hover { background-color: #eee; }
+    .language-selector {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 15px; border-radius: 8px; margin-bottom: 20px;
+    }
+    .language-selector select { background: white; font-weight: bold; }
+    .seo-preview {
+      background: #fff; border: 1px solid #e0e0e0; padding: 20px;
+      border-radius: 8px; margin-top: 20px;
+    }
+    .seo-preview h4 { color: #1a73e8; margin: 0 0 5px 0; font-size: 18px; }
+    .seo-preview .url { color: #006621; font-size: 14px; margin-bottom: 5px; }
+    .seo-preview .description { color: #545454; line-height: 1.4; }
+    .copy-btn { 
+      background: #28a745; 
+      margin-right: 10px; 
+    }
+    .copy-btn:hover { background: #218838; }
+    .keyword-input {
+      background: #fff3cd; border: 1px solid #ffeaa7; padding: 15px;
+      border-radius: 8px; margin-bottom: 20px;
+    }
+    .keyword-input h4 { color: #856404; margin-top: 0; }
   </style>
 </head>
 <body>
-  <h1>🎯 Tool tạo bài viết - SEO nâng cao + AI nội dung</h1>
 
-  <label>Chọn ngôn ngữ</label>
+<h2>🎥 Tool tạo bài viết SEO chuẩn Google - Đa quốc gia & Đa ngôn ngữ</h2>
+
+<div class="language-selector">
+  <label style="color: white; margin-bottom: 5px;">🌍 Chọn ngôn ngữ bài viết:</label>
   <select id="language">
-    <option value="vi">Tiếng Việt (vi)</option>
-    <option value="en">English (en)</option>
+    <option value="vi">🇻🇳 Tiếng Việt</option>
+    <option value="en">🇺🇸 English</option>
+  </select>
+</div>
+
+<div class="form-section">
+  <h3>📸 Upload ảnh và video</h3>
+  
+  <label>📸 Upload ảnh thumbnail (Imgur):</label>
+  <div class="dropzone" id="dropzone">Kéo ảnh vào đây hoặc click để chọn</div>
+  <div class="image-preview" id="imagePreview"></div>
+  <input type="hidden" id="imgurLink" />
+
+  <label>🎬 Nhập link video MP4:</label>
+  <input type="text" id="videoLink" placeholder="https://example.com/video.mp4" />
+</div>
+
+<div class="form-section">
+  <h3>🎯 Thông tin SEO và từ khóa</h3>
+  
+  <div class="keyword-input">
+    <h4>🔍 Từ khóa chính (quan trọng nhất cho SEO):</h4>
+    <input type="text" id="mainKeyword" placeholder="VD: gái xinh Việt Nam, beautiful Vietnamese girl..." />
+    
+    <label>📝 Từ khóa phụ (ngăn cách bằng dấu phẩy):</label>
+    <input type="text" id="subKeywords" placeholder="VD: hot girl, sexy, bikini, áo dài..." />
+  </div>
+
+  <label>🧙‍♀️ Tên nhân vật (có thể để trống):</label>
+  <input type="text" id="characterName" placeholder="Ví dụ: Ngọc Trinh, Arisa, Lisa..." />
+
+  <label>🌍 Chọn quốc gia:</label>
+  <select id="country">
+    <option value="Việt Nam">Việt Nam</option>
+    <option value="Nhật Bản">Nhật Bản</option>
+    <option value="Hàn Quốc">Hàn Quốc</option>
+    <option value="Trung Quốc">Trung Quốc</option>
+    <option value="Thái Lan">Thái Lan</option>
+    <option value="Mỹ">Mỹ</option>
+  </select>
+</div>
+
+<div class="form-section">
+  <h3>📚 Nội dung bài viết</h3>
+  
+  <label>📚 Chọn chủ đề bài viết:</label>
+  <select id="topic">
+    <option value="hotgirl">Hot girl</option>
+    <option value="tiktok">TikTok girl</option>
+    <option value="dienvien">Diễn viên</option>
+    <option value="nguoimau">Người mẫu</option>
+    <option value="idol">Idol</option>
+    <option value="influencer">Người nổi tiếng</option>
+    <option value="facebook">Gái xinh Facebook</option>
+    <option value="instagram">Gái xinh Instagram</option>
+    <option value="twitter">Gái xinh Twitter</option>
+    <option value="gaixinh-vn">Ảnh Gái Xinh VN</option>
+    <option value="gaixinh-chauau">Ảnh gái xinh Châu Âu Mỹ</option>
+    <option value="bosuutap">Bộ Sưu Tập Ảnh Gái Xinh</option>
+    <option value="gaixinh-nhat">Ảnh gái Nhật xinh đẹp</option>
+    <option value="gaixinh-europe">Hình ảnh gái xinh Châu Âu</option>
+    <option value="tocngan">Gái Xinh Tóc Ngắn</option>
+    <option value="hinhnen">Bộ sưu tập hình nền gái xinh</option>
+    <option value="bikini">Gái xinh mặc bikini</option>
+    <option value="cap3">Gái xinh cấp 3</option>
+    <option value="aodai">Gái xinh mặc áo dài Việt Nam</option>
+    <option value="cute">Ảnh Gái Xinh Cute</option>
+    <option value="cosplay">Ảnh gái cosplay</option>
   </select>
 
-  <div class="row">
-    <div class="col">
-      <label>Upload ảnh thumbnail (kéo/thả hoặc click)</label>
-      <div id="dropzone" class="dropzone">Kéo ảnh vào đây hoặc click để chọn (sẽ được chuyển sang WebP & nén trước khi upload)</div>
-      <div id="imageInfo" class="small"></div>
-      <div class="preview" id="imagePreview"></div>
-    </div>
-    <div class="col">
-      <label>Link video MP4 (hoặc URL embed)</label>
-      <input id="videoLink" type="text" placeholder="https://example.com/video.mp4" />
+  <label>✏️ Phong cách viết bài:</label>
+  <select id="style">
+    <option value="goi-cam">Gợi cảm, quyến rũ</option>
+    <option value="nhe-nhang">Nhẹ nhàng, giới thiệu cá nhân</option>
+    <option value="thoi-trang">Thời trang, phong cách</option>
+    <option value="tai-nang">Tài năng, kỹ năng</option>
+    <option value="doi-thuong">Đời thường, gần gũi</option>
+    <option value="nghe-thuat">Nghệ thuật, sáng tạo</option>
+  </select>
+</div>
 
-      <label>Tên nhân vật (subject)</label>
-      <input id="characterName" type="text" placeholder="Ví dụ: Ngọc Trinh, Arisa, Lisa..." />
+<button onclick="generateArticle()">📝 Tạo bài viết SEO</button>
 
-      <label>Quốc gia / khu vực</label>
-      <select id="country">
-        <option>Việt Nam</option>
-        <option>Nhật Bản</option>
-        <option>Hàn Quốc</option>
-        <option>Trung Quốc</option>
-        <option>Thái Lan</option>
-        <option>Mỹ</option>
-      </select>
+<div class="seo-preview" id="seoPreview" style="display: none;">
+  <h3>🔍 Preview kết quả tìm kiếm Google:</h3>
+  <h4 id="previewTitle"></h4>
+  <div class="url" id="previewUrl">https://yoursite.com/bai-viet-url</div>
+  <div class="description" id="previewDescription"></div>
+</div>
 
-      <label>Chủ đề (topic)</label>
-      <select id="topic">
-        <option value="hotgirl">Hot girl</option>
-        <option value="tiktok">TikTok girl</option>
-        <option value="bikini">Bikini</option>
-        <option value="aodai">Áo dài</option>
-        <option value="cosplay">Cosplay</option>
-        <option value="bosuutap">Bộ sưu tập</option>
-      </select>
+<label>Kết quả bài viết (HTML đầy đủ SEO):</label>
+<textarea id="resultHTML" readonly></textarea>
 
-      <label>Phong cách viết (style)</label>
-      <select id="style">
-        <option value="goi-cam">Gợi cảm</option>
-        <option value="nhe-nhang">Nhẹ nhàng</option>
-        <option value="thoi-trang">Thời trang</option>
-      </select>
+<div class="text-center">
+  <button class="copy-btn" onclick="copyResult()">📄 Sao chép HTML</button>
+  <button onclick="downloadHTML()">💾 Tải file HTML</button>
+</div>
 
-      <label>Internal links (dán URL, cách nhau bằng dấu phẩy)</label>
-      <input id="internalLinks" type="text" placeholder="https://yourblog.com/post1, https://yourblog.com/post2" />
-
-      <label>Outbound link (1-2 links uy tín)</label>
-      <input id="outboundLinks" type="text" placeholder="https://vi.wikipedia.org/..., https://example.com" />
-
-      <label>🔑 OpenAI API Key</label>
-      <input id="openaiKey" type="text" placeholder="sk-..." />
-
-    </div>
-  </div>
-
-  <div class="actions">
-    <button class="btn" id="generateBtn">Tạo bài viết SEO</button>
-    <button class="btn secondary" id="generateAIContentBtn">Sinh thêm nội dung AI (500-800 chữ)</button>
-    <button class="btn secondary" id="generateSitemapBtn">Tạo/Thêm vào sitemap XML</button>
-    <button class="btn secondary" id="pingGoogleBtn">Ping Google (submit sitemap)</button>
-  </div>
-
-  <div id="metaPreview" class="meta-preview" style="display:none"></div>
-
-  <label>Kết quả HTML (copy hoặc download)</label>
-  <textarea id="resultHTML"></textarea>
-  <div style="margin-top:8px">
-    <button class="btn" id="copyBtn">Sao chép HTML</button>
-    <button class="btn" id="downloadBtn">Tải file .html</button>
-  </div>
-
-  <p class="note">Tool này sinh thêm: <span class="chip">Meta &amp; OG</span><span class="chip">JSON-LD VideoObject</span><span class="chip">FAQ Schema</span><span class="chip">Internal/Outbound links</span><span class="chip">Sitemap XML</span><span class="chip">AI Content mở rộng (GPT API)</span></p>
+<div class="loading-modal" id="loadingModal"><div class="loading-text">Đang xử lý AI...</div></div>
 
 <script>
-// giữ nguyên toàn bộ code chính, bổ sung AI fetch
+const clientId = '3a8be4390ef3eb8';
+const dropzone = document.getElementById('dropzone');
+const imagePreview = document.getElementById('imagePreview');
+const imgurLinkInput = document.getElementById('imgurLink');
 
-qs('generateAIContentBtn').addEventListener('click', async () => {
-  const subject = qs('characterName').value.trim() || 'nhân vật';
-  const topic = qs('topic').value;
-  const lang = qs('language').value;
-  const apiKey = qs('openaiKey').value.trim();
-  if(!apiKey){ alert('Bạn cần nhập API key OpenAI'); return; }
-
-  const current = qs('resultHTML').value;
-  if(!current){ alert('Bạn cần tạo bài viết SEO trước'); return; }
-
-  try {
-    const prompt = lang==='vi'
-      ? `Viết một bài nội dung khoảng 600 từ bằng tiếng Việt về ${subject} với chủ đề ${topic}, có cấu trúc đoạn văn, dễ đọc, chuẩn SEO.`
-      : `Write an article about ${subject} in ${topic} topic, around 600 words, structured, SEO-friendly, in English.`;
-
-    const resp = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer '+apiKey },
-      body: JSON.stringify({
-        model: 'gpt-3.5-turbo',
-        messages: [{ role:'system', content:'You are an SEO article writer.' }, { role:'user', content: prompt }],
-        max_tokens: 900,
-        temperature: 0.7
-      })
-    });
-    const data = await resp.json();
-    if(data.error){ throw new Error(data.error.message); }
-    const text = data.choices[0].message.content;
-
-    const aiHtml = '<section>\n    <h2>Bài viết mở rộng (AI)</h2>\n'+ text.split(/\n+/).map(p=>'<p>'+p+'</p>').join('\n') +'\n  </section>';
-
-    const extended = current.replace('</article>', aiHtml+'\n</article>');
-    qs('resultHTML').value = extended;
-    alert('✅ Đã thêm nội dung AI từ OpenAI');
-  } catch(err){
-    alert('Lỗi khi gọi API: '+err.message);
+// Enhanced SEO content templates
+const contentTemplates = {
+  vi: {
+    countries: {
+      "Việt Nam": "việt nam",
+      "Nhật Bản": "nhật bản", 
+      "Hàn Quốc": "hàn quốc",
+      "Trung Quốc": "trung quốc",
+      "Thái Lan": "thái lan",
+      "Mỹ": "mỹ"
+    },
+    topics: {
+      facebook: "Facebook",
+      instagram: "Instagram", 
+      twitter: "Twitter",
+      tiktok: "TikTok",
+      "gaixinh-vn": "gái xinh Việt Nam",
+      "gaixinh-chauau": "gái xinh Châu Âu Mỹ",
+      bosuutap: "bộ sưu tập ảnh gái xinh",
+      "gaixinh-nhat": "gái Nhật xinh đẹp",
+      "gaixinh-europe": "gái xinh Châu Âu",
+      tocngan: "gái xinh tóc ngắn",
+      hinhnen: "hình nền gái xinh",
+      bikini: "gái xinh bikini",
+      cap3: "gái xinh cấp 3",
+      aodai: "gái xinh áo dài",
+      cute: "gái xinh cute",
+      cosplay: "gái cosplay",
+      hotgirl: "hot girl",
+      dienvien: "diễn viên",
+      nguoimau: "người mẫu",
+      idol: "idol",
+      influencer: "influencer"
+    },
+    seoTemplates: {
+      titleFormats: [
+        "{mainKeyword} {subject} - {country} {currentYear}",
+        "{subject} {mainKeyword} Hot Nhất {country}",
+        "Top {mainKeyword} {country} - {subject} Gây Sốt",
+        "{mainKeyword} {subject} {country} - Ảnh Video HD"
+      ],
+      descFormats: [
+        "Xem {mainKeyword} {subject} {country} hot nhất hiện tại. Ảnh video HD chất lượng cao, cập nhật liên tục. Click xem ngay! ⭐",
+        "Bộ sưu tập {mainKeyword} {subject} {country} đẹp nhất {currentYear}. Hình ảnh video HD, nội dung hấp dẫn. Xem ngay! 🔥",
+        "Top {mainKeyword} {subject} {country} được yêu thích nhất. Ảnh đẹp, video chất lượng cao. Khám phá ngay! ✨"
+      ]
+    },
+    headingStructure: {
+      h2Templates: [
+        "Giới thiệu về {subject} - {mainKeyword} {country}",
+        "Tại sao {subject} trở thành {mainKeyword} nổi tiếng?",
+        "Phong cách thời trang độc đáo của {subject}",
+        "Bộ sưu tập ảnh đẹp nhất của {subject}"
+      ],
+      h3Templates: [
+        "Thông tin cá nhân {subject}",
+        "Phong cách thời trang đặc trưng",
+        "Những khoảnh khắc ấn tượng nhất",
+        "Tương tác với người hâm mộ",
+        "Xu hướng thời trang mới nhất"
+      ]
+    }
+  },
+  en: {
+    countries: {
+      "Việt Nam": "vietnamese",
+      "Nhật Bản": "japanese",
+      "Hàn Quốc": "korean", 
+      "Trung Quốc": "chinese",
+      "Thái Lan": "thai",
+      "Mỹ": "american"
+    },
+    topics: {
+      facebook: "Facebook",
+      instagram: "Instagram",
+      twitter: "Twitter", 
+      tiktok: "TikTok",
+      "gaixinh-vn": "Vietnamese beautiful girl",
+      "gaixinh-chauau": "European American beautiful girl",
+      bosuutap: "beautiful girl photo collection",
+      "gaixinh-nhat": "beautiful Japanese girl",
+      "gaixinh-europe": "European beautiful girl",
+      tocngan: "short hair beautiful girl",
+      hinhnen: "beautiful girl wallpaper",
+      bikini: "bikini girl",
+      cap3: "high school girl",
+      aodai: "ao dai girl",
+      cute: "cute girl",
+      cosplay: "cosplay girl",
+      hotgirl: "hot girl",
+      dienvien: "actress",
+      nguoimau: "model",
+      idol: "idol",
+      influencer: "influencer"
+    },
+    seoTemplates: {
+      titleFormats: [
+        "{mainKeyword} {subject} - {country} {currentYear}",
+        "{subject} {mainKeyword} Hottest {country}",
+        "Top {mainKeyword} {country} - {subject} Going Viral",
+        "{mainKeyword} {subject} {country} - HD Photos Videos"
+      ],
+      descFormats: [
+        "Watch hottest {mainKeyword} {subject} {country} now. High quality HD photos & videos, constantly updated. Click to view! ⭐",
+        "Best {mainKeyword} {subject} {country} collection {currentYear}. Beautiful HD images & videos, engaging content. Watch now! 🔥",
+        "Top most loved {mainKeyword} {subject} {country}. Beautiful photos, high quality videos. Discover now! ✨"
+      ]
+    },
+    headingStructure: {
+      h2Templates: [
+        "Introduction to {subject} - {mainKeyword} {country}",
+        "Why {subject} became famous {mainKeyword}?",
+        "Unique fashion style of {subject}",
+        "Best photo collection of {subject}"
+      ],
+      h3Templates: [
+        "Personal information about {subject}",
+        "Distinctive fashion style",
+        "Most impressive moments",
+        "Fan interaction",
+        "Latest fashion trends"
+      ]
+    }
   }
+};
+
+dropzone.addEventListener('dragover', e => {
+  e.preventDefault();
+  dropzone.classList.add('dragover');
 });
+dropzone.addEventListener('dragleave', e => {
+  dropzone.classList.remove('dragover');
+});
+dropzone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropzone.classList.remove('dragover');
+  if(e.dataTransfer.files.length) uploadFile(e.dataTransfer.files[0]);
+});
+dropzone.addEventListener('click', () => {
+  const fileInput = document.createElement('input');
+  fileInput.type = 'file';
+  fileInput.accept = 'image/*';
+  fileInput.onchange = () => {
+    if(fileInput.files.length) uploadFile(fileInput.files[0]);
+  };
+  fileInput.click();
+});
+
+function uploadFile(file) {
+  if(!file.type.startsWith('image/')) {
+    alert('Vui lòng chọn ảnh!');
+    return;
+  }
+  showLoading(true);
+  const formData = new FormData();
+  formData.append('image', file);
+
+  fetch('https://api.imgur.com/3/image', {
+    method: 'POST',
+    headers: { Authorization: 'Client-ID ' + clientId },
+    body: formData
+  })
+  .then(res => res.json())
+  .then(data => {
+    showLoading(false);
+    if(data.success) {
+      const link = data.data.link;
+      imgurLinkInput.value = link;
+      imagePreview.innerHTML = `<img src="${link}" alt="Thumbnail">`;
+    } else {
+      alert('Upload ảnh thất bại!');
+    }
+  })
+  .catch(() => {
+    showLoading(false);
+    alert('Lỗi upload ảnh!');
+  });
+}
+
+function showLoading(show) {
+  document.getElementById('loadingModal').classList.toggle('show', show);
+}
+
+function generateSEOKeywords(mainKeyword, subKeywords, subject, country, language) {
+  const keywords = [mainKeyword];
+  
+  if (subKeywords) {
+    keywords.push(...subKeywords.split(',').map(k => k.trim()).filter(k => k));
+  }
+  
+  // Add auto-generated related keywords
+  if (language === 'vi') {
+    keywords.push(`${subject} xinh đẹp`, `ảnh ${subject}`, `video ${subject}`, 
+                 `${subject} ${country}`, 'hot girl', 'gái xinh', 'ảnh đẹp');
+  } else {
+    keywords.push(`${subject} beautiful`, `${subject} photos`, `${subject} videos`,
+                 `${subject} ${country}`, 'hot girl', 'beautiful girl', 'pretty girl');
+  }
+  
+  return keywords.slice(0, 15).join(', '); // Limit to 15 keywords
+}
+
+function generateSEOTitle(templates, mainKeyword, subject, country, currentYear) {
+  const template = pick(templates.titleFormats);
+  return template.replace(/{mainKeyword}/g, mainKeyword)
+                .replace(/{subject}/g, subject)
+                .replace(/{country}/g, country)
+                .replace(/{currentYear}/g, currentYear)
+                .substring(0, 60); // Google title limit
+}
+
+function generateSEODescription(templates, mainKeyword, subject, country, currentYear) {
+  const template = pick(templates.descFormats);
+  return template.replace(/{mainKeyword}/g, mainKeyword)
+                .replace(/{subject}/g, subject)
+                .replace(/{country}/g, country)
+                .replace(/{currentYear}/g, currentYear)
+                .substring(0, 155); // Google description limit
+}
+
+function generateArticle() {
+  const img = document.getElementById('imgurLink').value.trim();
+  const video = document.getElementById('videoLink').value.trim();
+  const name = document.getElementById('characterName').value.trim();
+  const country = document.getElementById('country').value;
+  const topic = document.getElementById('topic').value;
+  const style = document.getElementById('style').value;
+  const language = document.getElementById('language').value;
+  const mainKeyword = document.getElementById('mainKeyword').value.trim();
+  const subKeywords = document.getElementById('subKeywords').value.trim();
+
+  if(!img || !video) {
+    alert('Vui lòng nhập ảnh và video!');
+    return;
+  }
+
+  if(!mainKeyword) {
+    alert('Vui lòng nhập từ khóa chính để tối ưu SEO!');
+    return;
+  }
+
+  showLoading(true);
+
+  setTimeout(() => {
+    try {
+      const templates = contentTemplates[language];
+      const countryLower = templates.countries[country];
+      const subject = name ? name : `${language === 'vi' ? 'cô gái' : 'girl'} ${countryLower}`;
+      const topicName = templates.topics[topic] || topic;
+      const currentYear = new Date().getFullYear();
+      
+      // Generate SEO elements
+      const seoTitle = generateSEOTitle(templates.seoTemplates, mainKeyword, subject, country, currentYear);
+      const seoDescription = generateSEODescription(templates.seoTemplates, mainKeyword, subject, country, currentYear);
+      const seoKeywords = generateSEOKeywords(mainKeyword, subKeywords, subject, country, language);
+      
+      // Generate alt text with keywords
+      const altText = `${mainKeyword} ${subject} ${country} - ${topicName}`;
+      
+      // Generate heading structure
+      const h2Title = pick(templates.headingStructure.h2Templates)
+        .replace(/{subject}/g, subject)
+        .replace(/{mainKeyword}/g, mainKeyword)
+        .replace(/{country}/g, country);
+      
+      const h3Titles = templates.headingStructure.h3Templates.slice(0, 3).map(template =>
+        template.replace(/{subject}/g, subject)
+                .replace(/{mainKeyword}/g, mainKeyword)
+                .replace(/{country}/g, country)
+      );
+
+      // Generate content paragraphs with keyword optimization
+      const contentParagraphs = [
+        `${mainKeyword} ${subject} đang trở thành hiện tượng hot trên mạng xã hội với những hình ảnh và video chất lượng cao. Với vẻ đẹp ${language === 'vi' ? 'đặc trưng' : 'distinctive'} của ${country}, ${subject} thu hút hàng nghìn người theo dõi.`,
+        
+        `Bộ sưu tập ảnh của ${subject} không chỉ thể hiện vẻ đẹp tự nhiên mà còn cho thấy phong cách thời trang độc đáo. Mỗi bức ảnh đều được chụp với chất lượng HD, mang đến trải nghiệm thị giác tuyệt vời cho người xem.`,
+        
+        `${subject} thường xuyên cập nhật những khoảnh khắc mới nhất, từ những shoot ảnh chuyên nghiệp đến những khoảnh khắc đời thường. Điều này giúp người hâm mộ có thể theo dõi và cảm nhận được sự gần gũi, chân thật.`,
+        
+        `Video clip của ${subject} luôn nhận được lượng view và tương tác cao. Với nội dung đa dạng và hấp dẫn, mỗi video đều mang lại những trải nghiệm thú vị cho khán giả.`
+      ];
+
+      if (language === 'en') {
+        contentParagraphs[0] = `${mainKeyword} ${subject} is becoming a hot phenomenon on social media with high-quality images and videos. With the distinctive beauty of ${country}, ${subject} attracts thousands of followers.`;
+        contentParagraphs[1] = `${subject}'s photo collection not only shows natural beauty but also demonstrates unique fashion style. Each photo is shot in HD quality, providing excellent visual experience for viewers.`;
+        contentParagraphs[2] = `${subject} regularly updates the latest moments, from professional photo shoots to everyday moments. This helps fans follow and feel the closeness and authenticity.`;
+        contentParagraphs[3] = `${subject}'s video clips always receive high views and interactions. With diverse and attractive content, each video brings interesting experiences to the audience.`;
+      }
+
+      // Update SEO preview
+      document.getElementById('seoPreview').style.display = 'block';
+      document.getElementById('previewTitle').textContent = seoTitle;
+      document.getElementById('previewDescription').textContent = seoDescription;
+
+      const html = `<!DOCTYPE html>
+<html lang="${language}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO Meta Tags -->
+  <title>${seoTitle}</title>
+  <meta name="description" content="${seoDescription}">
+  <meta name="keywords" content="${seoKeywords}">
+  
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="${seoTitle}">
+  <meta property="og:description" content="${seoDescription}">
+  <meta property="og:image" content="${img}">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://yoursite.com/bai-viet-url">
+  
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="${seoTitle}">
+  <meta name="twitter:description" content="${seoDescription}">
+  <meta name="twitter:image" content="${img}">
+  
+  <!-- Additional SEO Meta Tags -->
+  <meta name="author" content="YourSite">
+  <meta name="robots" content="index, follow">
+  <meta name="language" content="${language === 'vi' ? 'Vietnamese' : 'English'}">
+  <link rel="canonical" href="https://yoursite.com/bai-viet-url">
+  
+  <!-- Schema.org structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "${seoTitle}",
+    "description": "${seoDescription}",
+    "image": "${img}",
+    "author": {
+      "@type": "Person",
+      "name": "YourSite"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "YourSite",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "${img}"
+      }
+    },
+    "datePublished": "${new Date().toISOString()}",
+    "dateModified": "${new Date().toISOString()}"
+  }
+  </script>
+</head>
+<body>
+
+<!-- Main SEO Title (H1) -->
+<h1>${seoTitle}</h1>
+
+<!-- Featured Image with SEO optimized alt text -->
+<div class="separator" style="clear: both;">
+  <a href="${img}" style="display: block; padding: 1em 0px; text-align: center;">
+    <img alt="${altText}" title="${seoTitle}" border="0" height="400" src="${img}" loading="lazy" />
+  </a>
+</div>
+
+<!-- Introduction Paragraph -->
+<p>${contentParagraphs[0]}</p>
+
+<!-- Secondary Heading (H2) -->
+<h2>${h2Title}</h2>
+
+<p>${contentParagraphs[1]}</p>
+
+<!-- Subheading (H3) -->
+<h3>${h3Titles[0]}</h3>
+<p>${contentParagraphs[2]}</p>
+
+<!-- Another Subheading (H3) -->
+<h3>${h3Titles[1]}</h3>
+<p>${contentParagraphs[3]}</p>
+
+<!-- Video Section -->
+<h3>${language === 'vi' ? 'Video Hot Nhất' : 'Hottest Videos'}</h3>
+
+<!-- Hidden autoplay video for engagement -->
+<div style="display: none;">
+  <div id="live-wallpaper">
+    <video class="live-wp" controlsList="nodownload" controls autoplay loop muted playsinline poster="${img}" title="${altText}">
+      <source src="${video}" type="video/mp4" />
+      <source src="${video}" type="video/ogg" />
+      Your browser does not support the video tag.
+    </video>
+  </div>
+</div>
+
+<!-- Call to Action Section -->
+<h3>${language === 'vi' ? 'Tải về và chia sẻ' : 'Download and Share'}</h3>
+<p>${language === 'vi' ? 'Đừng quên chia sẻ những hình ảnh và video tuyệt vời này với bạn bè. Click vào nút bên dưới để tải về bộ sưu tập đầy đủ!' : 'Don\'t forget to share these amazing images and videos with friends. Click the button below to download the complete collection!'}</p>
+
+<!-- Download Button -->
+<div class="text-center" style="text-align: center; margin: 20px 0;">
+  <a alt="Download ${mainKeyword} ${subject}" class="btnlook download-wall" href="https://t.me/girlxinhhd" style="color: black; padding: 15px 30px; border: 2px solid #007bff; border-radius: 8px; text-decoration: none; font-weight: bold; display: inline-block; transition: all 0.3s ease;" title="Download ${altText}" target="_blank">
+    ${language === 'vi' ? '📥 Tải về HD' : '📥 Download HD'}
+  </a>
+</div>
+
+<!-- Related Content Section -->
+<h3>${language === 'vi' ? 'Xem thêm nội dung tương tự' : 'See more related content'}</h3>
+<p>${language === 'vi' ? 
+  `Nếu bạn yêu thích ${mainKeyword} ${subject}, hãy khám phá thêm nhiều bộ sưu tập khác từ ${country}. Chúng tôi thường xuyên cập nhật những hình ảnh và video mới nhất, chất lượng cao nhất.` :
+  `If you love ${mainKeyword} ${subject}, explore more collections from ${country}. We regularly update with the latest and highest quality images and videos.`
+}</p>
+
+<!-- FAQ Section for better SEO -->
+<h2>${language === 'vi' ? 'Câu hỏi thường gặp' : 'Frequently Asked Questions'}</h2>
+
+<h3>${language === 'vi' ? `Ai là ${subject}?` : `Who is ${subject}?`}</h3>
+<p>${language === 'vi' ? 
+  `${subject} là một ${topicName} nổi tiếng đến từ ${country}, được biết đến với vẻ đẹp tự nhiên và phong cách thời trang độc đáo.` :
+  `${subject} is a famous ${topicName} from ${country}, known for natural beauty and unique fashion style.`
+}</p>
+
+<h3>${language === 'vi' ? `Làm thế nào để xem thêm ảnh của ${subject}?` : `How to see more photos of ${subject}?`}</h3>
+<p>${language === 'vi' ? 
+  `Bạn có thể theo dõi các trang mạng xã hội hoặc tìm kiếm với từ khóa "${mainKeyword}" để cập nhật những hình ảnh mới nhất.` :
+  `You can follow social media pages or search with keyword "${mainKeyword}" for the latest updates.`
+}</p>
+
+<!-- Footer with additional keywords -->
+<div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee;">
+  <p style="font-size: 14px; color: #666;">
+    <strong>${language === 'vi' ? 'Từ khóa liên quan:' : 'Related keywords:'}</strong> ${seoKeywords}
+  </p>
+  <p style="font-size: 12px; color: #999;">
+    ${language === 'vi' ? 'Cập nhật:' : 'Updated:'} ${new Date().toLocaleDateString(language === 'vi' ? 'vi-VN' : 'en-US')} | 
+    ${language === 'vi' ? 'Nguồn:' : 'Source:'} YourSite.com
+  </p>
+</div>
+
+</body>
+</html>`;
+
+      document.getElementById('resultHTML').value = html;
+      showLoading(false);
+    } catch (error) {
+      console.error('Error generating article:', error);
+      alert('Có lỗi xảy ra khi tạo bài viết!');
+      showLoading(false);
+    }
+  }, 1500);
+}
+
+function copyResult() {
+  const textarea = document.getElementById('resultHTML');
+  textarea.select();
+  document.execCommand('copy');
+  alert('✅ Đã sao chép HTML!');
+}
+
+function downloadHTML() {
+  const content = document.getElementById('resultHTML').value;
+  const blob = new Blob([content], { type: 'text/html' });
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'seo-article.html';
+  document.body.appendChild(a);
+  a.click();
+  window.URL.revokeObjectURL(url);
+  document.body.removeChild(a);
+}
+
+function pick(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+// Auto-update SEO preview when inputs change
+document.getElementById('mainKeyword').addEventListener('input', updateSEOPreview);
+document.getElementById('characterName').addEventListener('input', updateSEOPreview);
+document.getElementById('country').addEventListener('change', updateSEOPreview);
+
+function updateSEOPreview() {
+  const mainKeyword = document.getElementById('mainKeyword').value.trim();
+  const name = document.getElementById('characterName').value.trim();
+  const country = document.getElementById('country').value;
+  const language = document.getElementById('language').value;
+  
+  if (mainKeyword) {
+    const templates = contentTemplates[language];
+    const countryLower = templates.countries[country];
+    const subject = name ? name : `${language === 'vi' ? 'cô gái' : 'girl'} ${countryLower}`;
+    const currentYear = new Date().getFullYear();
+    
+    const previewTitle = generateSEOTitle(templates.seoTemplates, mainKeyword, subject, country, currentYear);
+    const previewDesc = generateSEODescription(templates.seoTemplates, mainKeyword, subject, country, currentYear);
+    
+    document.getElementById('previewTitle').textContent = previewTitle;
+    document.getElementById('previewDescription').textContent = previewDesc;
+    document.getElementById('seoPreview').style.display = 'block';
+  }
+}
 </script>
+
 </body>
 </html>
