@@ -1450,13 +1450,18 @@ function validateFormData(formData) {
 
 // Enhanced Content Generation Engine
 async function generateEnhancedContent(formData) {
-  const subject = formData.characterName || getDefaultSubject(formData.topic, formData.country);
-  const title = generateEnhancedTitle(subject, formData);
-  const description = generateEnhancedDescription(subject, formData);
-  const tags = generateSmartTags(formData);
-  const content = generateAdvancedContentBody(subject, formData);
-  
-  return buildEnhancedHTML(title, description, formData.imgurLink, formData.videoLink, content, tags, formData);
+  try {
+    const subject = formData.characterName || getDefaultSubject(formData.topic, formData.country);
+    const title = generateEnhancedTitle(subject, formData);
+    const description = generateEnhancedDescription(subject, formData);
+    const tags = generateSmartTags(formData);
+    const content = generateAdvancedContentBody(subject, formData);
+    
+    return buildEnhancedHTML(title, description, formData.imgurLink, formData.videoLink, content, tags, formData);
+  } catch (error) {
+    console.error('Content generation error:', error);
+    throw new Error('Failed to generate content: ' + error.message);
+  }
 }
 
 // Enhanced Title Generation
@@ -1531,23 +1536,135 @@ function generateAdvancedContentBody(subject, formData) {
     return generateMultiLanguageContent(subject, formData);
   }
 
-  // Audience-specific adjustments
-  const audienceStyles = {
-    'young-adults': 'Gen Z vibes với energy không thể cưỡng lại',
-    'millennials': 'Phong cách millennial đầy tinh tế và trưởng thành',
-    'photography': 'Nghệ thuật nhiếp ảnh đỉnh cao với composition hoàn hảo',
-    'fashion': 'Fashion statement độc đáo và trendsetting',
-    'gamers': 'Gaming aesthetic với màu sắc và style độc đáo'
+  // Base content library for Vietnamese
+  const contentLibrary = {
+    'goi-cam': {
+      intros: [
+        `${subject} vừa "đốt cháy" mạng xã hội với bộ ảnh cực kỳ nóng bỏng và quyến rũ, thu hút hàng triệu lượt xem chỉ trong vài giờ đầu tiên.`,
+        `Cộng đồng mạng đang "phát sốt" với loạt hình ảnh bùng nổ của ${subject} - một màn trình diễn thị giác đầy mê hoặc và gợi cảm không thể cưỡng lại.`,
+        `${subject} khiến người xem "đứng hình" với vẻ đẹp bốc lửa trong bộ ảnh mới, mỗi khung hình đều tỏa ra sức hút ma mị khó tả.`
+      ],
+      bodies: [
+        `Với thân hình cực phẩm cùng tỷ lệ vàng hoàn hảo, ${subject} biến mỗi pose dáng thành một tác phẩm nghệ thuật sống động.`,
+        `Ánh mắt đầy quyền lực như có thể thiêu cháy tất cả, nụ cười bí ẩn đầy mê hoặc cùng thần thái tự tin vượt trội.`,
+        `Mỗi chi tiết trong bộ ảnh đều được tính toán tinh tế: từ góc chụp nghệ thuật đến ánh sáng hoàn hảo.`
+      ]
+    },
+    'nhe-nhang': {
+      intros: [
+        `${subject} mang đến làn gió mới tươi mát trên mạng xã hội với bộ ảnh nhẹ nhàng, trong trẻo như nắng mai.`,
+        `Trong thế giới ảo đầy ồn ào, ${subject} như một "oasis" thanh bình với vẻ đẹp tự nhiên, giản dị nhưng đầy cuốn hút.`,
+        `${subject} tỏa sáng với phong cách gần gũi, nụ cười tươi như hoa và ánh mắt trong veo như suối nguồn.`
+      ],
+      bodies: [
+        `Với makeup tối giản chỉ tôn lên nét đẹp tự nhiên, ${subject} vẫn tỏa sáng rực rỡ nhờ vẻ đẹp thuần khiết từ bên trong.`,
+        `Nụ cười chân thành như ánh nắng, ánh mắt trong sáng như pha lê cùng thần thái tự tin nhẹ nhàng.`,
+        `Mỗi khung hình đều toát lên sự chân thật, không màu mè hay cầu kỳ nhưng vô cùng cuốn hút.`
+      ]
+    },
+    'thanh-lich': {
+      intros: [
+        `${subject} như một nàng công chúa bước ra từ cổ tích với vẻ đẹp thanh lịch, quý phái khiến người xem ngưỡng mộ.`,
+        `Trong thời đại của sự phô trương, ${subject} mang đến hơi thở tinh tế với phong cách "elegant beauty" đầy cảm hứng.`,
+        `${subject} tỏa sáng như ánh bình minh với vẻ đẹp thanh cao, mang đến năng lượng tích cực và niềm tin vào vẻ đẹp chân thật.`
+      ],
+      bodies: [
+        `Với phong thái quý phái và thần thái đầy tự tin, ${subject} chứng minh rằng vẻ đẹp thực sự đến từ sự tinh tế và sang trọng.`,
+        `Mỗi khung hình đều toát lên sự thanh lịch tuyệt đối, như những bức tranh nghệ thuật được vẽ bằng ánh sáng.`,
+        `${subject} embodies hoàn hảo concept "timeless beauty" với aura tích cực, peaceful và đầy năng lượng sống.`
+      ]
+    },
+    'ca-tinh': {
+      intros: [
+        `${subject} "break the internet" với concept cá tính mạnh mẽ, thể hiện tinh thần "boss lady" không ai có thể bỏ qua.`,
+        `Attitude level: ${subject}! Với phong thái "I don't ask for attention, I command it", cô ấy chính là định nghĩa hoàn hảo của main character energy.`,
+        `${subject} redefine chuẩn mực của modern woman - mạnh mẽ, độc lập và absolutely stunning trong mọi frame hình.`
+      ],
+      bodies: [
+        `Với confidence level cao và thần thái boss babe không thể chối cãi, ${subject} biến mỗi pose thành statement mạnh mẽ về female power.`,
+        `Sharp gaze, bold moves, zero compromise - ${subject} chính là inspiration hoàn hảo cho generation phụ nữ không ngại thể hiện bản thân.`,
+        `${subject} proof rằng gentle không có nghĩa là weak - cô ấy vừa có thể soft vừa có thể savage tùy vào situation.`
+      ]
+    },
+    'dang-yeu': {
+      intros: [
+        `${subject} "đốn tim" cộng đồng mạng với độ đáng yêu cực cao, khiến người xem muốn bảo vệ và yêu thương hết mực.`,
+        `Sweetness overload! ${subject} như một candy store sống với vibe ngọt ngào và adorable không thể cưỡng lại được.`,
+        `${subject} master được nghệ thuật "cute but make it fashion" - vừa đáng yêu vừa trendy một cách hoàn hảo.`
+      ],
+      bodies: [
+        `Với những biểu cảm đầy tinh nghịch và gesture đáng yêu, ${subject} awakened protective instinct sâu thẳm trong lòng mọi người xem.`,
+        `Mỗi nụ cười của ${subject} đều như sunshine tươi sáng, mang đến instant mood boost cho bất kỳ ai scroll qua feed.`,
+        `${subject} chứng minh rằng cute is the new cool - đáng yêu cũng có thể là một superpower đầy ấn tượng và mạnh mẽ.`
+      ]
+    }
   };
 
-  const baseContent = generateStyleBasedContent(subject, style, length, formData);
+  const currentStyle = contentLibrary[style] || contentLibrary['nhe-nhang'];
+  const intro = pick(currentStyle.intros);
+  const bodyParts = shuffle([...currentStyle.bodies]);
   
-  // Add audience-specific elements
-  if (audienceStyles[audience]) {
-    baseContent.content += `<p>Đặc biệt dành cho cộng đồng ${audience}: ${audienceStyles[audience]}, ${subject} thực sự là biểu tượng hoàn hảo cho phong cách sống hiện đại.</p>`;
+  let numParagraphs = 2;
+  switch(length) {
+    case 'micro': numParagraphs = 1; break;
+    case 'short': numParagraphs = 2; break;
+    case 'medium': numParagraphs = 3; break;
+    case 'long': numParagraphs = 4; break;
+    case 'article': numParagraphs = 5; break;
   }
+  
+  let selectedBodies = bodyParts.slice(0, numParagraphs);
+  
+  let content = `<p>${intro}</p>`;
+  content += selectedBodies.map(p => `<p>${p}</p>`).join('');
+  
+  // Add platform-specific content
+  const platformContent = getPlatformContent(subject, formData.platform);
+  if(platformContent) content += `<p>${platformContent}</p>`;
+  
+  // Add topic-specific content
+  const topicContent = getTopicContent(subject, formData.topic);
+  if(topicContent) content += `<p>${topicContent}</p>`;
+  
+  return content;
+}
 
-  return baseContent.content;
+// Platform-specific content
+function getPlatformContent(subject, platform) {
+  const platformContents = {
+    'facebook': [
+      `Post này đã "bùng nổ" trên Facebook với reaction rate 95% là love và wow, comments tăng vọt như rocket chỉ sau 30 phút đầu tiên!`,
+      `Fan page của ${subject} đã tăng follower chóng mặt sau khi album này được share rần rần trên các group hot nhất.`,
+      `Hàng nghìn comments khen ngợi và thả tim đã chứng minh sức hút không thể chối từ của ${subject} trên platform lớn nhất thế giới.`
+    ],
+    'instagram': [
+      `Story highlight của ${subject} về bộ ảnh này đã đạt view count khủng, với engagement rate thuộc top 1% trong category này.`,
+      `Reels của ${subject} trending #1 trên Instagram Explore, được feature bởi chính thuật toán vì độ viral cực cao.`,
+      `Hashtag liên quan đến ${subject} đã trở thành trending topic hot, với hàng triệu post cùng tag được đăng tải mỗi ngày.`
+    ],
+    'tiktok': [
+      `Video của ${subject} đã viral với 10M+ views chỉ trong 24h đầu, tạo nên challenge mới được giới trẻ hưởng ứng nhiệt tình.`,
+      `Sound gốc từ video của ${subject} đã được sử dụng bởi hàng nghìn creator, tạo thành trend khổng lồ "phủ sóng" khắp FYP.`,
+      `Duet và reaction video về ${subject} đã "ngập tràn" TikTok, khẳng định sức ảnh hưởng cực lớn.`
+    ]
+  };
+  
+  return platformContents[platform] ? pick(platformContents[platform]) : null;
+}
+
+// Topic-specific content
+function getTopicContent(subject, topic) {
+  const topicContents = {
+    'cosplay': `Với skill cosplay đỉnh cao và attention to detail hoàn hảo, ${subject} đã bring character to life một cách stunning và chân thực nhất.`,
+    'bikini': `Beach body goals achieved! ${subject} sở hữu figure chuẩn từng centimeter, perfect complement cho mọi kiểu bikini.`,
+    'ao-dai': `Trong tà áo dài truyền thống Việt Nam, ${subject} embodied perfectly vẻ đẹp dịu dàng và thanh lịch của phụ nữ Á Đông.`,
+    'school': `Với concept "nữ sinh cấp 3" đầy nostalgia, ${subject} mang đến feeling hoài niệm về tuổi học trò trong sáng.`,
+    'short-hair': `Kiểu tóc ngắn trendy của ${subject} không chỉ thời thượng mà còn perfectly complement với face shape.`,
+    'cute-girl': `Với concept "cute overload", ${subject} embodied hoàn hảo vẻ đẹp đáng yêu và ngây thơ.`,
+    'fashion': `Fashion sense của ${subject} truly on point, mỗi outfit đều carefully curated và styled to perfection.`
+  };
+  
+  return topicContents[topic] || null;
 }
 
 // Multi-language Content Generation
@@ -1646,18 +1763,128 @@ function buildEnhancedHTML(title, description, imgUrl, videoUrl, content, tags, 
     html += `<meta name="mobile-web-app-capable" content="yes">\n`;
   }
 
-  // Enhanced styling
-  html += generateEnhancedCSS(options);
+  // Main title with styling
+  html += `<!-- Main Article Title -->\n`;
+  html += `<div style="text-align: center; margin: 30px 0;">\n`;
+  html += `  <h1 style="font-size: 2.5em; background: linear-gradient(45deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 15px; font-weight: bold;">${title}</h1>\n`;
+  html += `</div>\n\n`;
 
-  // Main content structure
-  html += generateContentStructure(title, description, imgUrl, videoUrl, content, tags, options);
+  // Featured image with modern styling
+  html += `<!-- Featured Image -->\n`;
+  html += `<div style="text-align: center; margin: 30px 0;">\n`;
+  html += `  <div style="display: inline-block; position: relative; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.15); transition: transform 0.3s ease;">\n`;
+  html += `    <img src="${imgUrl}" alt="${title}" style="width: 100%; max-width: 800px; height: auto; display: block;" />\n`;
+  html += `    <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.7)); color: white; padding: 20px; text-align: left;">\n`;
+  html += `      <p style="margin: 0; font-size: 1.1em; font-weight: 600;">Premium Quality Gallery</p>\n`;
+  html += `    </div>\n`;
+  html += `  </div>\n`;
+  html += `</div>\n\n`;
 
-  // Enhanced features
-  if (options.includeAnalysis) {
-    html += generateContentAnalysis(content, tags);
+  // Tags with modern design
+  html += `<!-- Trending Tags -->\n`;
+  html += `<div style="text-align: center; margin: 25px 0;">\n`;
+  html += tags.slice(0, 8).map(tag => 
+    `  <span style="display: inline-block; background: linear-gradient(45deg, #667eea, #764ba2); color: white; padding: 8px 16px; margin: 4px; border-radius: 25px; font-size: 13px; font-weight: 500; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);">#${tag}</span>`
+  ).join('\n') + '\n';
+  html += `</div>\n\n`;
+
+  // Video player (if enabled and video exists)
+  if(options.includeVideo && videoUrl) {
+    html += `<!-- Auto-play Video -->\n`;
+    html += `<div style="text-align: center; margin: 30px 0;">\n`;
+    html += `  <video controls autoplay loop muted playsinline poster="${imgUrl}" style="width: 100%; max-width: 800px; border-radius: 15px; box-shadow: 0 15px 30px rgba(0,0,0,0.2);">\n`;
+    html += `    <source src="${videoUrl}" type="video/mp4" />\n`;
+    html += `    Your browser does not support the video tag.\n`;
+    html += `  </video>\n`;
+    html += `</div>\n\n`;
   }
 
+  // Main content with beautiful typography
+  html += `<!-- Article Content -->\n`;
+  html += `<div style="max-width: 800px; margin: 0 auto; padding: 20px; font-family: 'Georgia', serif; line-height: 1.8; color: #333;">\n`;
+  html += content.replace(/<p>/g, '  <p style="margin: 20px 0; font-size: 1.1em; text-align: justify;">').replace(/<\/p>/g, '</p>') + '\n';
+  html += `</div>\n\n`;
+
+  // Download section (if video exists)
+  if(videoUrl) {
+    html += `<!-- Premium Download Section -->\n`;
+    html += `<div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: 20px; padding: 30px; margin: 40px auto; max-width: 600px; text-align: center; box-shadow: 0 15px 35px rgba(240, 147, 251, 0.4);">\n`;
+    html += `  <h3 style="color: white; margin-bottom: 15px; font-size: 1.5em;">Download Premium Content</h3>\n`;
+    html += `  <p style="color: rgba(255,255,255,0.9); margin-bottom: 20px;">Chất lượng Full HD - Tải về hoàn toàn miễn phí</p>\n`;
+    html += `  <a href="${videoUrl}" download style="display: inline-block; background: white; color: #f5576c; padding: 15px 30px; border-radius: 50px; text-decoration: none; font-weight: bold; font-size: 16px; transition: transform 0.3s ease; box-shadow: 0 8px 25px rgba(0,0,0,0.2);">Download Now</a>\n`;
+    html += `</div>\n\n`;
+  }
+
+  // Related content section (if enabled)
+  if(options.includeRelated) {
+    const relatedLinks = generateRelatedContent(tags);
+    html += `<!-- Related Content -->\n`;
+    html += `<div style="background: #f8fafc; border-radius: 20px; padding: 30px; margin: 40px 0; border: 1px solid #e2e8f0;">\n`;
+    html += `  <h3 style="color: #2d3748; text-align: center; margin-bottom: 25px; font-size: 1.4em;">Nội dung liên quan</h3>\n`;
+    html += `  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">\n`;
+    relatedLinks.forEach(link => {
+      html += `    <div style="background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: transform 0.3s ease;">\n`;
+      html += `      <a href="#" style="color: #667eea; text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 10px;"><span style="font-size: 1.2em;">📌</span>${link}</a>\n`;
+      html += `    </div>\n`;
+    });
+    html += `  </div>\n`;
+    html += `</div>\n\n`;
+  }
+
+  // Social sharing section (if enabled)
+  if(options.includeSocial) {
+    html += `<!-- Social Sharing -->\n`;
+    html += `<div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px; padding: 30px; margin: 40px 0; text-align: center;">\n`;
+    html += `  <h4 style="color: white; margin-bottom: 20px; font-size: 1.3em;">Chia sẻ bài viết này</h4>\n`;
+    html += `  <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">\n`;
+    html += `    <a href="https://www.facebook.com/sharer/sharer.php?u=" style="background: #3b5998; color: white; padding: 12px 20px; text-decoration: none; border-radius: 10px; font-weight: bold; display: flex; align-items: center; gap: 8px; transition: transform 0.3s ease;">Facebook</a>\n`;
+    html += `    <a href="https://twitter.com/intent/tweet?url=" style="background: #1da1f2; color: white; padding: 12px 20px; text-decoration: none; border-radius: 10px; font-weight: bold; display: flex; align-items: center; gap: 8px; transition: transform 0.3s ease;">Twitter</a>\n`;
+    html += `    <a href="#" style="background: #e1306c; color: white; padding: 12px 20px; text-decoration: none; border-radius: 10px; font-weight: bold; display: flex; align-items: center; gap: 8px; transition: transform 0.3s ease;">Instagram</a>\n`;
+    html += `  </div>\n`;
+    html += `</div>\n\n`;
+  }
+
+  // Footer with branding
+  html += `<!-- Footer -->\n`;
+  html += `<div style="text-align: center; margin: 50px 0 30px; padding-top: 30px; border-top: 2px solid #e2e8f0;">\n`;
+  html += `  <p style="color: #718096; font-size: 14px; margin: 0;">Generated by AI Content Creator Pro V2 | ${new Date().toLocaleDateString('vi-VN')}</p>\n`;
+  html += `</div>`;
+
   return html;
+}
+
+// Generate related content
+function generateRelatedContent(tags) {
+  const templates = [
+    `Bộ sưu tập ${tags[0]} hot nhất 2024`,
+    `Top ${tags[1] || tags[0]} đẹp nhất năm`,
+    `${tags[0]} viral trên mạng xã hội`,
+    `Những ${tags[1] || tags[0]} không thể bỏ qua`,
+    `Collection ${tags[0]} chất lượng cao`,
+    `Gallery ${tags[2] || tags[0]} trending`,
+    `Best ${tags[1] || tags[0]} compilation`,
+    `Premium ${tags[0]} content`
+  ];
+  return shuffle(templates).slice(0, 4);
+}
+
+// Generate Advanced SEO
+function generateAdvancedSEO(title, description, imgUrl, tags, options) {
+  return `<!-- Advanced SEO Meta Tags -->\n` +
+         `<title>${title}</title>\n` +
+         `<meta name="description" content="${description}">\n` +
+         `<meta name="keywords" content="${tags.join(', ')}">\n` +
+         `<meta name="author" content="AI Content Generator V2">\n` +
+         `<meta name="robots" content="index, follow">\n` +
+         `<meta property="og:title" content="${title}">\n` +
+         `<meta property="og:description" content="${description}">\n` +
+         `<meta property="og:image" content="${imgUrl}">\n` +
+         `<meta property="og:type" content="article">\n` +
+         `<meta name="twitter:card" content="summary_large_image">\n` +
+         `<meta name="twitter:title" content="${title}">\n` +
+         `<meta name="twitter:description" content="${description}">\n` +
+         `<meta name="twitter:image" content="${imgUrl}">\n` +
+         `<link rel="canonical" href="#">\n\n`;
 }
 
 // Generate Advanced SEO
