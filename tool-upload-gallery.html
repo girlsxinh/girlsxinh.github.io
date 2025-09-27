@@ -506,10 +506,10 @@
 <div class="container">
   <!-- Enhanced Header -->
   <div class="header">
-    <div class="version-badge">V2.0 ENHANCED</div>
+    <div class="version-badge">V2.0 NÂNG CẤP</div>
     <div class="header-content">
-      <h1>🎨 Tool Tạo Bài Viết Gái Xinh Pro V2</h1>
-      <p>AI-Powered Content Generation • 30+ Templates • Advanced Analytics</p>
+      <h1>🎨 Công Cụ Tạo Bài Viết Gái Xinh Pro V2</h1>
+      <p>Tạo Nội Dung Bằng AI • Hơn 30 Mẫu • Phân Tích Chuyên Sâu</p>
     </div>
   </div>
 
@@ -522,23 +522,23 @@
       </div>
       <div class="stat-card" onclick="showStats('images')">
         <div class="stat-number" id="totalImages">0</div>
-        <div class="stat-label">Ảnh đã upload</div>
+        <div class="stat-label">Ảnh đã tải lên</div>
       </div>
       <div class="stat-card" onclick="showStats('templates')">
         <div class="stat-number">30+</div>
-        <div class="stat-label">AI Templates</div>
+        <div class="stat-label">Mẫu AI Có Sẵn</div>
       </div>
       <div class="stat-card" onclick="showStats('styles')">
         <div class="stat-number">8</div>
-        <div class="stat-label">Phong cách viết</div>
+        <div class="stat-label">Phong Cách Viết</div>
       </div>
       <div class="stat-card" onclick="showStats('analytics')">
         <div class="stat-number" id="totalViews">0</div>
-        <div class="stat-label">Total Views</div>
+        <div class="stat-label">Tổng Lượt Xem</div>
       </div>
       <div class="stat-card" onclick="showStats('success')">
         <div class="stat-number" id="successRate">98%</div>
-        <div class="stat-label">Success Rate</div>
+        <div class="stat-label">Tỉ Lệ Thành Công</div>
       </div>
     </div>
 
@@ -546,29 +546,29 @@
     <div class="quick-actions">
       <div class="quick-action" onclick="quickGenerate('trending')">
         <div class="icon">🔥</div>
-        <div class="title">Trending Now</div>
+        <div class="title">Nội Dung Hot</div>
         <div class="desc">Tạo nội dung viral</div>
       </div>
       <div class="quick-action" onclick="quickGenerate('instagram')">
         <div class="icon">📷</div>
-        <div class="title">Insta Ready</div>
-        <div class="desc">Tối ưu cho Instagram</div>
+        <div class="title">Tối Ưu Instagram</div>
+        <div class="desc">Phù hợp với Instagram</div>
       </div>
       <div class="quick-action" onclick="quickGenerate('tiktok')">
         <div class="icon">🎵</div>
         <div class="title">TikTok Viral</div>
-        <div class="desc">Content cho TikTok</div>
+        <div class="desc">Nội dung cho TikTok</div>
       </div>
       <div class="quick-action" onclick="quickGenerate('professional')">
         <div class="icon">💼</div>
-        <div class="title">Professional</div>
-        <div class="desc">Nội dung chuyên nghiệp</div>
+        <div class="title">Chuyên Nghiệp</div>
+        <div class="desc">Nội dung formal</div>
       </div>
     </div>
 
     <!-- NEW: AI Templates Section -->
     <div class="ai-templates">
-      <div class="advanced-title">🤖 AI Content Templates</div>
+      <div class="advanced-title">🤖 Mẫu Nội Dung AI</div>
       <div class="templates-grid" id="templatesGrid">
         <!-- Templates will be loaded here -->
       </div>
@@ -1639,7 +1639,7 @@ function enhanceCreativeTitle(baseTitle, creativityLevel) {
   return baseTitle;
 }
 
-// Advanced Content Body Generation
+// Advanced Content Body Generation - Fixed Vietnamese Content
 function generateAdvancedContentBody(subject, formData) {
   const { style, length, tone, creativityLevel, language, audience } = formData;
   
@@ -1648,71 +1648,71 @@ function generateAdvancedContentBody(subject, formData) {
     return generateMultiLanguageContent(subject, formData);
   }
 
-  // Base content library for Vietnamese
-  const contentLibrary = {
+  // Vietnamese content library with proper encoding
+  const vietnameseContent = {
     'goi-cam': {
       intros: [
-        `${subject} vừa "đốt cháy" mạng xã hội với bộ ảnh cực kỳ nóng bỏng và quyến rũ, thu hút hàng triệu lượt xem chỉ trong vài giờ đầu tiên.`,
-        `Cộng đồng mạng đang "phát sốt" với loạt hình ảnh bùng nổ của ${subject} - một màn trình diễn thị giác đầy mê hoặc và gợi cảm không thể cưỡng lại.`,
-        `${subject} khiến người xem "đứng hình" với vẻ đẹp bốc lửa trong bộ ảnh mới, mỗi khung hình đều tỏa ra sức hút ma mị khó tả.`
+        `${subject} vừa gây bão mạng xã hội với bộ ảnh cực kỳ nóng bỏng và quyến rũ, thu hút hàng triệu lượt xem chỉ trong vài giờ đầu tiên.`,
+        `Cộng đồng mạng đang phát sốt với loạt hình ảnh bùng nổ của ${subject}, một màn trình diễn thị giác đầy mê hoặc không thể cưỡng lại.`,
+        `${subject} khiến người xem đứng hình với vẻ đẹp bốc lửa trong bộ ảnh mới, mỗi khung hình đều tỏa ra sức hút ma mị khó tả.`
       ],
       bodies: [
-        `Với thân hình cực phẩm cùng tỷ lệ vàng hoàn hảo, ${subject} biến mỗi pose dáng thành một tác phẩm nghệ thuật sống động.`,
-        `Ánh mắt đầy quyền lực như có thể thiêu cháy tất cả, nụ cười bí ẩn đầy mê hoặc cùng thần thái tự tin vượt trội.`,
-        `Mỗi chi tiết trong bộ ảnh đều được tính toán tinh tế: từ góc chụp nghệ thuật đến ánh sáng hoàn hảo.`
+        `Với thân hình cực phẩm cùng tỷ lệ vàng hoàn hảo, ${subject} biến mỗi pose dáng thành một tác phẩm nghệ thuật sống động, khiến người xem không thể rời mắt.`,
+        `Ánh mắt đầy quyền lực như có thể thiêu cháy tất cả, nụ cười bí ẩn đầy mê hoặc cùng thần thái tự tin vượt trội của ${subject}.`,
+        `Mỗi chi tiết trong bộ ảnh đều được tính toán tinh tế: từ góc chụp nghệ thuật đến ánh sáng hoàn hảo, tất cả nhằm tôn vinh vẻ đẹp của ${subject}.`
       ]
     },
     'nhe-nhang': {
       intros: [
-        `${subject} mang đến làn gió mới tươi mát trên mạng xã hội với bộ ảnh nhẹ nhàng, trong trẻo như nắng mai.`,
-        `Trong thế giới ảo đầy ồn ào, ${subject} như một "oasis" thanh bình với vẻ đẹp tự nhiên, giản dị nhưng đầy cuốn hút.`,
-        `${subject} tỏa sáng với phong cách gần gũi, nụ cười tươi như hoa và ánh mắt trong veo như suối nguồn.`
+        `${subject} mang đến làn gió mới tươi mát trên mạng xã hội với bộ ảnh nhẹ nhàng, trong trẻo như nắng mai, khiến người xem cảm thấy bình yên.`,
+        `Trong thế giới ảo đầy ồn ào, ${subject} như một ốc đảo thanh bình với vẻ đẹp tự nhiên, giản dị nhưng đầy cuốn hút.`,
+        `${subject} tỏa sáng với phong cách gần gũi, nụ cười tươi như hoa và ánh mắt trong veo như suối nguồn núi rừng.`
       ],
       bodies: [
         `Với makeup tối giản chỉ tôn lên nét đẹp tự nhiên, ${subject} vẫn tỏa sáng rực rỡ nhờ vẻ đẹp thuần khiết từ bên trong.`,
-        `Nụ cười chân thành như ánh nắng, ánh mắt trong sáng như pha lê cùng thần thái tự tin nhẹ nhàng.`,
-        `Mỗi khung hình đều toát lên sự chân thật, không màu mè hay cầu kỳ nhưng vô cùng cuốn hút.`
+        `Nụ cười chân thành như ánh nắng, ánh mắt trong sáng như pha lê cùng thần thái tự tin nhẹ nhàng của ${subject}.`,
+        `Mỗi khung hình đều toát lên sự chân thật, không màu mè hay cầu kỳ nhưng vô cùng cuốn hút và đáng yêu.`
       ]
     },
     'thanh-lich': {
       intros: [
         `${subject} như một nàng công chúa bước ra từ cổ tích với vẻ đẹp thanh lịch, quý phái khiến người xem ngưỡng mộ.`,
-        `Trong thời đại của sự phô trương, ${subject} mang đến hơi thở tinh tế với phong cách "elegant beauty" đầy cảm hứng.`,
-        `${subject} tỏa sáng như ánh bình minh với vẻ đẹp thanh cao, mang đến năng lượng tích cực và niềm tin vào vẻ đẹp chân thật.`
+        `Trong thời đại của sự phô trương, ${subject} mang đến hơi thở tinh tế với phong cách elegant beauty đầy cảm hứng.`,
+        `${subject} tỏa sáng như ánh bình minh với vẻ đẹp thanh cao, mang đến năng lượng tích cực cho người xem.`
       ],
       bodies: [
         `Với phong thái quý phái và thần thái đầy tự tin, ${subject} chứng minh rằng vẻ đẹp thực sự đến từ sự tinh tế và sang trọng.`,
-        `Mỗi khung hình đều toát lên sự thanh lịch tuyệt đối, như những bức tranh nghệ thuật được vẽ bằng ánh sáng.`,
-        `${subject} embodies hoàn hảo concept "timeless beauty" với aura tích cực, peaceful và đầy năng lượng sống.`
+        `Mỗi khung hình đều toát lên sự thanh lịch tuyệt đối, như những bức tranh nghệ thuật được vẽ bằng ánh sáng và cảm xúc.`,
+        `${subject} thể hiện hoàn hảo concept vẻ đẹp vượt thời gian với aura tích cực, bình yên và đầy năng lượng sống.`
       ]
     },
     'ca-tinh': {
       intros: [
-        `${subject} "break the internet" với concept cá tính mạnh mẽ, thể hiện tinh thần "boss lady" không ai có thể bỏ qua.`,
-        `Attitude level: ${subject}! Với phong thái "I don't ask for attention, I command it", cô ấy chính là định nghĩa hoàn hảo của main character energy.`,
-        `${subject} redefine chuẩn mực của modern woman - mạnh mẽ, độc lập và absolutely stunning trong mọi frame hình.`
+        `${subject} gây bão internet với concept cá tính mạnh mẽ, thể hiện tinh thần boss lady không ai có thể bỏ qua.`,
+        `Với thái độ tự tin tuyệt đối, ${subject} chính là định nghĩa hoàn hảo của main character energy trong thời đại số.`,
+        `${subject} định nghĩa lại chuẩn mực của phụ nữ hiện đại - mạnh mẽ, độc lập và cực kỳ ấn tượng trong mọi khung hình.`
       ],
       bodies: [
-        `Với confidence level cao và thần thái boss babe không thể chối cãi, ${subject} biến mỗi pose thành statement mạnh mẽ về female power.`,
-        `Sharp gaze, bold moves, zero compromise - ${subject} chính là inspiration hoàn hảo cho generation phụ nữ không ngại thể hiện bản thân.`,
-        `${subject} proof rằng gentle không có nghĩa là weak - cô ấy vừa có thể soft vừa có thể savage tùy vào situation.`
+        `Với sự tự tin vượt trội và thần thái boss babe không thể chối cãi, ${subject} biến mỗi pose thành tuyên ngôn mạnh mẽ về sức mạnh phụ nữ.`,
+        `Ánh mắt sắc bén, động tác táo bạo, không thỏa hiệp - ${subject} chính là nguồn cảm hứng hoàn hảo cho thế hệ phụ nữ không ngại thể hiện bản thân.`,
+        `${subject} chứng minh rằng dịu dàng không có nghĩa là yếu đuối - cô ấy vừa có thể soft vừa có thể mạnh mẽ tùy hoàn cảnh.`
       ]
     },
     'dang-yeu': {
       intros: [
-        `${subject} "đốn tim" cộng đồng mạng với độ đáng yêu cực cao, khiến người xem muốn bảo vệ và yêu thương hết mực.`,
-        `Sweetness overload! ${subject} như một candy store sống với vibe ngọt ngào và adorable không thể cưỡng lại được.`,
-        `${subject} master được nghệ thuật "cute but make it fashion" - vừa đáng yêu vừa trendy một cách hoàn hảo.`
+        `${subject} đốn tim cộng đồng mạng với độ đáng yêu cực cao, khiến người xem muốn bảo vệ và yêu thương hết mực.`,
+        `Quá ngọt ngào! ${subject} như một cửa hàng kẹo sống với vibe ngọt ngào và đáng yêu không thể cưỡng lại được.`,
+        `${subject} thành thạo nghệ thuật cute nhưng vẫn thời trang - vừa đáng yêu vừa trendy một cách hoàn hảo.`
       ],
       bodies: [
-        `Với những biểu cảm đầy tinh nghịch và gesture đáng yêu, ${subject} awakened protective instinct sâu thẳm trong lòng mọi người xem.`,
-        `Mỗi nụ cười của ${subject} đều như sunshine tươi sáng, mang đến instant mood boost cho bất kỳ ai scroll qua feed.`,
-        `${subject} chứng minh rằng cute is the new cool - đáng yêu cũng có thể là một superpower đầy ấn tượng và mạnh mẽ.`
+        `Với những biểu cảm đầy tinh nghịch và cử chỉ đáng yêu, ${subject} đánh thức bản năng bảo vệ sâu thẳm trong lòng mọi người xem.`,
+        `Mỗi nụ cười của ${subject} đều như ánh nắng tươi sáng, mang đến cảm giác vui vẻ tức thì cho bất kỳ ai nhìn thấy.`,
+        `${subject} chứng minh rằng đáng yêu chính là sức mạnh mới - cute cũng có thể là một siêu năng lực đầy ấn tượng.`
       ]
     }
   };
 
-  const currentStyle = contentLibrary[style] || contentLibrary['nhe-nhang'];
+  const currentStyle = vietnameseContent[style] || vietnameseContent['nhe-nhang'];
   const intro = pick(currentStyle.intros);
   const bodyParts = shuffle([...currentStyle.bodies]);
   
