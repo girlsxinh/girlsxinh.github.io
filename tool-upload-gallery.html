@@ -1476,38 +1476,150 @@ function generateEnhancedTitle(subject, formData) {
     }
   }
 
-  // Platform-optimized titles
+  // Platform-optimized titles in Vietnamese
   const platformTitles = {
     'tiktok': [
-      `🎵 ${subject} - Viral TikTok Content That's Breaking The Internet`,
-      `🔥 ${subject}: TikTok Star With 10M+ Views Per Video`,
-      `⚡ ${subject} - The TikTok Sensation Everyone's Talking About`,
+      `🎵 ${subject} - Nội dung TikTok viral đang càn quét mạng xã hội`,
+      `🔥 ${subject}: Ngôi sao TikTok với hơn 10 triệu lượt xem mỗi video`,
+      `⚡ ${subject} - Hiện tượng TikTok mà ai cũng đang bàn tán`,
+      `🎭 ${subject}: Nữ hoàng TikTok chiếm trọn màn hình For You`,
+      `🌟 ${subject} - Thần tượng TikTok của thế hệ GenZ`
     ],
     'instagram': [
-      `📸 ${subject} - Instagram Model With Perfect Aesthetic Feed`,
-      `✨ ${subject}: IG Beauty That's Redefining Standards`,
-      `🌟 ${subject} - Instagram Icon With Million+ Engagement`,
+      `📸 ${subject} - Người mẫu Instagram với feed thẩm mỹ hoàn hảo`,
+      `✨ ${subject}: Nhan sắc Instagram đang định nghĩa lại chuẩn đẹp`,
+      `🌟 ${subject} - Biểu tượng Instagram với triệu lượt tương tác`,
+      `💎 ${subject}: Nữ thần Instagram khiến cộng đồng mạng điên đảo`,
+      `🦋 ${subject} - Công chúa Instagram với phong cách độc đáo`
     ],
     'facebook': [
-      `📘 ${subject} - Facebook's Most Talked About Beauty`,
-      `💎 ${subject}: The Facebook Star Everyone Follows`,
+      `📘 ${subject} - Nhan sắc được bàn tán nhiều nhất Facebook`,
+      `💎 ${subject}: Ngôi sao Facebook mà mọi người đều theo dõi`,
+      `👑 ${subject} - Nữ hoàng Facebook với triệu reactions`,
+      `🔥 ${subject}: Hiện tượng Facebook gây sốt cộng đồng mạng`
     ],
     'youtube': [
-      `📺 ${subject} - YouTube Creator Making Waves`,
-      `🎬 ${subject}: Content Creator With Viral Videos`,
+      `📺 ${subject} - YouTuber đang tạo nên làn sóng mới`,
+      `🎬 ${subject}: Nhà sáng tạo nội dung với video triệu view`,
+      `⭐ ${subject} - Ngôi sao YouTube được yêu thích nhất`,
+      `🚀 ${subject}: Kênh YouTube hot nhất hiện tại`
+    ],
+    'twitter': [
+      `🐦 ${subject} - Nhân vật Twitter được nhắc đến nhiều nhất`,
+      `💭 ${subject}: Influencer Twitter với tweet triệu like`,
+      `📝 ${subject} - Chủ nhân những tweet viral nhất`,
+      `⚡ ${subject}: Hiện tượng Twitter trending toàn cầu`
     ]
   };
 
-  const titles = platformTitles[platform] || [
-    `✨ ${subject} - Premium Beauty Content Collection`,
-    `🌟 ${subject}: High-Quality Gallery ${country}`,
-    `💎 ${subject} - Exclusive Content You Can't Miss`
-  ];
+  // Topic-specific titles in Vietnamese
+  const topicTitles = {
+    'cosplay': [
+      `🎭 ${subject}: Nữ hoàng cosplay với kỹ năng hóa thân thần thánh`,
+      `👘 ${subject} - Coser hàng đầu ${country} với triệu fan`,
+      `🦄 ${subject}: Bậc thầy cosplay biến anime thành hiện thực`,
+      `🎨 ${subject} - Nghệ sĩ cosplay với phép thuật biến hóa`
+    ],
+    'bikini': [
+      `🏖️ ${subject}: Nữ thần bãi biển với thân hình chuẩn từng centimet`,
+      `👙 ${subject} - Người mẫu bikini nóng bỏng nhất mùa hè`,
+      `🌊 ${subject}: Vibe mùa hè với bộ sưu tập cực phẩm`,
+      `☀️ ${subject} - Nàng tiên bãi biển với phong cách đỉnh cao`
+    ],
+    'ao-dai': [
+      `🌺 ${subject}: Nàng thơ áo dài đẹp nhất Việt Nam`,
+      `👗 ${subject} - Biểu tượng áo dài thời hiện đại`,
+      `🇻🇳 ${subject}: Đại sứ văn hóa áo dài truyền thống`,
+      `🌸 ${subject} - Hoa khôi áo dài của thế hệ mới`
+    ],
+    'school': [
+      `🎒 ${subject}: Nữ sinh cấp 3 trong sáng nhất`,
+      `📚 ${subject} - Cô nàng học sinh với vibe thanh xuân`,
+      `🌸 ${subject}: Nhan sắc học đường với nét đẹp tuổi 17`,
+      `✏️ ${subject} - Nữ sinh xinh đẹp gây sốt mạng xã hội`
+    ],
+    'hotgirl': [
+      `🔥 ${subject}: Hot girl đình đám nhất ${country}`,
+      `👑 ${subject} - Nữ hoàng hot girl với lượng fan khủng`,
+      `💎 ${subject}: Biểu tượng hot girl thế hệ mới`,
+      `⚡ ${subject} - Hot girl viral với nhan sắc cực phẩm`
+    ]
+  };
+
+  let titles = [];
+
+  // Get platform-specific titles
+  if (platformTitles[platform]) {
+    titles = [...titles, ...platformTitles[platform]];
+  }
+
+  // Get topic-specific titles  
+  if (topicTitles[topic]) {
+    titles = [...titles, ...topicTitles[topic]];
+  }
+
+  // Default titles if no specific ones found
+  if (titles.length === 0) {
+    titles = [
+      `✨ ${subject} - Bộ sưu tập ảnh đẹp nhất ${country}`,
+      `🔥 ${subject}: Nội dung hot không thể bỏ qua`,
+      `💎 ${subject} - Bộ sưu tập premium chất lượng cao`,
+      `🌟 ${subject}: Nhan sắc trending hàng đầu`,
+      `👑 ${subject} - Vẻ đẹp đỉnh cao khiến triệu người mê`,
+      `🎨 ${subject}: Bộ ảnh nghệ thuật cực kỳ ấn tượng`,
+      `💫 ${subject} - Nhan sắc tuyệt đẹp của ${country}`,
+      `🌹 ${subject}: Vẻ đẹp hoàn hảo không tì vết`
+    ];
+  }
 
   // Creativity level adjustment
   if (creativityLevel >= 8) {
     return enhanceCreativeTitle(pick(titles), creativityLevel);
   }
+
+  return pick(titles);
+}
+
+// Generate template-specific title in Vietnamese
+function generateTemplateTitle(subject, template, formData) {
+  const templateTitles = {
+    'viral-tiktok': [
+      `🎵 ${subject} - Nội dung TikTok viral cực hot`,
+      `🔥 ${subject}: Hiện tượng TikTok đang gây bão`,
+      `⚡ ${subject} - Ngôi sao TikTok triệu view`
+    ],
+    'instagram-aesthetic': [
+      `📷 ${subject} - Thẩm mỹ Instagram hoàn hảo`,
+      `✨ ${subject}: Nhan sắc Instagram đỉnh cao`,
+      `🌟 ${subject} - Biểu tượng Instagram của ${formData.country}`
+    ],
+    'professional-portfolio': [
+      `💼 ${subject} - Portfolio chuyên nghiệp đẳng cấp`,
+      `👔 ${subject}: Phong cách business sang trọng`,
+      `🏢 ${subject} - Hình ảnh chuyên nghiệp hoàn hảo`
+    ],
+    'kawaii-japanese': [
+      `🌸 ${subject} - Phong cách Kawaii Nhật Bản`,
+      `🎀 ${subject}: Nét đẹp Nhật Bản siêu dễ thương`,
+      `🦄 ${subject} - Công chúa Kawaii của ${formData.country}`
+    ],
+    'korean-idol': [
+      `⭐ ${subject} - Phong cách K-pop Idol`,
+      `🎤 ${subject}: Vẻ đẹp thần tượng Hàn Quốc`,
+      `💫 ${subject} - Nhan sắc Idol đỉnh cao`
+    ],
+    'minimalist-elegant': [
+      `🤍 ${subject} - Vẻ đẹp tối giản thanh lịch`,
+      `✨ ${subject}: Phong cách minimalist tinh tế`,
+      `🌿 ${subject} - Nhan sắc đơn giản mà quyến rũ`
+    ]
+  };
+
+  const titles = templateTitles[template.id] || [
+    `🎨 ${subject} - ${template.title} phong cách ${formData.country}`,
+    `✨ ${subject}: ${template.title} cực kỳ ấn tượng`,
+    `💎 ${subject} - ${template.title} đẳng cấp cao`
+  ];
 
   return pick(titles);
 }
