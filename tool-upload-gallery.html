@@ -1741,39 +1741,46 @@ function generateAdvancedContentBody(subject, formData) {
   return content;
 }
 
-// Platform-specific content
+// Platform-specific content - Fixed Vietnamese encoding
 function getPlatformContent(subject, platform) {
   const platformContents = {
     'facebook': [
-      `Post này đã "bùng nổ" trên Facebook với reaction rate 95% là love và wow, comments tăng vọt như rocket chỉ sau 30 phút đầu tiên!`,
+      `Post này đã bùng nổ trên Facebook với reaction rate 95% là love và wow, comments tăng vọt như rocket chỉ sau 30 phút đầu tiên!`,
       `Fan page của ${subject} đã tăng follower chóng mặt sau khi album này được share rần rần trên các group hot nhất.`,
       `Hàng nghìn comments khen ngợi và thả tim đã chứng minh sức hút không thể chối từ của ${subject} trên platform lớn nhất thế giới.`
     ],
     'instagram': [
       `Story highlight của ${subject} về bộ ảnh này đã đạt view count khủng, với engagement rate thuộc top 1% trong category này.`,
-      `Reels của ${subject} trending #1 trên Instagram Explore, được feature bởi chính thuật toán vì độ viral cực cao.`,
+      `Reels của ${subject} trending số 1 trên Instagram Explore, được feature bởi chính thuật toán vì độ viral cực cao.`,
       `Hashtag liên quan đến ${subject} đã trở thành trending topic hot, với hàng triệu post cùng tag được đăng tải mỗi ngày.`
     ],
     'tiktok': [
       `Video của ${subject} đã viral với 10M+ views chỉ trong 24h đầu, tạo nên challenge mới được giới trẻ hưởng ứng nhiệt tình.`,
-      `Sound gốc từ video của ${subject} đã được sử dụng bởi hàng nghìn creator, tạo thành trend khổng lồ "phủ sóng" khắp FYP.`,
-      `Duet và reaction video về ${subject} đã "ngập tràn" TikTok, khẳng định sức ảnh hưởng cực lớn.`
+      `Sound gốc từ video của ${subject} đã được sử dụng bởi hàng nghìn creator, tạo thành trend khổng lồ phủ sóng khắp FYP.`,
+      `Duet và reaction video về ${subject} đã ngập tràn TikTok, khẳng định sức ảnh hưởng cực lớn và tầm reach đáng kinh ngạc.`
+    ],
+    'twitter': [
+      `Thread về ${subject} đã được retweet hàng chục nghìn lần, trending top 3 worldwide trong suốt 48 giờ liên tục.`,
+      `Hashtag ${subject.replace(/\s+/g, '')} đã trở thành hashtag được mention nhiều nhất tuần này với sentiment 98% positive.`,
+      `Quote tweets về album này đều là những lời khen có cánh, chứng minh impact mạnh mẽ của ${subject} lên toàn bộ cộng đồng.`
     ]
   };
   
   return platformContents[platform] ? pick(platformContents[platform]) : null;
 }
 
-// Topic-specific content
+// Topic-specific content - Fixed Vietnamese encoding
 function getTopicContent(subject, topic) {
   const topicContents = {
-    'cosplay': `Với skill cosplay đỉnh cao và attention to detail hoàn hảo, ${subject} đã bring character to life một cách stunning và chân thực nhất.`,
-    'bikini': `Beach body goals achieved! ${subject} sở hữu figure chuẩn từng centimeter, perfect complement cho mọi kiểu bikini.`,
-    'ao-dai': `Trong tà áo dài truyền thống Việt Nam, ${subject} embodied perfectly vẻ đẹp dịu dàng và thanh lịch của phụ nữ Á Đông.`,
-    'school': `Với concept "nữ sinh cấp 3" đầy nostalgia, ${subject} mang đến feeling hoài niệm về tuổi học trò trong sáng.`,
-    'short-hair': `Kiểu tóc ngắn trendy của ${subject} không chỉ thời thượng mà còn perfectly complement với face shape.`,
-    'cute-girl': `Với concept "cute overload", ${subject} embodied hoàn hảo vẻ đẹp đáng yêu và ngây thơ.`,
-    'fashion': `Fashion sense của ${subject} truly on point, mỗi outfit đều carefully curated và styled to perfection.`
+    'cosplay': `Với skill cosplay đỉnh cao và attention to detail hoàn hảo từng chi tiết nhỏ, ${subject} đã bring character to life một cách stunning và chân thực nhất.`,
+    'bikini': `Beach body goals achieved! ${subject} sở hữu figure chuẩn từng centimeter, perfect complement cho mọi kiểu bikini từ sporty năng động đến glamorous quyến rũ.`,
+    'ao-dai': `Trong tà áo dài truyền thống Việt Nam, ${subject} thể hiện hoàn hảo vẻ đẹp dịu dàng và thanh lịch của phụ nữ Á Đông, tôn vinh văn hóa dân tộc.`,
+    'school': `Với concept nữ sinh cấp 3 đầy nostalgia, ${subject} mang đến feeling hoài niệm về tuổi học trò trong sáng và đầy mơ mộng của tuổi 17.`,
+    'short-hair': `Kiểu tóc ngắn trendy của ${subject} không chỉ thời thượng mà còn hoàn hao complement với face shape, tạo nên look vừa cute vừa chic cực kỳ ấn tượng.`,
+    'cute-girl': `Với concept cute overload, ${subject} thể hiện hoàn hảo vẻ đẹp đáng yêu và ngây thơ, khiến ai nhìn cũng muốn bảo vệ và yêu thương.`,
+    'fashion': `Fashion sense của ${subject} truly on point, mỗi outfit đều carefully curated và styled to perfection, set trend cho fashion lover.`,
+    'hotgirl': `Với thần thái hotgirl đỉnh cao và visual cực phẩm, ${subject} chính là định nghĩa hoàn hảo của hot trend và viral content trong thời đại số.`,
+    'model': `Kinh nghiệm modeling chuyên nghiệp của ${subject} thể hiện rõ qua từng pose dáng và biểu cảm, tạo nên những shot ảnh đẳng cấp quốc tế.`
   };
   
   return topicContents[topic] || null;
@@ -2444,12 +2451,13 @@ function createFullHTMLDocument(content) {
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Generated Content - Enhanced V2</title>
+    <title>Nội dung AI được tạo - Enhanced V2</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { 
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             max-width: 1000px; margin: 0 auto; padding: 20px; 
             background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
             line-height: 1.6; color: #2d3748;
@@ -2482,7 +2490,7 @@ function createFullHTMLDocument(content) {
     <div class="container">
         ${content}
         <div class="meta">
-            Generated by AI Content Generator V2 | ${new Date().toLocaleDateString('vi-VN')}
+            ⭐ Nội dung được tạo bởi AI - Chất lượng cao, tối ưu SEO
         </div>
     </div>
 </body>
